@@ -1,0 +1,18 @@
+# Tabletop Simulator & GAS Credentials
+webapp/.clasprc.json
+
+# Local Environment Configs
+.env
+*.secret
+credentials*.json
+token*.json
+
+# OS files
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Temporary files
+*.tmp
+*.log
+*.bak
