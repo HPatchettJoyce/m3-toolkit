@@ -85,6 +85,9 @@ def main():
         if i < len(char_csv_rows):
             name_val = char_csv_rows[i].get("Name (str)", "").strip()
             id_val = char_csv_rows[i].get("ID (str)", "").strip()
+            # Task 2 Support: If ID is blank (e.g. Loyal Companions/Talismans), generate a deterministic synthetic ID
+            if not id_val and name_val:
+                id_val = "SYN-" + "".join(c for c in name_val if c.isalnum()).upper()
             card_obj["Nickname"] = name_val
             card_obj["GMNotes"] = id_val
 
@@ -121,6 +124,9 @@ def main():
         if i < len(spec_csv_rows):
             name_val = spec_csv_rows[i].get("Name (str)", "").strip()
             id_val = spec_csv_rows[i].get("ID (str)", "").strip()
+            # Task 2 Support: If ID is blank, generate a deterministic synthetic ID
+            if not id_val and name_val:
+                id_val = "SYN-" + "".join(c for c in name_val if c.isalnum()).upper()
             card_obj["Nickname"] = name_val
             card_obj["GMNotes"] = id_val
 

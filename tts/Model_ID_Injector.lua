@@ -15,7 +15,7 @@
 
 -- =============== CONFIGURATION GUIDs (REQUIRED) ===============
 CHARACTERS_ZONE_GUID = "83f62b"  -- Zone containing the Characters Deck
-MODELS_BAG_ZONE_GUID = "XXXXXX"  -- Zone containing the Raw Models Bag
+MODELS_BAG_ZONE_GUID = "fe2114"  -- Zone containing the Raw Models Bag
 
 
 local isProcessing = false
@@ -96,9 +96,10 @@ function injectIdsCoroutine()
         end
     end
     
-    -- 2. Build items list to process from the Bag
+    -- 2. Build items list to process from the Bag (Task 2 Support)
     local bagObjects = bag.getObjects()
     local itemsToProcess = {}
+    local unmatchedModels = {}
     
     for _, bObj in ipairs(bagObjects) do
         local modelName = bObj.nickname
@@ -108,7 +109,21 @@ function injectIdsCoroutine()
             local matchedId = nameToId[modelName:lower()]
             if matchedId then
                 table.insert(itemsToProcess, { guid = bObj.guid, name = modelName, id = matchedId })
+            else
+                table.insert(unmatchedModels, modelName)
             end
+        end
+    end
+    
+    -- Print out diagnostic information for unmatched models
+    if #unmatchedModels > 0 then
+        print("Diagnostic: " .. #unmatchedModels .. " models in the bag could not be matched with any card in the Characters Deck:")
+        local maxPrint = math.min(#unmatchedModels, 15)
+        for idx = 1, maxPrint do
+            print("  - [Unmatched]: " .. unmatchedModels[idx])
+        end
+        if #unmatchedModels > maxPrint then
+            print("  - ... and " .. (#unmatchedModels - maxPrint) .. " more unmatched models.")
         end
     end
     

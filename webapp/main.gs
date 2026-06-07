@@ -1,55 +1,105 @@
 /**
- * The required routing function for a Google Web App.
+ * Tabletop Simulator Match Logger & Cast Recruiter API
+ * Apps Script Backend
+ * Date: Sunday, 7 June 2026
  */
-function doGet(e) {
-  return HtmlService.createTemplateFromFile('CastRecruiter')
-    .evaluate()
-    .setTitle('Monumentum - Cast Recruiter')
-    .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
+
+// Global Sheet configuration names
+var MATCH_SHEET_NAME = "IN TTS";
+var CHAR_SHEET_NAME = "M3_TTS_DB - IN Cha-Tal";
+var SP_SHEET_NAME = "M3_TTS_DB - IN SP";
+
+/**
+ * Serves the HTML frontend interface to clients.
+ */
+function doGet() {
+  return HtmlService.createHtmlOutputFromFile('CastRecruiter')
+      .setTitle('Monumentum Cast Recruiter')
+      .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL)
+      .addMetaTag('viewport', 'width=device-width, initial-scale=1');
 }
 
 /**
- * The webhook receiver for Tabletop Simulator.
- * Receives game results and logs them to the "IN TTS" sheet tab for balance analysis.
+ * Handles incoming match logs POSTed by the TTS End Game Controller webhook.
  */
 function doPost(e) {
+  var lock = LockService.getScriptLock();
   try {
-    // 1. Parse the incoming JSON payload from Tabletop Simulator
-    var postData;
-    var contents = e.postData ? e.postData.contents : "";
+    // Acquire a 30-second lock to prevent concurrent write collisions in Google Sheets!
+    lock.waitLock(30000);
     
-    // Check if the contents are in e.parameter or URL-encoded
-    if (e.parameter && e.parameter.payload) {
-      postData = JSON.parse(e.parameter.payload);
-    } else if (contents) {
-      // Decode if it is URL-encoded (starts with %7b or similar)
-      if (contents.indexOf('%') === 0 || contents.indexOf('%7b') === 0 || contents.indexOf('%7B') === 0) {
-        contents = decodeURIComponent(contents);
-      }
-      
-      // Handle key-value format (e.g. payload=JSON or simply =JSON)
-      if (contents.indexOf('=') !== -1 && contents.indexOf('{') !== 0) {
-        var parts = contents.split('=');
-        if (parts.length > 1) {
-          contents = decodeURIComponent(parts[1]);
-        } else {
-          contents = decodeURIComponent(parts[0]);
+    var rawContent = e && e.postData ? e.postData.contents : "";
+    if (!rawContent) {
+      return ContentService.createTextOutput(JSON.stringify({
+        status: "error",
+        message: "Request payload was empty."
+      })).setMimeType(ContentService.MimeType.JSON);
+    }
+
+    var payload = null;
+    
+    // Resilient Parser: Supports standard application/json, form-urlencoded, or raw serialised payloads
+    try {
+      payload = JSON.parse(rawContent);
+    } catch (jsonErr) {
+      if (e && e.parameter) {
+        payload = e.parameter;
+      } else {
+        var parsedParams = parseFormUrlEncoded(rawContent);
+        if (Object.keys(parsedParams).length > 0) {
+          payload = parsedParams;
         }
       }
-      
-      postData = JSON.parse(contents);
-    } else {
-      throw new Error("No payload found in request.");
     }
-    
-    // 2. Open the spreadsheet and access the 'IN TTS' tab
+
+    if (!payload) {
+      return ContentService.createTextOutput(JSON.stringify({
+        status: "error",
+        message: "Failed to parse parameters from POST body."
+      })).setMimeType(ContentService.MimeType.JSON);
+    }
+
+    // Decode nested JSON strings if they were double-serialised by Tabletop Simulator's WebRequest Custom client
+    if (typeof payload === 'string') {
+      try { payload = JSON.parse(payload); } catch (e) {}
+    }
+
+    var winner = payload.winner || "";
+    var matchDataJson = payload.matchData || "";
+    var matchData = {};
+
+    if (matchDataJson) {
+      try {
+        matchData = JSON.parse(matchDataJson);
+      } catch (err) {
+        console.warn("Could not parse nested matchData JSON: " + err.message);
+      }
+    } else {
+      // Direct assignment fallback
+      matchData = payload;
+    }
+
+    var loadedCasts = matchData.loadedCasts || {};
+    var specialActionsLog = matchData.specialActionsLog || [];
+
+    // Map Player Red & Blue cast definitions
+    var redCast = loadedCasts.Red || {};
+    var blueCast = loadedCasts.Blue || {};
+
+    var redChampion = redCast.champion || "";
+    var redDominion = redCast.dominion || "";
+    var blueChampion = blueCast.champion || "";
+    var blueDominion = blueCast.dominion || "";
+
+    // Open active spreadsheet
     var ss = SpreadsheetApp.getActiveSpreadsheet();
-    var sheet = ss.getSheetByName("IN TTS");
+    var sheet = ss.getSheetByName(MATCH_SHEET_NAME);
     
+    // Resilient creation of tracking sheet tab if not present
     if (!sheet) {
-      // If the sheet doesn't exist, create it with standard headers
-      sheet = ss.insertSheet("IN TTS");
-      var headers = [
+      sheet = ss.insertSheet(MATCH_SHEET_NAME);
+      // Append standard column headers
+      sheet.appendRow([
         "Timestamp (UTC)",
         "Winner",
         "Red Champion",
@@ -59,79 +109,74 @@ function doPost(e) {
         "Blue Dominion",
         "Blue Cast JSON",
         "Special Actions Log JSON"
-      ];
-      sheet.appendRow(headers);
-      sheet.getRange(1, 1, 1, headers.length).setFontWeight("bold");
+      ]);
+      sheet.getRange(1, 1, 1, 9).setFontWeight("bold").setBackground("#f1c40f");
     }
-    
-    // 3. Extract player casts
-    var casts = postData.casts || {};
-    var redCast = casts["Red"] || {};
-    var blueCast = casts["Blue"] || {};
-    
-    // 4. Compile the row values
-    var timestamp = postData.timestamp || new Date().toISOString();
-    var winner = postData.winner || "Unknown";
-    
-    var redChampion = redCast.champion || "N/A";
-    var redDominion = redCast.dominion || "N/A";
-    var redCastJson = JSON.stringify(redCast);
-    
-    var blueChampion = blueCast.champion || "N/A";
-    var blueDominion = blueCast.dominion || "N/A";
-    var blueCastJson = JSON.stringify(blueCast);
-    
-    var specialLogJson = JSON.stringify(postData.specialActionsLog || []);
-    
-    var rowData = [
-      timestamp,
+
+    // Append standard row record
+    sheet.appendRow([
+      new Date().toISOString(), // Standardised ISO timestamp
       winner,
       redChampion,
       redDominion,
-      redCastJson,
+      JSON.stringify(redCast),
       blueChampion,
       blueDominion,
-      blueCastJson,
-      specialLogJson
-    ];
-    
-    // 5. Append the match record row to the sheet
-    sheet.appendRow(rowData);
-    
+      JSON.stringify(blueCast),
+      JSON.stringify(specialActionsLog)
+    ]);
+
     return ContentService.createTextOutput(JSON.stringify({
       status: "success",
-      message: "Webhook successfully received. Match results logged to sheet 'IN TTS'."
+      message: "Match results logged successfully!"
     })).setMimeType(ContentService.MimeType.JSON);
-    
-  } catch (error) {
-    // Graceful error logging and reporting
-    Logger.log("Webhook error: " + error.toString());
+
+  } catch (globalErr) {
+    console.error("Critical Post Error: " + globalErr.toString());
     return ContentService.createTextOutput(JSON.stringify({
       status: "error",
-      message: "Webhook processing failed: " + error.toString()
+      message: globalErr.toString()
     })).setMimeType(ContentService.MimeType.JSON);
+  } finally {
+    lock.releaseLock();
   }
 }
 
 /**
- * This function is called by the frontend via google.script.run
- * It fetches and parses the active spreadsheet data into a JSON object.
+ * Manual URL Parameter Decoder
+ */
+function parseFormUrlEncoded(rawString) {
+  var obj = {};
+  if (!rawString) return obj;
+  var pairs = rawString.split('&');
+  for (var i = 0; i < pairs.length; i++) {
+    var parts = pairs[i].split('=');
+    if (parts.length === 2) {
+      var key = decodeURIComponent(parts[0].replace(/\+/g, ' '));
+      var value = decodeURIComponent(parts[1].replace(/\+/g, ' '));
+      obj[key] = value;
+    }
+  }
+  return obj;
+}
+
+/**
+ * Compiles and returns character and special database objects, merged with image coordinates.
  */
 function getCardDatabase() {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
-  var charSheet = ss.getSheetByName("IN Cha-Tal");
-  var spSheet = ss.getSheetByName("IN SP");
-  
+  var charSheet = ss.getSheetByName(CHAR_SHEET_NAME);
+  var spSheet = ss.getSheetByName(SP_SHEET_NAME);
+
   if (!charSheet || !spSheet) {
-    throw new Error("Could not find the required tabs: 'IN Cha-Tal' or 'IN SP'. Please check the sheet names.");
+    throw new Error("Missing required source spreadsheet tabs.");
   }
 
-  // Retrieve image mappings if available
-  var imageMappings = null;
+  var imageMappings = {};
   try {
     imageMappings = getCardImageMappings();
-  } catch (e) {
-    Logger.log("No card image mappings found or failed to load: " + e.message);
+  } catch (err) {
+    console.warn("getCardImageMappings is undefined. Falling back to default styling: " + err.message);
   }
 
   var db = {
@@ -144,30 +189,20 @@ function getCardDatabase() {
   var uniqueDominions = new Set();
   var championNameToId = {};
 
-  // Helper to map headers to their index
-  function getHeaderMap(headers) {
+  var getHeaderMap = function(headers) {
     var map = {};
-    headers.forEach(function(header, index) {
-      if (header) {
-        var cleanHeader = String(header).trim().toLowerCase();
-        map[cleanHeader] = index;
-      }
-    });
+    headers.forEach(function(h, idx) { map[h.trim()] = idx; });
     return map;
-  }
+  };
 
-  // Helper to find column index from potential matches
-  function findColumnIndex(headerMap, possibleNames) {
-    for (var i = 0; i < possibleNames.length; i++) {
-      var name = possibleNames[i].toLowerCase();
-      if (headerMap[name] !== undefined) {
-        return headerMap[name];
-      }
+  var findColumnIndex = function(map, keys) {
+    for (var i = 0; i < keys.length; i++) {
+      if (map.hasOwnProperty(keys[i])) return map[keys[i]];
     }
     return -1;
-  }
+  };
 
-  // --- Parse Characters and Talismans ---
+  // --- Parse Characters & Talismans ---
   var charData = charSheet.getDataRange().getValues();
   if (charData.length > 1) {
     var charHeaders = charData[0];
@@ -188,6 +223,9 @@ function getCardDatabase() {
       var dominion = String(row[domIdx]).trim();
       var unitClass = String(row[classIdx]).trim();
       var cardIdVal = idIdx !== -1 ? String(row[idIdx]).trim() : "";
+      if (!cardIdVal && name) {
+        cardIdVal = "SYN-" + name.replace(/[^a-zA-Z0-9]/g, "").toUpperCase();
+      }
       
       if (!name || !dominion) return;
       
@@ -215,6 +253,9 @@ function getCardDatabase() {
       var unitClass = String(row[classIdx]).trim();
       var cost = etherIdx !== -1 ? (parseInt(row[etherIdx]) || 0) : 0;
       var cardIdVal = idIdx !== -1 ? String(row[idIdx]).trim() : "";
+      if (!cardIdVal && name) {
+        cardIdVal = "SYN-" + name.replace(/[^a-zA-Z0-9]/g, "").toUpperCase();
+      }
       
       if (!name || !dominion) return;
       if (unitClass === "Champion") return; // Already processed
@@ -276,6 +317,9 @@ function getCardDatabase() {
       var unitClass = String(row[spClassIdx]).trim();
       var cost = spEtherIdx !== -1 ? (parseInt(row[spEtherIdx]) || 0) : 0;
       var spCardIdVal = spIdIdx !== -1 ? String(row[spIdIdx]).trim() : "";
+      if (!spCardIdVal && name) {
+        spCardIdVal = "SYN-" + name.replace(/[^a-zA-Z0-9]/g, "").toUpperCase();
+      }
       
       if (!name || !dominion || unitClass !== "Special Action") return;
 

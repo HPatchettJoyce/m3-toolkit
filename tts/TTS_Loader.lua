@@ -16,7 +16,7 @@
 -- Place scripting zones over your decks on the table and enter their GUIDs below.
 CHARACTERS_ZONE_GUID = "83f62b" -- Zone containing the Characters & Talismans deck
 SPECIALS_ZONE_GUID   = "b609e4" -- Zone containing the Special Actions deck
-MODELS_ZONE_GUID     = "XXXXXX" -- Zone containing the 3D Models Bag (Task 3)
+MODELS_ZONE_GUID     = "fe2114" -- Zone containing the 3D Models Bag (Task 3)
 
 
 -- =============== PLAYER LAYOUT CONFIGURATION ===============
