@@ -211,73 +211,73 @@ Gallitrice,Veritian,Familiar,,06VER-02FAM-056,"**FORERUNNER**
 
 **Death Crow** | *Ability*
 When this character is destroyed, all enemies within **AURA(3)** become **STUNNED** until after their next direction.",1,3,M3/Icons/Prowess/prowess.png,3,M3/Icons/Fortitude/fortitude.png,4,M3/Icons/Ether/ether.png,"M3/Artwork/Characters/Veritian/Gallitrice.png,50,0,100"
-The Kovarine,Rhavlika,Familiar,Flint Dross' Loyal Companion,,"**Convections** | *Ability*
+The Kovarine,Rhavlika,Familiar,Flint Dross' Loyal Companion,01RHV-02FAM-057,"**Convections** | *Ability*
 When this character becomes ""Molten"", **HEAL(2d2)** them. When this character becomes no longer ""Molten"", **SHIELD(2d2)** them.",1,8,M3/Icons/Prowess/prowess.png,8,M3/Icons/Fortitude/fortitude.png,8,M3/Icons/Ether/ether.png,"M3/Artwork/Characters/Rhavlika/The Kovarine.png,50,0,100"
-Scoriath,Rhavlika,Familiar,Ignatius Krag's Loyal Companion,,"**Blast Furnace** | *Ability*
+Scoriath,Rhavlika,Familiar,Ignatius Krag's Loyal Companion,01RHV-02FAM-058,"**Blast Furnace** | *Ability*
 Whilst this character is ""Molten""; they gain **BLAST(1)**. If this character is ""Molten"", after they perform an *attack*, they summon a ""Fissure"" on each unoccupied space designated by the *attack*.
 Each ""Fissure"" is a *hazard* and *catalyst* that causes enemies to suffer 2d2 damage, and allies may trigger to become ""Molten"". Each ""Fissure"" is destroyed after triggering. This effect persists until the last ""Fissure"" is destroyed.",1,8,M3/Icons/Prowess/prowess.png,8,M3/Icons/Fortitude/fortitude.png,8,M3/Icons/Ether/ether.png,"M3/Artwork/Characters/Rhavlika/Scoriath.png,50,0,100"
-Tocarin,Iro-Si-Khar,Minion,Ripple Elshara's Loyal Companion,,"**RANGE(5)**
+Tocarin,Iro-Si-Khar,Minion,Ripple Elshara's Loyal Companion,02IRO-03MIN-059,"**RANGE(5)**
 
 **His Master's Voice** | *Ability*
 Ripple Elshara's *Current's Embrace* *action* may use this character as the origin instead.",1,3,M3/Icons/Prowess/prowess.png,3,M3/Icons/Fortitude/fortitude.png,1,M3/Icons/Ether/ether.png,"M3/Artwork/Characters/Iro-Si-Khar/Tocarin.png,50,0,100"
-Pelazhiqi,Iro-Si-Khar,Familiar,Thælass Elshara's Loyal Companion,,"**RANGE(5)**
+Pelazhiqi,Iro-Si-Khar,Familiar,Thælass Elshara's Loyal Companion,02IRO-02FAM-060,"**RANGE(5)**
 
 **Lob** | *Ability*
 This character may ignore enemies when designating a *ranged* *attack*.
 
 **Hurl** | *Ability*
 After this character performs a *ranged* *attack*; they summon 1 ""Driplet"" on an available space within **BLAST(1)** of the focus of the *attack*. If an enemy was destroyed; this character summons 2 ""Driplets"" instead.",1,4,M3/Icons/Prowess/prowess.png,4,M3/Icons/Fortitude/fortitude.png,5,M3/Icons/Ether/ether.png,"M3/Artwork/Characters/Iro-Si-Khar/Pelazhiqi.png,50,0,100"
-Calazi,Voisira,Minion,Lark's Loyal Companion,,"**SLIGHT**, **RANGE(5)**
+Calazi,Voisira,Minion,Lark's Loyal Companion,03VOI-03MIN-061,"**SLIGHT**, **RANGE(5)**
 
 **Bird Call** | *Action*
 After any ally within **AURA(2)** performs a *ranged* *attack*; they may then perform a **MANOEUVRE(1)**.",1,3,M3/Icons/Prowess/prowess.png,3,M3/Icons/Fortitude/fortitude.png,1,M3/Icons/Ether/ether.png,"M3/Artwork/Characters/Voisira/Calazi.png,50,0,100"
-Mabruqa,Voisira,Familiar,Malika Saffron's Loyal Companion,,"**STEALTH**, **RANGE(10)**
+Mabruqa,Voisira,Familiar,Malika Saffron's Loyal Companion,03VOI-02FAM-062,"**STEALTH**, **RANGE(10)**
 
 **""Lucky""** | *Ability*
 During your epilogue this character gains ""Fortune"".",1,6,M3/Icons/Prowess/prowess.png,6,M3/Icons/Fortitude/fortitude.png,7,M3/Icons/Ether/ether.png,"M3/Artwork/Characters/Voisira/Mabruqa.png,50,0,100"
-Ryuztli,Xalakith,Familiar,"Valex, the Final Plume's Loyal Companion",,"**PIERCE(3)**, **REACH**
+Ryuztli,Xalakith,Familiar,"Valex, the Final Plume's Loyal Companion",04XAL-02FAM-063,"**PIERCE(3)**, **REACH**
 
 **Copperscale Intercept** | *Free Attack Reaction*
 If this character is adjacent to an ally, when an enemy performs a *manoeuvre* on a space adjacent to that ally, this character may perform an **ATTACK** that enemy as if they were adjacent.",1,6,M3/Icons/Prowess/prowess.png,5,M3/Icons/Fortitude/fortitude.png,7,M3/Icons/Ether/ether.png,"M3/Artwork/Characters/Xalakith/Ryuztli.png,50,0,100"
-Kibantli,Xalakith,Familiar,"Micteca, the Unsetting Sun's Loyal Companion",,"**BLOCK(2d2)**
+Kibantli,Xalakith,Familiar,"Micteca, the Unsetting Sun's Loyal Companion",04XAL-02FAM-064,"**BLOCK(2d2)**
 
 **Tyrannical Consumption** | *Ability*
 When this character or any adjacent ally destroys an enemy, gain Xd2 ethemeralds, where X is the ether cost of this enemy.",1,7,M3/Icons/Prowess/prowess.png,7,M3/Icons/Fortitude/fortitude.png,9,M3/Icons/Ether/ether.png,"M3/Artwork/Characters/Xalakith/Kibantli.png,50,0,100"
-Opolkan,Ahèserec,Minion,"Iroko, the Evergreen's Loyal Companion",,"**SLIGHT**, **RANGE(5)**
+Opolkan,Ahèserec,Minion,"Iroko, the Evergreen's Loyal Companion",05AHS-03MIN-065,"**SLIGHT**, **RANGE(5)**
 
 **Harmonise** | *Ability*
 When Iroko, the Evergreen's performs the *Soothing Song* *action*, trigger a second occurrence with this character as its origin.",1,3,M3/Icons/Prowess/prowess.png,3,M3/Icons/Fortitude/fortitude.png,1,M3/Icons/Ether/ether.png,"M3/Artwork/Characters/Ahèserec/Opolkan.png,50,0,100"
-Egunghi,Ahèserec,Familiar,"Draen, the Ashen Hart's Loyal Companion",,"**THICKETWAY**, **RIPOSTE**, **REFLECT**
+Egunghi,Ahèserec,Familiar,"Draen, the Ashen Hart's Loyal Companion",05AHS-02FAM-066,"**THICKETWAY**, **RIPOSTE**, **REFLECT**
 
 **Ironshell Canopy** | *Ability*
 When an *attack* is performed against an adjacent ally, deal up to 2 of the damage to this character instead. Adjacent allies gain **RIPOSTE** and **REFLECT**.",1,7,M3/Icons/Prowess/prowess.png,7,M3/Icons/Fortitude/fortitude.png,8,M3/Icons/Ether/ether.png,"M3/Artwork/Characters/Ahèserec/Egunghi.png,50,0,100"
-Pashan,Veritian,Minion,Patience Wick's Loyal Companion,,"**STEALTH**, **RANGE(5)**
+Pashan,Veritian,Minion,Patience Wick's Loyal Companion,06VER-03MIN-067,"**STEALTH**, **RANGE(5)**
 
 **Shroud** | *Action* | 4
 Remove this character and an adjacent character from the stage, ready to *emerge* when next directed.",1,3,M3/Icons/Prowess/prowess.png,3,M3/Icons/Fortitude/fortitude.png,1,M3/Icons/Ether/ether.png,"M3/Artwork/Characters/Veritian/Pashan.png,50,0,100"
-The Anticoris,Veritian,Familiar,Clement Tacitus' Loyal Companion,,"**STEALTH**, **PIERCE(3)**
+The Anticoris,Veritian,Familiar,Clement Tacitus' Loyal Companion,06VER-02FAM-068,"**STEALTH**, **PIERCE(3)**
 
 **Poisoned Tipped** | *Ability*
 This character deals +1d2 bonus damage.
 
 **Temporal Misalignment** | *Ability*
 When a *special action* is played, with *origin* or *focus* within **AURA(3)** increase their ether cost by 1.",1,7,M3/Icons/Prowess/prowess.png,6,M3/Icons/Fortitude/fortitude.png,7,M3/Icons/Ether/ether.png,"M3/Artwork/Characters/Veritian/The Anticoris.png,50,0,100"
-The Rock of Hrugar,Rhavlika,Talisman,,,,1,+2,M3/Icons/Prowess/prowess.png,+2,M3/Icons/Fortitude/fortitude.png,2,M3/Icons/Ether/ether.png,"M3/Artwork/Characters/Rhavlika/The Rock of Hrugar.png,50,0,100"
-Cord of Iron Beads,Rhavlika,Talisman,,,"**Surge** | *Ability*
+The Rock of Hrugar,Rhavlika,Talisman,,01RHV-04TAL-069,,1,+2,M3/Icons/Prowess/prowess.png,+2,M3/Icons/Fortitude/fortitude.png,2,M3/Icons/Ether/ether.png,"M3/Artwork/Characters/Rhavlika/The Rock of Hrugar.png,50,0,100"
+Cord of Iron Beads,Rhavlika,Talisman,,01RHV-04TAL-070,"**Surge** | *Ability*
 After this character destroys an enemy, they may then perform a **MANOEUVRE(1)**.",,,,,,1,M3/Icons/Ether/ether.png,"M3/Artwork/Characters/Rhavlika/Cord of Iron Beads.png,50,0,100"
-Jade-Cloud Catcher,Iro-Si-Khar,Talisman,,,"**Ethereal Consumption** | *Ability*
+Jade-Cloud Catcher,Iro-Si-Khar,Talisman,,02IRO-04TAL-071,"**Ethereal Consumption** | *Ability*
 When this character destroys an enemy, gain Xd2 ethemeralds, where X is the ether cost of the destroyed enemy.",,,,,,2,M3/Icons/Ether/ether.png,"M3/Artwork/Characters/Iro-Si-Khar/Jade-Cloud Catcher.png,50,0,100"
-Celadon Gourd,Iro-Si-Khar,Talisman,,,"**Flush** | *Ability*
+Celadon Gourd,Iro-Si-Khar,Talisman,,02IRO-04TAL-072,"**Flush** | *Ability*
 When destroy this character, they summon 1 ""Driplet"" to the nearest available space.",,,,,,1,M3/Icons/Ether/ether.png,"M3/Artwork/Characters/Iro-Si-Khar/Celadon Gourd.png,50,0,100"
-The Kilit-Shard,Voisira,Talisman,,,,1,+1,M3/Icons/Prowess/prowess.png,+0,M3/Icons/Fortitude/fortitude.png,1,M3/Icons/Ether/ether.png,"M3/Artwork/Characters/Voisira/The Kilit-Shard.png,50,0,100"
-Dawn-Quill Vane,Voisira,Talisman,,,**FORERUNNER**,,,,,,1,M3/Icons/Ether/ether.png,"M3/Artwork/Characters/Voisira/Dawn-Quill Vane.png,50,0,100"
-Gilded Gun-Kan,Xalakith,Talisman,,,"**Stewardism** | *Ability*
+The Kilit-Shard,Voisira,Talisman,,03VOI-04TAL-073,,1,+1,M3/Icons/Prowess/prowess.png,+0,M3/Icons/Fortitude/fortitude.png,1,M3/Icons/Ether/ether.png,"M3/Artwork/Characters/Voisira/The Kilit-Shard.png,50,0,100"
+Dawn-Quill Vane,Voisira,Talisman,,03VOI-04TAL-074,**FORERUNNER**,,,,,,1,M3/Icons/Ether/ether.png,"M3/Artwork/Characters/Voisira/Dawn-Quill Vane.png,50,0,100"
+Gilded Gun-Kan,Xalakith,Talisman,,04XAL-04TAL-075,"**Stewardism** | *Ability*
 This character can place two ""Link"" tokens per direction.",,,,,,2,M3/Icons/Ether/ether.png,"M3/Artwork/Characters/Xalakith/Gilded Gun-Kan.png,50,0,100"
-Re-Minted Obel,Xalakith,Talisman,,,"**Ethereally Charged** | *Ability*
+Re-Minted Obel,Xalakith,Talisman,,04XAL-04TAL-076,"**Ethereally Charged** | *Ability*
 When this character is being resummoned, decrease their ether cost by 1.",,,,,,1,M3/Icons/Ether/ether.png,"M3/Artwork/Characters/Xalakith/Re-Minted Obel.png,50,0,100"
-The Gnyar-Knot,Ahèserec,Talisman,,,**ABSORB**,,,,,,2,M3/Icons/Ether/ether.png,"M3/Artwork/Characters/Ahèserec/The Gnyar-Knot.png,50,0,100"
-Ghul-Bark Pouch,Ahèserec,Talisman,,,"**Rustle** | *Ability*
+The Gnyar-Knot,Ahèserec,Talisman,,05AHS-04TAL-077,**ABSORB**,,,,,,2,M3/Icons/Ether/ether.png,"M3/Artwork/Characters/Ahèserec/The Gnyar-Knot.png,50,0,100"
+Ghul-Bark Pouch,Ahèserec,Talisman,,05AHS-04TAL-078,"**Rustle** | *Ability*
 When this character is destroyed, they summon 1 ""Huskling"" onto their ""Verdant Soil"".",,,,,,1,M3/Icons/Ether/ether.png,"M3/Artwork/Characters/Ahèserec/Ghul-Bark Pouch.png,50,0,100"
-Litany of the First-Stride,Veritian,Talisman,,,"**Jump Start** | *Ability*
+Litany of the First-Stride,Veritian,Talisman,,06VER-04TAL-079,"**Jump Start** | *Ability*
 During this character's *emergence*, they may move an additional 1 spaces.",,,,,,1,M3/Icons/Ether/ether.png,"M3/Artwork/Characters/Veritian/Litany of the First-Stride.png,50,0,100"
-Osmotic-Needle Censer,Veritian,Talisman,,,**ABSORB**,,,,,,2,M3/Icons/Ether/ether.png,"M3/Artwork/Characters/Veritian/Osmotic-Needle Censer.png,50,0,100"
+Osmotic-Needle Censer,Veritian,Talisman,,06VER-04TAL-080,**ABSORB**,,,,,,2,M3/Icons/Ether/ether.png,"M3/Artwork/Characters/Veritian/Osmotic-Needle Censer.png,50,0,100"
