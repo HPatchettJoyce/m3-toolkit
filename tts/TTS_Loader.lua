@@ -325,14 +325,47 @@ function loadCastCoroutine()
         end
     end
     
-    -- 3. Extract Units, deal 1 Card to Hand, and spawn recruited Models (Task 3 & 4)
+    -- 3. Extract Units, deal 1 Card to Hand, and spawn recruited Models
     local modelsBag = getBagFromZone(MODELS_ZONE_GUID)
     if not modelsBag then
         print("Warning: Models Bag not found in trigger zone " .. MODELS_ZONE_GUID .. ". Models will not be spawned.")
     end
 
+    local unitIndex = 0
+
+    -- 3a. Spawn Champion Standee (Task 3 Improvement - Champion as Character 1)
+    local champId = castData.championId
+    if champId and modelsBag then
+        unitIndex = unitIndex + 1
+        local spawnTarget = getSpawnPositionForModels(config)
+        
+        local xStart = (config.color == "Red") and -23.5 or 23.5
+        local zStart = (config.color == "Red") and -5.0 or 5.0
+        local xDirection = (config.color == "Red") and 1 or -1
+        local zDirection = (config.color == "Red") and -1 or 1
+        local zSpacing = 2.5
+        
+        local unitSpawnPos = {
+            x = xStart,
+            y = spawnTarget.y,
+            z = zStart + (unitIndex * zSpacing * zDirection)
+        }
+
+        isCloning = true
+        -- Spawn exactly 1 copy of the Champion standee
+        local modelSuccess = cloneModelFromBag(modelsBag, champId, 1, unitSpawnPos, {0, 90, 0}, xDirection, false)
+        if modelSuccess then
+            while isCloning do
+                coroutine.yield(0)
+            end
+            yieldSeconds(0.2)
+        else
+            isCloning = false
+        end
+    end
+
+    -- 3b. Loop and spawn recruited Unit Standees
     if castData.unitIdsRecruited and next(castData.unitIdsRecruited) then
-        local unitIndex = 0
         for unitId, qty in pairs(castData.unitIdsRecruited) do
             unitIndex = unitIndex + 1
             local charDeck, specDeck = findDecks()
@@ -341,7 +374,7 @@ function loadCastCoroutine()
                 break
             end
 
-            -- 3a. Clone Card to Hand
+            -- Clone Card to Hand
             isCloning = true
             local success = cloneCardFromDeck(charDeck, "", unitId, spawnPos, {0, 180, 180}, true, config.color)
             if success then
@@ -354,28 +387,25 @@ function loadCastCoroutine()
                 print("Warning: Unit card ID not found: " .. unitId)
             end
 
-            -- 3b. Clone 3D Models to Layout Zone (Task 3 Custom Coordinates Layout)
+            -- Clone 3D Models to Layout Zone
             if modelsBag and qty and qty > 0 then
                 local spawnTarget = getSpawnPositionForModels(config)
                 
-                -- Custom start coordinates: X pulled back to -23.5 (Red) or 23.5 (Blue), Z set to -5.0 (Red) or 5.0 (Blue)
                 local xStart = (config.color == "Red") and -23.5 or 23.5
                 local zStart = (config.color == "Red") and -5.0 or 5.0
-                local xDirection = (config.color == "Red") and 1 or -1   -- duplicates build inwards towards table center
-                local zDirection = (config.color == "Red") and -1 or 1   -- different units move further back towards player edge (decreasing Z for Red, increasing Z for Blue)
-                
+                local xDirection = (config.color == "Red") and 1 or -1
+                local zDirection = (config.color == "Red") and -1 or 1
                 local zSpacing = 2.5
                 
-                -- Arrange each unit type on its own row along the Z axis, duplicates building inward along the X axis
                 local unitSpawnPos = {
                     x = xStart,
-                    y = spawnTarget.y, -- retain correct height from layout zone
+                    y = spawnTarget.y,
                     z = zStart + (unitIndex * zSpacing * zDirection)
                 }
 
                 isCloning = true
-                -- Rotate standees by 90 degrees around Y so they face the players directly (double-sided)
-                local modelSuccess = cloneModelFromBag(modelsBag, unitId, qty, unitSpawnPos, {0, 90, 0}, xDirection)
+                -- Rotate standees by 90 degrees around Y so they face the players directly
+                local modelSuccess = cloneModelFromBag(modelsBag, unitId, qty, unitSpawnPos, {0, 90, 0}, xDirection, false)
                 if modelSuccess then
                     while isCloning do
                         coroutine.yield(0)
@@ -383,8 +413,40 @@ function loadCastCoroutine()
                     yieldSeconds(0.2)
                 else
                     isCloning = false
-                    -- Failed to find model by ID in bag, but we continue silently so we don't block cards
                 end
+            end
+        end
+    end
+
+    -- 3c. Auto-Spawn 12 Stacked Minions (Driplet / Huskling Lot for Iro-Si-Khar & Ahéserec)
+    if castData.dominion == "Iro-Si-Khar" or castData.dominion == "Ahéserec" or castData.dominion == "Aheserec" then
+        if modelsBag then
+            unitIndex = unitIndex + 1
+            local minionId = (castData.dominion == "Iro-Si-Khar") and "02IRO-03MIN-009" or "05AHS-03MIN-022"
+            local spawnTarget = getSpawnPositionForModels(config)
+            
+            local xStart = (config.color == "Red") and -23.5 or 23.5
+            local zStart = (config.color == "Red") and -5.0 or 5.0
+            local xDirection = (config.color == "Red") and 1 or -1
+            local zDirection = (config.color == "Red") and -1 or 1
+            local zSpacing = 2.5
+            
+            local minionSpawnPos = {
+                x = xStart,
+                y = spawnTarget.y,
+                z = zStart + (unitIndex * zSpacing * zDirection)
+            }
+
+            isCloning = true
+            -- Spawn exactly 12 copies and stack them vertically (isStacked = true)
+            local modelSuccess = cloneModelFromBag(modelsBag, minionId, 12, minionSpawnPos, {0, 90, 0}, xDirection, true)
+            if modelSuccess then
+                while isCloning do
+                    coroutine.yield(0)
+                end
+                yieldSeconds(0.2)
+            else
+                isCloning = false
             end
         end
     end
@@ -646,7 +708,7 @@ function getSpawnPositionForModels(config)
 end
 
 -- Core Function: Clones a specific model by ID from a bag N times, arranging them to the right, and returns original to the bag
-function cloneModelFromBag(bag, modelId, qty, targetPos, targetRot, xDirection)
+function cloneModelFromBag(bag, modelId, qty, targetPos, targetRot, xDirection, isStacked)
     if not bag then return false end
     
     for _, objInfo in ipairs(bag.getObjects()) do
@@ -658,14 +720,24 @@ function cloneModelFromBag(bag, modelId, qty, targetPos, targetRot, xDirection)
                 rotation = targetRot,
                 smooth = false,
                 callback_function = function(modelObj)
-                    -- Clone it qty times, arranging them to the right
+                    -- Clone it qty times
                     for q = 1, qty do
-                        -- Place models: first copy at targetPos.x, subsequent copies build inwards
-                        local modelPos = {
-                            x = targetPos.x + ((q - 1) * 1.8 * xDirection),
-                            y = targetPos.y,
-                            z = targetPos.z
-                        }
+                        local modelPos
+                        if isStacked then
+                            -- Stack vertically: same X and Z, increased Y height per copy
+                            modelPos = {
+                                x = targetPos.x,
+                                y = targetPos.y + ((q - 1) * 0.4), -- perfect vertical stack height spacing
+                                z = targetPos.z
+                            }
+                        else
+                            -- Place models: first copy at targetPos.x, subsequent copies build inwards
+                            modelPos = {
+                                x = targetPos.x + ((q - 1) * 1.8 * xDirection),
+                                y = targetPos.y,
+                                z = targetPos.z
+                            }
+                        end
                         
                         local clonedObj = modelObj.clone({
                             position = modelPos,
