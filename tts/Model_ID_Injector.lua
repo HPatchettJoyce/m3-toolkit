@@ -15,7 +15,7 @@
 
 -- =============== CONFIGURATION GUIDs (REQUIRED) ===============
 CHARACTERS_ZONE_GUID = "83f62b"  -- Zone containing the Characters Deck
-MODELS_BAG_ZONE_GUID = "XXXXXX"  -- Zone containing the Raw Models Bag
+MODELS_BAG_ZONE_GUID = "fe2114"  -- Zone containing the Raw Models Bag
 
 
 local isProcessing = false

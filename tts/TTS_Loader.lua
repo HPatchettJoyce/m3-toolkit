@@ -354,21 +354,25 @@ function loadCastCoroutine()
                 print("Warning: Unit card ID not found: " .. unitId)
             end
 
-            -- 3b. Clone 3D Models to Layout Zone
+            -- 3b. Clone 3D Models to Layout Zone (Task 3 Improvements)
             if modelsBag and qty and qty > 0 then
                 local spawnTarget = getSpawnPositionForModels(config)
-                local zDirection = (config.color == "Red") and -1 or 1
+                
+                -- Align models at Z = -24 for Red and Z = 24 for Blue to prevent encroaching on the board
+                local zStart = (config.color == "Red") and -24.0 or 24.0
+                local zDirection = (config.color == "Red") and 1 or -1 -- layout towards table center (Z = 0)
                 local xDirection = (config.color == "Red") and 1 or -1
                 
                 -- Arrange each unit type on its own row along the Z axis, duplicates along the X axis
                 local unitSpawnPos = {
                     x = spawnTarget.x,
                     y = spawnTarget.y,
-                    z = spawnTarget.z + (unitIndex * 2.5 * zDirection)
+                    z = zStart + (unitIndex * 2.5 * zDirection)
                 }
 
                 isCloning = true
-                local modelSuccess = cloneModelFromBag(modelsBag, unitId, qty, unitSpawnPos, {0, (config.color == "Red" and 0 or 180), 0}, xDirection)
+                -- Rotate standees by 90 degrees around Y so they face the players directly (double-sided)
+                local modelSuccess = cloneModelFromBag(modelsBag, unitId, qty, unitSpawnPos, {0, 90, 0}, xDirection)
                 if modelSuccess then
                     while isCloning do
                         coroutine.yield(0)
