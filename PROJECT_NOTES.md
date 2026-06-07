@@ -1,13 +1,13 @@
 # Project Notes: Monumentum Cast Recruiter
 
 ## Overview
-This document outlines the architecture, setup instructions, historical progress, and technical specifications for the **Monumentum Cast Recruiter** project. It serves as the single source of truth for both the Web App and the Tabletop Simulator (TTS) automation scripts.
+This document outlines the architecture, setup instructions, historical progress, and technical specifications for the **Monumentum Cast Recruiter** project (M3 Toolkit). It serves as the single source of truth for both the Web App and the Tabletop Simulator (TTS) automation scripts.
 
 ---
 
 ## Project Structure
 ```text
-C:\Users\Harvey\projects\Cast Recruiter\
+C:\Users\Harvey\projects\M3 Toolkit\
 ├── dextrous\
 │   ├── generate_card_images.py          # Python script to parse Dextrous JSONs & inject metadata (Nickname/GMNotes)
 │   ├── MonuMentuM Characters *.json     # Tabletop Simulator Character deck exports (with Name & ID injected!)
@@ -72,7 +72,7 @@ When adding new cards or modifying sheets:
 1. Export the latest Saved Object JSONs from Dextrous to the `dextrous/` folder.
 2. Run `python dextrous/generate_card_images.py`. This will:
    * Scan your sheets/CSVs.
-   * Inject Names into Nicknames and Unique IDs into GM Notes for the TTS Saved Object JSONs.
+   * Inject Names into Nicknames and Unique IDs into GM Notes for the TTS Saved Object JSONs (automatically generating deterministic `SYN-` prefix unique IDs for any items missing IDs in your sheet, such as Loyal Companions or Talismans, ensuring all cards successfully resolve!).
    * Regenerate `CardImages.gs` with image sprite coordinates.
 3. Use `clasp push` to sync your GAS backend.
 4. Import the newly saved JSON Saved Objects in Tabletop Simulator. All cards will be fully searchable, layout-safe, and ready for deployment!
@@ -118,16 +118,19 @@ We have implemented a decoupled, 3D button-based End Game Controller to record m
 * **Objective:** Establish a foolproof standalone utility to prepare 3D models with database IDs.
 * **Implementation:**
   * Created `tts/Model_ID_Injector.lua`. This token script can be placed on the table next to a Characters Deck (which has IDs in GM Notes) and a bag of raw models.
-  * When clicked, the script matches each model in the bag against its card counterpart by Nickname, copies the card's Unique ID from its `GM_Notes` property, and assigns it to the model's `GM_Notes` before returning it to the bag.
-  * The user can then right-click and save the Bag as a permanent, pre-loaded game component.
+  * **Casing and Cost Filtering:** Automatically ignores and strips parenthesized trailing costs (e.g. `Obduron (6)` -> `Obduron`) during name matching.
+  * **Automated Cleanup:** When matched, the script permanently renames the model inside your bag to its clean name (removing `(6)` cost) and completely clears the prowess and fortitude description stats.
+  * **ID Assignment:** Copies the card's Unique ID from its `GM_Notes` property, and assigns it to the model's `GM_Notes` before returning it safely to the bag.
 
 ### Task 3: Model Spawning from Bags
 * **Objective:** Spawn recruited 3D models directly on the table, matching the exact counts from the JSON.
 * **Implementation:**
   * Introduced `MODELS_ZONE_GUID` at the top of `TTS_Loader.lua`.
   * During the load coroutine, if the Models Bag is present in this trigger zone, it iterates over `unitIdsRecruited` and extracts the models matching the Database ID (`GM_Notes`) directly.
-  * Clones the model `N` times (representing the quantity recruited) and drops them onto the physical table in the player's layout zone (`config.character_zone_guid`).
-  * **Dynamic Row Layout:** Arranges distinct unit types on their own rows along the Z axis, while placing duplicate models of that same type in a clean horizontal row along the X axis (shifting to the right) to prevent physical overlaps and collisions.
+  * **Champion Spawning (Character 1):** Spawns the Champion standee first, treating them as row 1 of the player's grid, followed by recruited units on rows 2, 3, etc.
+  * **Auto-Summon Minion Stacking:** If the dominion is *Iro-Si-Khar* or *Ahéserec*, the script automatically clones **12 copies** of the minion token standee, stacking them vertically on their own dedicated final row as a summoning pool.
+  * **Calibrated Layout Grid:** Automatically aligns spawns at `X = -23.5, Z = -5.0` (Red Player) and `X = 23.5, Z = 5.0` (Blue Player). Duplicates build inwards on the X axis, while different units stack on rows further back (decreasing Z for Red, increasing Z for Blue) to protect the central board area from encroachment.
+  * **Rotated Standees:** Standees are spawned rotated by `90` degrees around Y so they face the players directly.
 
 ### Task 4: Importer Cleanup & Standardisation
 * **Objective:** Streamline the importer pad to remove meandering legacy fallback code.
@@ -138,10 +141,9 @@ We have implemented a decoupled, 3D button-based End Game Controller to record m
 ### Task 5: Native TTS Onboarding Feature
 * **Objective:** Give players the ability to instantly launch learning scenarios directly in TTS without copying JSON.
 * **Implementation:**
-  * Integrated a native XML UI into the loader token, accompanied by a purple "Onboarding Menu" button flat on the loader pad.
-  * Clicking "Onboarding Menu" toggles a clean screen-space setup panel.
-  * Players choose their Champion (Flint, Ripple, Lark), select Onboarding Scenarios 1 to 4, choose their Seat (Red, Blue), and click "Load Scenario".
-  * The script serialises the hardcoded scenario list into JSON and channels it directly into the robust loading pipeline, spawning the champion card, the units, their corresponding models, and any auto-summoned minions automatically.
+  * Integrated a native **Screen-Space XML UI** panel that centers elegantly on the player's monitor (`rectAlignment="MiddleCenter"`) with slide transitions, matching the aesthetic of the JSON importer window.
+  * **GUID Event Routing:** Dynamically formats the XML at runtime using the loader's dynamic GUID (`self.getGUID()`). This routes screen-space dropdown select and load clicks seamlessly back into the object script callbacks!
+  * **Instant Drafting:** Serialises hardcoded learning scenario casts into JSON on the fly and channels them directly through the main loading pipeline.
 
 ### Task 6: Web App Signature Actions Segregation
 * **Objective:** Separate Signature Actions from other generic Specials in the web app UI.
