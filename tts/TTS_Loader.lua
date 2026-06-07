@@ -45,6 +45,13 @@ SPAWN_HEIGHT_OFFSET = 3.0
 -- Time (in seconds) to wait between card spawns inside active layout zones
 ZONE_LAYOUT_DELAY = 0.3
 
+-- =============== ONBOARDING UI CANVAS POSITIONING ===============
+-- Adjusts the position, rotation, and scale of the Onboarding panel relative to the loader pad token.
+-- Position coordinates: "X Y Z" (X: left/right, Y: height above token, Z: forward/backward)
+ONBOARDING_UI_POSITION = "0 10 -15" -- Raised up (Y=10) and pulled closer to Red player (Z=-15) to prevent occlusion
+ONBOARDING_UI_ROTATION = "90 180 0" -- Flat on the table facing the Red player directly (rotated 180 on Y)
+ONBOARDING_UI_SCALE    = "0.1 0.1 0.1"
+
 -- =============== ONBOARDING SCENARIOS CONFIGURATION ===============
 -- Pre-configured cast lists for the learning scenarios (Task 5).
 -- You can modify these lists of IDs to customize the onboarding scenarios.
@@ -774,52 +781,55 @@ selectedChamp = "Flint"
 selectedScenario = 1
 selectedPlayer = 1
 
--- Build the screen-space XML panel dynamically on load
+-- Build the screen-space XML panel dynamically on load (Task 5 Improvements)
 function setupXmlUi()
-    local xml = [[
-<Defaults>
-    <Button class="start-btn" width="180" height="40" fontSize="16" color="#2ecc71" textColor="#ffffff" fontStyle="Bold" />
-    <Button class="close-btn" width="100" height="40" fontSize="16" color="#95a5a6" textColor="#ffffff" />
-    <Text class="header" fontSize="18" fontStyle="Bold" color="#ffffff" alignment="Inferred" />
-</Defaults>
-<Panel id="onboardPanel" active="false" width="450" height="300" color="#2c3e50" rectAlignment="MiddleCenter" padding="20" showAnimation="SlideIn_Bottom" hideAnimation="SlideOut_Bottom">
-    <VerticalLayout spacing="15">
-        <Text class="header" alignment="MiddleCenter">Monumentum Onboarding Setup</Text>
-        
-        <HorizontalLayout spacing="10" height="35">
-            <Text color="#ffffff" fontSize="15" alignment="MiddleLeft">Champion:</Text>
-            <Dropdown id="ddChamp" onValueChanged="onChampSelected" width="220" height="30">
-                <option selected="true">Flint</option>
-                <option>Ripple</option>
-                <option>Lark</option>
-            </Dropdown>
-        </HorizontalLayout>
-        
-        <HorizontalLayout spacing="10" height="35">
-            <Text color="#ffffff" fontSize="15" alignment="MiddleLeft">Scenario:</Text>
-            <Dropdown id="ddScenario" onValueChanged="onScenarioSelected" width="220" height="30">
-                <option selected="true">Scenario 1</option>
-                <option>Scenario 2</option>
-                <option>Scenario 3</option>
-                <option>Scenario 4</option>
-            </Dropdown>
-        </HorizontalLayout>
+    -- Format with our positioning variables to let users adjust them effortlessly at the top of the script
+    local xml = string.format([[
+<Canvas position="%s" rotation="%s" scale="%s" width="450" height="300">
+    <Defaults>
+        <Button class="start-btn" width="180" height="40" fontSize="16" color="#2ecc71" textColor="#ffffff" fontStyle="Bold" />
+        <Button class="close-btn" width="100" height="40" fontSize="16" color="#95a5a6" textColor="#ffffff" />
+        <Text class="header" fontSize="18" fontStyle="Bold" color="#ffffff" alignment="Inferred" />
+    </Defaults>
+    <Panel id="onboardPanel" active="false" width="450" height="300" color="#2c3e50" padding="20" showAnimation="SlideIn_Bottom" hideAnimation="SlideOut_Bottom">
+        <VerticalLayout spacing="15">
+            <Text class="header" alignment="MiddleCenter">Monumentum Onboarding Setup</Text>
+            
+            <HorizontalLayout spacing="10" height="35">
+                <Text color="#ffffff" fontSize="15" alignment="MiddleLeft">Champion:</Text>
+                <Dropdown id="ddChamp" onValueChanged="onChampSelected" width="220" height="30">
+                    <option selected="true">Flint</option>
+                    <option>Ripple</option>
+                    <option>Lark</option>
+                </Dropdown>
+            </HorizontalLayout>
+            
+            <HorizontalLayout spacing="10" height="35">
+                <Text color="#ffffff" fontSize="15" alignment="MiddleLeft">Scenario:</Text>
+                <Dropdown id="ddScenario" onValueChanged="onScenarioSelected" width="220" height="30">
+                    <option selected="true">Scenario 1</option>
+                    <option>Scenario 2</option>
+                    <option>Scenario 3</option>
+                    <option>Scenario 4</option>
+                </Dropdown>
+            </HorizontalLayout>
 
-        <HorizontalLayout spacing="10" height="35">
-            <Text color="#ffffff" fontSize="15" alignment="MiddleLeft">Load For:</Text>
-            <Dropdown id="ddPlayer" onValueChanged="onPlayerSelected" width="220" height="30">
-                <option selected="true">Red Player</option>
-                <option>Blue Player</option>
-            </Dropdown>
-        </HorizontalLayout>
-        
-        <HorizontalLayout spacing="20" height="50" alignment="MiddleCenter">
-            <Button class="start-btn" onClick="btnSpawnOnboarding">LOAD SCENARIO</Button>
-            <Button class="close-btn" onClick="btnHideOnboard">CLOSE</Button>
-        </HorizontalLayout>
-    </VerticalLayout>
-</Panel>
-]]
+            <HorizontalLayout spacing="10" height="35">
+                <Text color="#ffffff" fontSize="15" alignment="MiddleLeft">Load For:</Text>
+                <Dropdown id="ddPlayer" onValueChanged="onPlayerSelected" width="220" height="30">
+                    <option selected="true">Red Player</option>
+                    <option>Blue Player</option>
+                </Dropdown>
+            </HorizontalLayout>
+            
+            <HorizontalLayout spacing="20" height="50" alignment="MiddleCenter">
+                <Button class="start-btn" onClick="btnSpawnOnboarding">LOAD SCENARIO</Button>
+                <Button class="close-btn" onClick="btnHideOnboard">CLOSE</Button>
+            </HorizontalLayout>
+        </VerticalLayout>
+    </Panel>
+</Canvas>
+]], ONBOARDING_UI_POSITION, ONBOARDING_UI_ROTATION, ONBOARDING_UI_SCALE)
     self.UI.setXml(xml)
 end
 
