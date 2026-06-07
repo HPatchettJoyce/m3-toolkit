@@ -354,20 +354,23 @@ function loadCastCoroutine()
                 print("Warning: Unit card ID not found: " .. unitId)
             end
 
-            -- 3b. Clone 3D Models to Layout Zone (Task 3 Improvements)
+            -- 3b. Clone 3D Models to Layout Zone (Task 3 Custom Coordinates Layout)
             if modelsBag and qty and qty > 0 then
                 local spawnTarget = getSpawnPositionForModels(config)
                 
-                -- Align models at Z = -24 for Red and Z = 24 for Blue to prevent encroaching on the board
-                local zStart = (config.color == "Red") and -24.0 or 24.0
-                local zDirection = (config.color == "Red") and 1 or -1 -- layout towards table center (Z = 0)
-                local xDirection = (config.color == "Red") and 1 or -1
+                -- Custom start coordinates: X pulled back to -23.5 (Red) or 23.5 (Blue), Z set to -5.0 (Red) or 5.0 (Blue)
+                local xStart = (config.color == "Red") and -23.5 or 23.5
+                local zStart = (config.color == "Red") and -5.0 or 5.0
+                local xDirection = (config.color == "Red") and 1 or -1   -- duplicates build inwards towards table center
+                local zDirection = (config.color == "Red") and -1 or 1   -- different units move further back towards player edge (decreasing Z for Red, increasing Z for Blue)
                 
-                -- Arrange each unit type on its own row along the Z axis, duplicates along the X axis
+                local zSpacing = 2.5
+                
+                -- Arrange each unit type on its own row along the Z axis, duplicates building inward along the X axis
                 local unitSpawnPos = {
-                    x = spawnTarget.x,
-                    y = spawnTarget.y,
-                    z = zStart + (unitIndex * 2.5 * zDirection)
+                    x = xStart,
+                    y = spawnTarget.y, -- retain correct height from layout zone
+                    z = zStart + (unitIndex * zSpacing * zDirection)
                 }
 
                 isCloning = true
@@ -657,9 +660,9 @@ function cloneModelFromBag(bag, modelId, qty, targetPos, targetRot, xDirection)
                 callback_function = function(modelObj)
                     -- Clone it qty times, arranging them to the right
                     for q = 1, qty do
-                        -- Place models to the right: X offset = q * 2.0 * xDirection
+                        -- Place models: first copy at targetPos.x, subsequent copies build inwards
                         local modelPos = {
-                            x = targetPos.x + (q * 1.8 * xDirection),
+                            x = targetPos.x + ((q - 1) * 1.8 * xDirection),
                             y = targetPos.y,
                             z = targetPos.z
                         }
