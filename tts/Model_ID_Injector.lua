@@ -9,20 +9,20 @@
         - Zone 2: Over the Bag containing the raw 3D Models.
      3. Enter their GUIDs in CHARACTERS_ZONE_GUID and MODELS_BAG_ZONE_GUID below.
      4. Click the "Inject IDs to Models" button.
-     5. The script will take each model out of the bag, assign its GMNotes to match its card counterpart's ID, and put it back.
+     5. The script will take each model out of the bag, clean its name, clear its description, assign its GMNotes, and return it.
      6. Once complete, you can right-click and save the Bag as a customized game component!
 --]]
 
 -- =============== CONFIGURATION GUIDs (REQUIRED) ===============
 CHARACTERS_ZONE_GUID = "83f62b"  -- Zone containing the Characters Deck
-MODELS_BAG_ZONE_GUID = "fe2114"  -- Zone containing the Raw Models Bag
+MODELS_BAG_ZONE_GUID = "XXXXXX"  -- Zone containing the Raw Models Bag
 
 
 local isProcessing = false
 
 function onLoad()
     self.setName("Monumentum Model ID Injector")
-    self.setDescription("Standalone utility to permanently inject Card IDs into 3D models inside a bag.")
+    self.setDescription("Standalone utility to permanently inject Card IDs, clean nicknames, and strip stats from 3D models in a bag.")
     
     -- Render Inject Button
     self.createButton({
@@ -53,6 +53,16 @@ function btnStartInjection(obj, player_color, alt_click)
     end
     
     startLuaCoroutine(self, "injectIdsCoroutine")
+end
+
+-- Helper: Clean model nickname by stripping trailing parenthesized numbers (e.g. "Obduron (6)" -> "Obduron")
+function cleanModelName(name)
+    if not name then return "" end
+    -- Remove optional whitespace and trailing parentheses containing numbers
+    local cleaned = name:gsub("%s*%(%d+%)", "")
+    -- Trim any leading or trailing spaces
+    cleaned = cleaned:match("^%s*(.-)%s*$") or cleaned
+    return cleaned
 end
 
 -- Coroutine to safely handle async taking, updating, and returning
@@ -96,21 +106,27 @@ function injectIdsCoroutine()
         end
     end
     
-    -- 2. Build items list to process from the Bag (Task 2 Support)
+    -- 2. Build items list to process from the Bag
     local bagObjects = bag.getObjects()
     local itemsToProcess = {}
     local unmatchedModels = {}
     
     for _, bObj in ipairs(bagObjects) do
-        local modelName = bObj.nickname
-        if modelName == "" or modelName == nil then modelName = bObj.name end
+        local rawName = bObj.nickname
+        if rawName == "" or rawName == nil then rawName = bObj.name end
         
-        if modelName and modelName ~= "" then
+        if rawName and rawName ~= "" then
+            local modelName = cleanModelName(rawName)
             local matchedId = nameToId[modelName:lower()]
             if matchedId then
-                table.insert(itemsToProcess, { guid = bObj.guid, name = modelName, id = matchedId })
+                table.insert(itemsToProcess, { 
+                    guid = bObj.guid, 
+                    rawName = rawName, 
+                    cleanName = modelName, 
+                    id = matchedId 
+                })
             else
-                table.insert(unmatchedModels, modelName)
+                table.insert(unmatchedModels, rawName)
             end
         end
     end
@@ -135,16 +151,19 @@ function injectIdsCoroutine()
     
     broadcastToAll("Found " .. #itemsToProcess .. " models inside the bag to update. Starting injection...", {0.1, 0.8, 0.1})
     
-    -- 3. Sequentially take each model, set GM Notes, and return to Bag
+    -- 3. Sequentially take each model, clean name, clear description, set GM Notes, and return to Bag
     for i, item in ipairs(itemsToProcess) do
         local spawned = bag.takeObject({
             guid = item.guid,
             position = {x = 0, y = 15, z = 0}, -- High up to avoid clashing
             smooth = false,
             callback_function = function(obj)
+                -- 3a. Inject database ID
                 obj.setGMNotes(item.id)
-                -- Apply visual tag or name update if helpful (optional)
-                -- obj.setDescription("ID: " .. item.id)
+                -- 3b. Rename to clean Name (removes "(6)" etc.)
+                obj.setName(item.cleanName)
+                -- 3c. Clear the description (removes prowess/fortitude stats)
+                obj.setDescription("")
                 
                 Wait.frames(function()
                     if obj ~= nil and not obj.isDestroyed() and bag ~= nil and not bag.isDestroyed() then
@@ -160,7 +179,7 @@ function injectIdsCoroutine()
         end
     end
     
-    broadcastToAll("Success: " .. #itemsToProcess .. " models successfully injected with Database IDs! Please save the updated Bag.", {0.1, 0.9, 0.1})
+    broadcastToAll("Success: " .. #itemsToProcess .. " models successfully updated! Re-named to clean names, cleared descriptions, and injected with Database IDs. Please save the updated Bag.", {0.1, 0.9, 0.1})
     isProcessing = false
     return 1
 end
