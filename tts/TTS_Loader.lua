@@ -45,115 +45,108 @@ SPAWN_HEIGHT_OFFSET = 3.0
 -- Time (in seconds) to wait between card spawns inside active layout zones
 ZONE_LAYOUT_DELAY = 0.3
 
--- =============== ONBOARDING UI CANVAS POSITIONING ===============
--- Adjusts the position, rotation, and scale of the Onboarding panel relative to the loader pad token.
--- Position coordinates: "X Y Z" (X: left/right, Y: height above token, Z: forward/backward)
-ONBOARDING_UI_POSITION = "0 10 -15" -- Raised up (Y=10) and pulled closer to Red player (Z=-15) to prevent occlusion
-ONBOARDING_UI_ROTATION = "90 180 0" -- Flat on the table facing the Red player directly (rotated 180 on Y)
-ONBOARDING_UI_SCALE    = "0.1 0.1 0.1"
-
 -- =============== ONBOARDING SCENARIOS CONFIGURATION ===============
 -- Pre-configured cast lists for the learning scenarios (Task 5).
 -- You can modify these lists of IDs to customize the onboarding scenarios.
 ONBOARDING_SCENARIOS = {
     ["Flint"] = { -- Rhavlika Dominion
         [1] = {
-            championId = "01RHA-01CHP-001",
-            unitIdsRecruited = { ["01RHA-02FAM-002"] = 1, ["01RHA-02FAM-003"] = 1 }, -- Obduron, etc.
+            championId = "",
+            unitIdsRecruited = { ["01RHV-02FAM-002"] = 1, ["01RHV-02FAM-003"] = 1 },
             talismanIdsEquipped = {},
-            specialIds = { "01RHA-04SP-001", "01RHA-04SP-002" },
+            specialIds = {},
             dominion = "Rhavlika",
             champion = "Flint Dross"
         },
         [2] = {
-            championId = "01RHA-01CHP-001",
-            unitIdsRecruited = { ["01RHA-02FAM-002"] = 1, ["01RHA-02FAM-003"] = 1, ["01RHA-03MIN-004"] = 1 },
+            championId = "",
+            unitIdsRecruited = { ["01RHV-02FAM-002"] = 1, ["01RHV-02FAM-003"] = 1 },
             talismanIdsEquipped = {},
-            specialIds = { "01RHA-04SP-001", "01RHA-04SP-002" },
+            specialIds = { "01RHV-05SPA-006", "01RHV-05SPA-038" },
             dominion = "Rhavlika",
             champion = "Flint Dross"
         },
         [3] = {
-            championId = "01RHA-01CHP-001",
-            unitIdsRecruited = { ["01RHA-02FAM-002"] = 2, ["01RHA-02FAM-003"] = 1, ["01RHA-03MIN-004"] = 2 },
+            championId = "01RHV-01CHP-001",
+            unitIdsRecruited = { ["01RHV-02FAM-002"] = 1, ["01RHV-02FAM-003"] = 1, ["01RHV-02FAM-004"] = 2 },
             talismanIdsEquipped = {},
-            specialIds = { "01RHA-04SP-001", "01RHA-04SP-002", "01RHA-04SP-003" },
+            specialIds = { "01RHV-05SPA-006", "01RHV-05SPA-038", "01RHV-05SPA-005", "01RHV-05SPA-063" },
             dominion = "Rhavlika",
             champion = "Flint Dross"
         },
         [4] = {
-            championId = "01RHA-01CHP-001",
-            unitIdsRecruited = { ["01RHA-02FAM-002"] = 2, ["01RHA-02FAM-003"] = 2, ["01RHA-03MIN-004"] = 2 },
+            championId = "01RHV-01CHP-001",
+            unitIdsRecruited = { ["01RHV-02FAM-002"] = 2, ["01RHV-02FAM-003"] = 3, ["01RHV-02FAM-004"] = 3 },
             talismanIdsEquipped = {},
-            specialIds = { "01RHA-04SP-001", "01RHA-04SP-002", "01RHA-04SP-003" },
+            specialIds = { "01RHV-05SPA-006", "01RHV-05SPA-038", "01RHV-05SPA-005", "01RHV-05SPA-063", "01RHV-05SPA-001", "01RHV-05SPA-003" },
             dominion = "Rhavlika",
             champion = "Flint Dross"
         }
     },
     ["Ripple"] = { -- Iro-Si-Khar Dominion
         [1] = {
-            championId = "02IRO-01CHP-005",
-            unitIdsRecruited = { ["02IRO-02FAM-006"] = 1, ["02IRO-02FAM-007"] = 1 }, -- Ripple, Driplet, etc.
+            championId = "",
+            unitIdsRecruited = { ["02IRO-02FAM-006"] = 1, ["02IRO-02FAM-007"] = 1 },
             talismanIdsEquipped = {},
-            specialIds = { "02IRO-04SP-001", "02IRO-04SP-002" },
+            specialIds = {},
             dominion = "Iro-Si-Khar",
-            champion = "Ripple"
+            champion = "Ripple Elshara"
         },
         [2] = {
-            championId = "02IRO-01CHP-005",
-            unitIdsRecruited = { ["02IRO-02FAM-006"] = 1, ["02IRO-02FAM-007"] = 1, ["02IRO-02FAM-008"] = 1 },
+            championId = "",
+            unitIdsRecruited = { ["02IRO-02FAM-006"] = 1, ["02IRO-02FAM-007"] = 1 },
             talismanIdsEquipped = {},
-            specialIds = { "02IRO-04SP-001", "02IRO-04SP-002" },
+            specialIds = { "02IRO-05SPA-010", "02IRO-05SPA-041" },
             dominion = "Iro-Si-Khar",
-            champion = "Ripple"
+            champion = "Ripple Elshara"
         },
         [3] = {
             championId = "02IRO-01CHP-005",
-            unitIdsRecruited = { ["02IRO-02FAM-006"] = 2, ["02IRO-02FAM-007"] = 1, ["02IRO-02FAM-008"] = 2 },
+            unitIdsRecruited = { ["02IRO-02FAM-006"] = 1, ["02IRO-02FAM-007"] = 1, ["02IRO-02FAM-008"] = 2 },
             talismanIdsEquipped = {},
-            specialIds = { "02IRO-04SP-001", "02IRO-04SP-002", "02IRO-04SP-003" },
+            specialIds = { "02IRO-05SPA-010", "02IRO-05SPA-041", "02IRO-05SPA-012", "02IRO-05SPA-067"},
             dominion = "Iro-Si-Khar",
-            champion = "Ripple"
+            champion = "Ripple Elshara"
         },
         [4] = {
             championId = "02IRO-01CHP-005",
-            unitIdsRecruited = { ["02IRO-02FAM-006"] = 2, ["02IRO-02FAM-007"] = 2, ["02IRO-02FAM-008"] = 2 },
+            unitIdsRecruited = { ["02IRO-02FAM-006"] = 3, ["02IRO-02FAM-007"] = 3, ["02IRO-02FAM-008"] = 3 },
             talismanIdsEquipped = {},
-            specialIds = { "02IRO-04SP-001", "02IRO-04SP-002", "02IRO-04SP-003" },
+            specialIds = { "02IRO-05SPA-010", "02IRO-05SPA-041", "02IRO-05SPA-012", "02IRO-05SPA-067", "02IRO-05SPA-011", "02IRO-05SPA-065" },
             dominion = "Iro-Si-Khar",
-            champion = "Ripple"
+            champion = "Ripple Elshara"
         }
     },
     ["Lark"] = { -- Voisira Dominion
         [1] = {
-            championId = "03VOI-01CHP-010",
-            unitIdsRecruited = { ["03VOI-02FAM-011"] = 1, ["03VOI-02FAM-012"] = 1 },
+            championId = "",
+            unitIdsRecruited = { ["03VOI-02FAM-012"] = 1, ["03VOI-02FAM-050"] = 1 },
             talismanIdsEquipped = {},
-            specialIds = { "03VOI-04SP-001", "03VOI-04SP-002" },
+            specialIds = {},
             dominion = "Voisira",
             champion = "Lark"
         },
         [2] = {
-            championId = "03VOI-01CHP-010",
-            unitIdsRecruited = { ["03VOI-02FAM-011"] = 1, ["03VOI-02FAM-012"] = 1, ["03VOI-02FAM-013"] = 1 },
+            championId = "",
+            unitIdsRecruited = { ["03VOI-02FAM-012"] = 1, ["03VOI-02FAM-050"] = 1 },
             talismanIdsEquipped = {},
-            specialIds = { "03VOI-04SP-001", "03VOI-04SP-002" },
+            specialIds = { "03VOI-05SPA-048", "03VOI-05SPA-017"  },
             dominion = "Voisira",
             champion = "Lark"
         },
         [3] = {
             championId = "03VOI-01CHP-010",
-            unitIdsRecruited = { ["03VOI-02FAM-011"] = 2, ["03VOI-02FAM-012"] = 1, ["03VOI-03MIN-014"] = 2 },
+            unitIdsRecruited = { ["03VOI-02FAM-011"] = 1, ["03VOI-02FAM-012"] = 2, ["03VOI-02FAM-050"] = 1 },
             talismanIdsEquipped = {},
-            specialIds = { "03VOI-04SP-001", "03VOI-04SP-002", "03VOI-04SP-003" },
+            specialIds = { "03VOI-05SPA-048", "03VOI-05SPA-017", "03VOI-05SPA-014", "03VOI-05SPA-018"  },
             dominion = "Voisira",
             champion = "Lark"
         },
         [4] = {
             championId = "03VOI-01CHP-010",
-            unitIdsRecruited = { ["03VOI-02FAM-011"] = 2, ["03VOI-02FAM-012"] = 2, ["03VOI-03MIN-014"] = 2 },
+            unitIdsRecruited = { ["03VOI-02FAM-011"] = 3, ["03VOI-02FAM-012"] = 3, ["03VOI-02FAM-050"] = 3 },
             talismanIdsEquipped = {},
-            specialIds = { "03VOI-04SP-001", "03VOI-04SP-002", "03VOI-04SP-003" },
+            specialIds = { "03VOI-05SPA-048", "03VOI-05SPA-017", "03VOI-05SPA-014", "03VOI-05SPA-018", "03VOI-05SPA-013", "03VOI-05SPA-016"  },
             dominion = "Voisira",
             champion = "Lark"
         }
@@ -279,6 +272,41 @@ function processPastedCast(playerNum, player, jsonText)
     startLuaCoroutine(self, "loadCastCoroutine")
 end
 
+-- Clears previous cards in hand and models in zone for the given player to allow fresh redraws
+function clearPlayerWorkspace(playerNum)
+    local config = PLAYER_CONFIG[playerNum]
+    if not config then return end
+    
+    local color = config.color
+    
+    -- 1. Clear Player's Hand
+    if Player[color] then
+        local handObjects = Player[color].getHandObjects()
+        if handObjects then
+            for _, obj in ipairs(handObjects) do
+                if obj and not obj.isDestroyed() then
+                    destroyObject(obj)
+                end
+            end
+        end
+    end
+    
+    -- 2. Clear character scripting zone
+    if config.character_zone_guid and config.character_zone_guid ~= "XXXXXX" and config.character_zone_guid ~= "" then
+        local zone = getObjectFromGUID(config.character_zone_guid)
+        if zone then
+            for _, obj in ipairs(zone.getObjects()) do
+                -- Prevent destroying the zone itself or other vital objects
+                if obj and obj.getGUID() ~= config.character_zone_guid then
+                    if obj ~= self and obj.type ~= "Table" and obj.type ~= "Zone" then
+                        destroyObject(obj)
+                    end
+                end
+            end
+        end
+    end
+end
+
 -- Coroutine to handle step-by-step take, clone, and return operations smoothly
 function loadCastCoroutine()
     -- Safely retrieve parameters from global storage (TTS coroutines do not accept arguments)
@@ -294,6 +322,10 @@ function loadCastCoroutine()
     local config = PLAYER_CONFIG[playerNum]
     local spawnPos = config.special_dest -- Safe temporary spawn coordinates before dealing to hand
     
+    -- Clear previous cards in hand and models in zone for a clean fresh redraw (Tweak 1)
+    clearPlayerWorkspace(playerNum)
+    yieldSeconds(0.4) -- Wait a brief moment for the physics engine to register removals
+    
     broadcastToAll("Loading Cast for Player " .. playerNum .. " (" .. (castData.dominion or "Unknown") .. " - " .. (castData.champion or "Unknown") .. ")...", {0.1, 0.8, 0.1})
     
     -- Initial verification: Verify decks are strictly present in trigger zones before loading
@@ -307,10 +339,13 @@ function loadCastCoroutine()
         return 1
     end
     
+    -- Reduced onboarding scenarios (Scenarios 1 & 2) should not load the Champion card/standee, or minion tokens (Tweak 2)
+    local isReducedScenario = (castData.scenarioNum ~= nil and (castData.scenarioNum == 1 or castData.scenarioNum == 2))
+    
     -- 2. Extract and deal Champion to Hand
     local champName = castData.champion
     local champId = castData.championId
-    if champName or champId then
+    if (champName or champId) and not isReducedScenario then
         -- Fresh lookup to ensure valid Unity object references
         local charDeck, specDeck = findDecks()
         if not charDeck then
@@ -425,8 +460,8 @@ function loadCastCoroutine()
         end
     end
 
-    -- 3c. Auto-Spawn 12 Stacked Minions (Driplet / Huskling Lot for Iro-Si-Khar & Ahéserec)
-    if castData.dominion == "Iro-Si-Khar" or castData.dominion == "Ahéserec" or castData.dominion == "Aheserec" then
+    -- 3c. Auto-Spawn 12 Stacked Minions (Driplet / Huskling Lot for Iro-Si-Khar & Ahéserec) (Tweak 2)
+    if (castData.dominion == "Iro-Si-Khar" or castData.dominion == "Ahéserec" or castData.dominion == "Aheserec") and not isReducedScenario then
         if modelsBag then
             unitIndex = unitIndex + 1
             local minionId = (castData.dominion == "Iro-Si-Khar") and "02IRO-03MIN-009" or "05AHS-03MIN-022"
@@ -482,7 +517,7 @@ function loadCastCoroutine()
     end
     
     -- 4.5 Auto-Summon Minions (Task 1)
-    if castData.dominion == "Iro-Si-Khar" or castData.dominion == "Ahéserec" or castData.dominion == "Aheserec" then
+    if (castData.dominion == "Iro-Si-Khar" or castData.dominion == "Ahéserec" or castData.dominion == "Aheserec") and not isReducedScenario then
         local minionName = (castData.dominion == "Iro-Si-Khar") and "Driplet" or "Huskling"
         local minionId = (castData.dominion == "Iro-Si-Khar") and "02IRO-03MIN-009" or "05AHS-03MIN-022"
         local charDeck, specDeck = findDecks()
@@ -781,71 +816,69 @@ selectedChamp = "Flint"
 selectedScenario = 1
 selectedPlayer = 1
 
--- Build the screen-space XML panel dynamically on load (Task 5 Improvements)
+-- Build the screen-space XML panel dynamically on load (Task 5 Improvements - Global Screen Space)
 function setupXmlUi()
-    -- Format with our positioning variables to let users adjust them effortlessly at the top of the script
+    local myGuid = self.getGUID()
     local xml = string.format([[
-<Canvas position="%s" rotation="%s" scale="%s" width="450" height="300">
-    <Defaults>
-        <Button class="start-btn" width="180" height="40" fontSize="16" color="#2ecc71" textColor="#ffffff" fontStyle="Bold" />
-        <Button class="close-btn" width="100" height="40" fontSize="16" color="#95a5a6" textColor="#ffffff" />
-        <Text class="header" fontSize="18" fontStyle="Bold" color="#ffffff" alignment="Inferred" />
-    </Defaults>
-    <Panel id="onboardPanel" active="false" width="450" height="300" color="#2c3e50" padding="20" showAnimation="SlideIn_Bottom" hideAnimation="SlideOut_Bottom">
-        <VerticalLayout spacing="15">
-            <Text class="header" alignment="MiddleCenter">Monumentum Onboarding Setup</Text>
-            
-            <HorizontalLayout spacing="10" height="35">
-                <Text color="#ffffff" fontSize="15" alignment="MiddleLeft">Champion:</Text>
-                <Dropdown id="ddChamp" onValueChanged="onChampSelected" width="220" height="30">
-                    <option selected="true">Flint</option>
-                    <option>Ripple</option>
-                    <option>Lark</option>
-                </Dropdown>
-            </HorizontalLayout>
-            
-            <HorizontalLayout spacing="10" height="35">
-                <Text color="#ffffff" fontSize="15" alignment="MiddleLeft">Scenario:</Text>
-                <Dropdown id="ddScenario" onValueChanged="onScenarioSelected" width="220" height="30">
-                    <option selected="true">Scenario 1</option>
-                    <option>Scenario 2</option>
-                    <option>Scenario 3</option>
-                    <option>Scenario 4</option>
-                </Dropdown>
-            </HorizontalLayout>
+<Defaults>
+    <Button class="start-btn" width="180" height="40" fontSize="16" color="#2ecc71" textColor="#ffffff" fontStyle="Bold" />
+    <Button class="close-btn" width="100" height="40" fontSize="16" color="#95a5a6" textColor="#ffffff" />
+    <Text class="header" fontSize="18" fontStyle="Bold" color="#ffffff" alignment="Inferred" />
+</Defaults>
+<Panel id="onboardPanel" active="false" width="450" height="300" color="#2c3e50" rectAlignment="MiddleCenter" padding="20" showAnimation="SlideIn_Bottom" hideAnimation="SlideOut_Bottom">
+    <VerticalLayout spacing="15">
+        <Text class="header" alignment="MiddleCenter">Monumentum Onboarding Setup</Text>
+        
+        <HorizontalLayout spacing="10" height="35">
+            <Text color="#ffffff" fontSize="15" alignment="MiddleLeft">Champion:</Text>
+            <Dropdown id="ddChamp" onValueChanged="%s/onChampSelected" width="220" height="30">
+                <option selected="true">Flint</option>
+                <option>Ripple</option>
+                <option>Lark</option>
+            </Dropdown>
+        </HorizontalLayout>
+        
+        <HorizontalLayout spacing="10" height="35">
+            <Text color="#ffffff" fontSize="15" alignment="MiddleLeft">Scenario:</Text>
+            <Dropdown id="ddScenario" onValueChanged="%s/onScenarioSelected" width="220" height="30">
+                <option selected="true">Scenario 1</option>
+                <option>Scenario 2</option>
+                <option>Scenario 3</option>
+                <option>Scenario 4</option>
+            </Dropdown>
+        </HorizontalLayout>
 
-            <HorizontalLayout spacing="10" height="35">
-                <Text color="#ffffff" fontSize="15" alignment="MiddleLeft">Load For:</Text>
-                <Dropdown id="ddPlayer" onValueChanged="onPlayerSelected" width="220" height="30">
-                    <option selected="true">Red Player</option>
-                    <option>Blue Player</option>
-                </Dropdown>
-            </HorizontalLayout>
-            
-            <HorizontalLayout spacing="20" height="50" alignment="MiddleCenter">
-                <Button class="start-btn" onClick="btnSpawnOnboarding">LOAD SCENARIO</Button>
-                <Button class="close-btn" onClick="btnHideOnboard">CLOSE</Button>
-            </HorizontalLayout>
-        </VerticalLayout>
-    </Panel>
-</Canvas>
-]], ONBOARDING_UI_POSITION, ONBOARDING_UI_ROTATION, ONBOARDING_UI_SCALE)
-    self.UI.setXml(xml)
+        <HorizontalLayout spacing="10" height="35">
+            <Text color="#ffffff" fontSize="15" alignment="MiddleLeft">Load For:</Text>
+            <Dropdown id="ddPlayer" onValueChanged="%s/onPlayerSelected" width="220" height="30">
+                <option selected="true">Red Player</option>
+                <option>Blue Player</option>
+            </Dropdown>
+        </HorizontalLayout>
+        
+        <HorizontalLayout spacing="20" height="50" alignment="MiddleCenter">
+            <Button class="start-btn" onClick="%s/btnSpawnOnboarding">LOAD SCENARIO</Button>
+            <Button class="close-btn" onClick="%s/btnHideOnboard">CLOSE</Button>
+        </HorizontalLayout>
+    </VerticalLayout>
+</Panel>
+]], myGuid, myGuid, myGuid, myGuid, myGuid)
+    UI.setXml(xml)
 end
 
--- Toggles Onboarding UI visibility
+-- Toggles Onboarding UI visibility (using global UI)
 function btnToggleOnboarding(obj, player_color, alt_click)
-    local active = self.UI.getAttribute("onboardPanel", "active")
+    local active = UI.getAttribute("onboardPanel", "active")
     if active == "true" then
-        self.UI.setAttribute("onboardPanel", "active", "false")
+        UI.setAttribute("onboardPanel", "active", "false")
     else
-        self.UI.setAttribute("onboardPanel", "active", "true")
+        UI.setAttribute("onboardPanel", "active", "true")
     end
 end
 
 -- Closes Onboarding UI
 function btnHideOnboard(player, value, id)
-    self.UI.setAttribute("onboardPanel", "active", "false")
+    UI.setAttribute("onboardPanel", "active", "false")
 end
 
 -- Dropdown Selection Callbacks
@@ -880,7 +913,10 @@ function btnSpawnOnboarding(player, value, id)
     end
     
     -- Hide Onboarding Menu
-    self.UI.setAttribute("onboardPanel", "active", "false")
+    UI.setAttribute("onboardPanel", "active", "false")
+    
+    -- Dynamically inject scenarioNum so the loader knows which scenario is active (Tweak 2)
+    scenarioData.scenarioNum = selectedScenario
     
     -- Pass scenario serialized configuration directly into our robust loading pipeline!
     processPastedCast(selectedPlayer, player, JSON.encode(scenarioData))

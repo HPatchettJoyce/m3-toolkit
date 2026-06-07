@@ -150,5 +150,10 @@ We have implemented a decoupled, 3D button-based End Game Controller to record m
 * **Implementation:**
   * Upgraded `webapp/CastRecruiter.html`'s Specials grid structure.
   * Split the DOM layout into `#signature-container` (`<h3>Signature Actions</h3>`) and `#specials-container` (`<h3>Special Actions</h3>`).
-  * Enhanced `renderSpecials()` to filter cards based on their `isSignature` property, rendering them into their respective distinct grids.
-  * Seamlessly handles active limits (maximum of 6 specials) and preserves the export schema cleanly.
+  * Rendered into separate distinct grids to prevent signature actions from cluttering regular actions.
+  * Enhanced search filtering and active limits to treat signature and special cards distinctly while maintaining back-compatible schema compliance.
+
+### Latest Scenario Loader & Onboarding Refinements (June 7, 2026)
+* **GAS Tab Name Restoration (Bug Fix):** Reverted `CHAR_SHEET_NAME` and `SP_SHEET_NAME` in `webapp/main.gs` back to `"IN Cha-Tal"` and `"IN SP"` to match the active Google Sheet tab names, successfully resolving the database loading error.
+* **Automatic Board Clearing (Tweak 1):** Integrated `clearPlayerWorkspace(playerNum)` in `TTS_Loader.lua`. This automatically deletes all cards in the player's Hand and all spawned standees/models in their layout Scripting Zone before loading a new cast or scenario, enabling clean, seamless delete-and-redraw transitions.
+* **Reduced Scenario Filtering (Tweak 2):** Dynamically injects `scenarioNum` when spawning onboarding scenarios. For Scenarios 1 & 2 (reduced learning games), the loader bypasses drawing the champion card, spawning the champion standee, and drawing/spawning minion cards and tokens. These are automatically introduced starting from Scenario 3 onwards.

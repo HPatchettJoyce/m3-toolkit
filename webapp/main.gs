@@ -6,8 +6,8 @@
 
 // Global Sheet configuration names
 var MATCH_SHEET_NAME = "IN TTS";
-var CHAR_SHEET_NAME = "M3_TTS_DB - IN Cha-Tal";
-var SP_SHEET_NAME = "M3_TTS_DB - IN SP";
+var CHAR_SHEET_NAME = "IN Cha-Tal";
+var SP_SHEET_NAME = "IN SP";
 
 /**
  * Serves the HTML frontend interface to clients.
