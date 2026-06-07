@@ -18,6 +18,14 @@ CHARACTERS_ZONE_GUID = "83f62b" -- Zone containing the Characters & Talismans de
 SPECIALS_ZONE_GUID   = "b609e4" -- Zone containing the Special Actions deck
 MODELS_ZONE_GUID     = "fe2114" -- Zone containing the 3D Models Bag (Task 3)
 
+-- =============== MAP DEPLOYMENT CONFIGURATION (ONBOARDING) ===============
+-- GUIDs for the Path Tiles and Font Tiles scripting zones on your table.
+MAP_TILE_ZONE_GUID   = "193b90" -- Zone containing the Path/Grid tile deck
+MAP_FONT_ZONE_GUID   = "547581" -- Zone containing the Font tile deck
+
+MAP_SPACING          = 4.0      -- Physical spacing distance between tiles
+MAP_START_POS        = { x = -10, y = 0.21, z = 10 } -- Top-left corner spawn coordinate
+
 
 -- =============== PLAYER LAYOUT CONFIGURATION ===============
 -- [Zones Option] You can specify scripting zones where each player's characters should spawn on the table!
@@ -159,6 +167,12 @@ ONBOARDING_SCENARIOS = {
 loadedCasts = {}          -- Loaded cast configurations keyed by player colour
 specialActionsLog = {}    -- Chronological record of Special Actions played
 
+-- Global tracking tables and JSON snapshots for map auto-deployment
+deployedMapTiles = {}
+deployedMapFonts = {}
+savedTileDeckJSON = nil
+savedFontDeckJSON = nil
+
 -- Global parameter storage to pass arguments safely into the coroutine
 local activeCoroutineParams = nil
 
@@ -170,11 +184,17 @@ function onLoad()
     self.setName("Monumentum Cast Loader")
     self.setDescription("Drafts your Cast lists on the table using zones.")
     
+    -- Seed random number generator
+    math.randomseed(os.time())
+    
     -- Setup Onboarding XML UI dynamically (Task 5)
     setupXmlUi()
     
     -- Draw classic 3D Lua buttons flat on the token surface (Matching your exact tile style!)
     drawButtons()
+    
+    -- Proactively cache the map decks after a brief moment to allow physics to settle
+    Wait.time(function() captureMapDecks() end, 1.5)
 end
 
 function drawButtons()
@@ -325,6 +345,12 @@ function loadCastCoroutine()
     -- Clear previous cards in hand and models in zone for a clean fresh redraw (Tweak 1)
     clearPlayerWorkspace(playerNum)
     yieldSeconds(0.4) -- Wait a brief moment for the physics engine to register removals
+    
+    -- If Player 1 (Red / Bottom) loads their cast, automatically handle map deployment in parallel
+    if playerNum == 1 then
+        local scenarioNum = castData.scenarioNum or 4 -- Default to Scenario 4 (Full standard game)
+        deployScenarioMap(scenarioNum, clickerColor)
+    end
     
     broadcastToAll("Loading Cast for Player " .. playerNum .. " (" .. (castData.dominion or "Unknown") .. " - " .. (castData.champion or "Unknown") .. ")...", {0.1, 0.8, 0.1})
     
@@ -920,4 +946,218 @@ function btnSpawnOnboarding(player, value, id)
     
     -- Pass scenario serialized configuration directly into our robust loading pipeline!
     processPastedCast(selectedPlayer, player, JSON.encode(scenarioData))
+end
+
+-- ================= MAP AUTO-DEPLOYMENT NATIVE SUPPORT =================
+
+-- Pre-configured grid sizes, offsets, and relative font coordinates for each scenario.
+-- Scenario 4 represents the full standard game (6x6 grid with manual font deployment).
+MAP_SCENARIOS = {
+    [1] = {
+        gridCols = 2,
+        gridRows = 2,
+        startCol = 3, -- Starts at column 3 to centralise the 2x2 grid in a 6x6 area
+        startRow = 3, -- Starts at row 3 to centralise the 2x2 grid in a 6x6 area
+        fonts = { {0.5, 0.5} }
+    },
+    [2] = {
+        gridCols = 2,
+        gridRows = 2,
+        startCol = 3,
+        startRow = 3,
+        fonts = { {0.5, 0.5} }
+    },
+    [3] = {
+        gridCols = 4,
+        gridRows = 4,
+        startCol = 2, -- Starts at column 2 to centralise the 4x4 grid in a 6x6 area
+        startRow = 2, -- Starts at row 2 to centralise the 4x4 grid in a 6x6 area
+        fonts = { {2.5, 0.5}, {1.5, 1.5}, {0.5, 2.5} }
+    },
+    [4] = {
+        gridCols = 6,
+        gridRows = 6,
+        startCol = 1,
+        startRow = 1,
+        fonts = {} -- Scenario 4 does not auto-deploy fonts; players use Font Controller
+    }
+}
+
+-- Natively deploys the appropriate scenario grid and fonts on the table
+function deployScenarioMap(scenarioNum, clickerColor)
+    -- Determine scenario configuration
+    local scenario = MAP_SCENARIOS[scenarioNum]
+    if not scenario then
+        print("Warning: Scenario " .. tostring(scenarioNum) .. " has no map configuration. Defaulting to Scenario 4.")
+        scenario = MAP_SCENARIOS[4]
+        scenarioNum = 4
+    end
+
+    -- 1. Recall any currently active map elements to start fresh
+    recallMapDeployed()
+    
+    -- 2. Capture pristine decks if not done already
+    captureMapDecks()
+
+    local tileDeck = findDeckInMapZone(MAP_TILE_ZONE_GUID)
+    local fontDeck = findDeckInMapZone(MAP_FONT_ZONE_GUID)
+
+    if tileDeck == nil then
+        broadcastToColor("Warning: Map Path Deck missing from zone " .. MAP_TILE_ZONE_GUID .. ". Board cannot be auto-constructed.", clickerColor, {1, 0.5, 0})
+        return
+    end
+
+    -- 3. Deploy Path Tiles
+    local tilesNeeded = scenario.gridCols * scenario.gridRows
+    if #tileDeck.getObjects() < tilesNeeded then
+        broadcastToColor("Warning: Not enough tiles in deck (" .. #tileDeck.getObjects() .. " / " .. tilesNeeded .. ") to deploy Scenario " .. scenarioNum, clickerColor, {1, 0.5, 0})
+        return
+    end
+
+    broadcastToAll("Auto-Deploying Scenario " .. scenarioNum .. " Board (" .. scenario.gridCols .. "x" .. scenario.gridRows .. ")...", {0.1, 0.8, 0.1})
+
+    for row = 0, scenario.gridRows - 1 do
+        for col = 0, scenario.gridCols - 1 do
+            -- Apply the centralising offset (-1 translates 1-based config to 0-based math)
+            local actualCol = (scenario.startCol - 1) + col
+            local actualRow = (scenario.startRow - 1) + row
+
+            local targetPos = {
+                x = MAP_START_POS.x + (actualCol * MAP_SPACING),
+                y = MAP_START_POS.y,
+                z = MAP_START_POS.z - (actualRow * MAP_SPACING)
+            }
+
+            -- Randomize tile orientation (0, 90, 180, 270 degrees)
+            local randomMultiplier = math.random(0, 3)
+            local currentRot = tileDeck.getRotation()
+            local targetRot = {x = currentRot.x, y = randomMultiplier * 90, z = currentRot.z}
+
+            tileDeck.takeObject({
+                position = targetPos,
+                rotation = targetRot,
+                smooth   = true,
+                callback_function = function(obj)
+                    if obj ~= nil and not obj.isDestroyed() then
+                        obj.setLock(true)
+                        table.insert(deployedMapTiles, obj)
+                    end
+                end
+            })
+        end
+    end
+
+    -- 4. Deploy Font Tiles (If required for this scenario)
+    local fontsNeeded = #scenario.fonts
+    if fontsNeeded > 0 then
+        if fontDeck == nil then
+            broadcastToColor("Warning: Font Deck missing from zone " .. MAP_FONT_ZONE_GUID .. ". Scenario Fonts cannot be auto-deployed.", clickerColor, {1, 0.5, 0})
+            return
+        end
+
+        if #fontDeck.getObjects() < fontsNeeded then
+            broadcastToColor("Warning: Not enough font tiles in deck to deploy Scenario " .. scenarioNum, clickerColor, {1, 0.5, 0})
+            return
+        end
+
+        for i = 1, fontsNeeded do
+            local coord = scenario.fonts[i]
+            
+            -- Shift font coordinates by the exact same centralized offset as the tile grid
+            local actualX = (scenario.startCol - 1) + coord[1]
+            local actualZ = (scenario.startRow - 1) + coord[2]
+
+            local targetPos = {
+                x = MAP_START_POS.x + (actualX * MAP_SPACING),
+                y = MAP_START_POS.y + 0.05,
+                z = MAP_START_POS.z - (actualZ * MAP_SPACING)
+            }
+
+            local currentRot = fontDeck.getRotation()
+
+            fontDeck.takeObject({
+                position = targetPos,
+                rotation = currentRot,
+                smooth   = true,
+                callback_function = function(obj)
+                    if obj ~= nil and not obj.isDestroyed() then
+                        obj.setLock(true)
+                        table.insert(deployedMapFonts, obj)
+                    end
+                end
+            })
+        end
+    end
+end
+
+-- Helper: Locates a Deck container inside a Scripting Zone GUID
+function findDeckInMapZone(zoneGuid)
+    local zone = getObjectFromGUID(zoneGuid)
+    if zone == nil then return nil end
+    for _, obj in ipairs(zone.getObjects()) do
+        if obj.type == "Deck" then return obj end
+    end
+    return nil
+end
+
+-- Helper: Deletes any Decks/Cards inside a Scripting Zone GUID
+function clearMapZone(zoneGuid)
+    local zone = getObjectFromGUID(zoneGuid)
+    if zone == nil then return end
+    for _, obj in ipairs(zone.getObjects()) do
+        if obj.type == "Deck" or obj.type == "Card" then
+            destroyObject(obj)
+        end
+    end
+end
+
+-- Captures pristine snapshots of the map and font decks if present in their zones
+function captureMapDecks()
+    if savedTileDeckJSON == nil then
+        local tDeck = findDeckInMapZone(MAP_TILE_ZONE_GUID)
+        if tDeck then savedTileDeckJSON = tDeck.getJSON() end
+    end
+
+    if savedFontDeckJSON == nil then
+        local fDeck = findDeckInMapZone(MAP_FONT_ZONE_GUID)
+        if fDeck then savedFontDeckJSON = fDeck.getJSON() end
+    end
+end
+
+-- Clears any deployed map elements and restores decks in their scripting zones
+function recallMapDeployed()
+    -- 1. Destroy all deployed tiles
+    for _, obj in ipairs(deployedMapTiles) do
+        if obj ~= nil and not obj.isDestroyed() then destroyObject(obj) end
+    end
+    deployedMapTiles = {}
+
+    -- 2. Destroy all deployed fonts
+    for _, obj in ipairs(deployedMapFonts) do
+        if obj ~= nil and not obj.isDestroyed() then destroyObject(obj) end
+    end
+    deployedMapFonts = {}
+
+    -- 3. Clear trigger zones of leftover singles
+    clearMapZone(MAP_TILE_ZONE_GUID)
+    clearMapZone(MAP_FONT_ZONE_GUID)
+
+    -- 4. Respawn pristine decks slightly above the table surface
+    local tZone = getObjectFromGUID(MAP_TILE_ZONE_GUID)
+    if savedTileDeckJSON and tZone then
+        local pos = tZone.getPosition()
+        spawnObjectJSON({
+            json = savedTileDeckJSON,
+            position = {pos.x, MAP_START_POS.y + 0.2, pos.z}
+        })
+    end
+
+    local fZone = getObjectFromGUID(MAP_FONT_ZONE_GUID)
+    if savedFontDeckJSON and fZone then
+        local pos = fZone.getPosition()
+        spawnObjectJSON({
+            json = savedFontDeckJSON,
+            position = {pos.x, MAP_START_POS.y + 0.2, pos.z}
+        })
+    end
 end
