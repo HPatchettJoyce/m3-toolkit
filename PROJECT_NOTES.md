@@ -164,3 +164,17 @@ We have implemented a decoupled, 3D button-based End Game Controller to record m
   * **Scenario 4 / Standard Game:** Deploys a full 6x6 grid of path tiles (standard layout).
   * This deployment occurs asynchronously and in parallel with card/model drafting, creating an interactive visual setup.
 * **Scenario Controller Deprecation:** Deprecated `Deploy_Onboarding_Scenarios.lua` as its core functionality is now natively and automatically handled by `TTS_Loader.lua`. The physical Scenario Controller token can be removed from the table layout.
+
+### Floating Health Tracker Implementation (June 8, 2026)
+* **Objective:** Implement a lightweight, high-performance world-space health tracker for both Custom Standees and Custom Tiles.
+* **Component-Level Dynamic Placement:** 
+  * Created `tts/Floating_Health_Tracker.lua`. The script embeds its own XML UI to provide a single, foolproof copy-paste installation for custom components.
+  * **Custom Tiles Behavior:** Automatically identifies Double-Sided tiles by checking `self.tag == "Tile"`. Places a single horizontal tracker flat on the tile face (`position="0 0 -35"`). Dynamically queries the flip orientation via `self.is_face_down` and completely hides the UI when flipped to the spawner-side face down.
+  * **Custom Standees Behavior:** Automatically applies high-hovering flat horizontal positioning (`position="0 0 -300"`, scale `1.0 1.0 1.0`), which renders beautifully right above the standee's head, readable from any player angle around the table looking down.
+* **Highly Optimized Physics-Based Visibility Updates:**
+  * Avoids heavy, frame-rate degrading `onUpdate()` checks.
+  * Visibility transitions are triggered strictly on player-driven events (`onRotate` and `onDrop`).
+  * Utilizes `self.isSmoothMoving()` inside a non-blocking wait handler to query orientation only *after* physical translation/rotation has completely settled, saving valuable rendering cycles.
+* **Silent & Secure Synchronized Interactions:**
+  * Clean, silent `-` and `+` XML buttons increment and decrement health.
+  * To prevent stealth health modifications, any update broadcasts a synchronized, color-coded chat notification containing the player's name and the component's name to all active players.
