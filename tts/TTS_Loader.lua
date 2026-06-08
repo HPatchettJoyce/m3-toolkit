@@ -60,7 +60,7 @@ ONBOARDING_SCENARIOS = {
     ["Flint"] = { -- Rhavlika Dominion
         [1] = {
             championId = "",
-            unitIdsRecruited = { ["01RHV-02FAM-002"] = 1, ["01RHV-02FAM-003"] = 1 },
+            unitIdsRecruited = { ["01RHA-02FAM-002"] = 1, ["01RHA-02FAM-003"] = 1 },
             talismanIdsEquipped = {},
             specialIds = {},
             dominion = "Rhavlika",
@@ -68,25 +68,25 @@ ONBOARDING_SCENARIOS = {
         },
         [2] = {
             championId = "",
-            unitIdsRecruited = { ["01RHV-02FAM-002"] = 1, ["01RHV-02FAM-003"] = 1 },
+            unitIdsRecruited = { ["01RHA-02FAM-002"] = 1, ["01RHA-02FAM-003"] = 1 },
             talismanIdsEquipped = {},
-            specialIds = { "01RHV-05SPA-006", "01RHV-05SPA-038" },
+            specialIds = { "01RHA-05SPA-006", "01RHA-05SPA-038" },
             dominion = "Rhavlika",
             champion = "Flint Dross"
         },
         [3] = {
-            championId = "01RHV-01CHP-001",
-            unitIdsRecruited = { ["01RHV-02FAM-002"] = 1, ["01RHV-02FAM-003"] = 1, ["01RHV-02FAM-004"] = 2 },
+            championId = "01RHA-01CHP-001",
+            unitIdsRecruited = { ["01RHA-02FAM-002"] = 1, ["01RHA-02FAM-003"] = 1, ["01RHA-02FAM-004"] = 2 },
             talismanIdsEquipped = {},
-            specialIds = { "01RHV-05SPA-006", "01RHV-05SPA-038", "01RHV-05SPA-005", "01RHV-05SPA-063" },
+            specialIds = { "01RHA-05SPA-006", "01RHA-05SPA-038", "01RHA-05SPA-005", "01RHA-05SPA-063" },
             dominion = "Rhavlika",
             champion = "Flint Dross"
         },
         [4] = {
-            championId = "01RHV-01CHP-001",
-            unitIdsRecruited = { ["01RHV-02FAM-002"] = 2, ["01RHV-02FAM-003"] = 3, ["01RHV-02FAM-004"] = 3 },
+            championId = "01RHA-01CHP-001",
+            unitIdsRecruited = { ["01RHA-02FAM-002"] = 2, ["01RHA-02FAM-003"] = 3, ["01RHA-02FAM-004"] = 3 },
             talismanIdsEquipped = {},
-            specialIds = { "01RHV-05SPA-006", "01RHV-05SPA-038", "01RHV-05SPA-005", "01RHV-05SPA-063", "01RHV-05SPA-001", "01RHV-05SPA-003" },
+            specialIds = { "01RHA-05SPA-006", "01RHA-05SPA-038", "01RHA-05SPA-005", "01RHA-05SPA-063", "01RHA-05SPA-001", "01RHA-05SPA-003" },
             dominion = "Rhavlika",
             champion = "Flint Dross"
         }

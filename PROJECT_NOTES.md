@@ -120,7 +120,8 @@ We have implemented a decoupled, 3D button-based End Game Controller to record m
   * Created `tts/Model_ID_Injector.lua`. This token script can be placed on the table next to a Characters Deck (which has IDs in GM Notes) and a bag of raw models.
   * **Casing and Cost Filtering:** Automatically ignores and strips parenthesized trailing costs (e.g. `Obduron (6)` -> `Obduron`) during name matching.
   * **Automated Cleanup:** When matched, the script permanently renames the model inside your bag to its clean name (removing `(6)` cost) and completely clears the prowess and fortitude description stats.
-  * **ID Assignment:** Copies the card's Unique ID from its `GM_Notes` property, and assigns it to the model's `GM_Notes` before returning it safely to the bag.
+  * **ID Assignment:** Copies the card's Unique ID from its `GM_Notes` property, and assigns it to the model's `GM_Notes`.
+  * **Script Injection:** Automatically embeds and injects the `Floating_Health_Tracker.lua` script code into the model's script properties (`script_code`) and reloads it before returning it safely to the bag. This ensures every processed model comes pre-loaded with its own functional 3D floating health dial above its head when pulled out.
 
 ### Task 3: Model Spawning from Bags
 * **Objective:** Spawn recruited 3D models directly on the table, matching the exact counts from the JSON.
