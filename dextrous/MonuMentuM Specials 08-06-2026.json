@@ -2,7 +2,7 @@
   "ObjectStates": [
     {
       "Name": "Deck",
-      "Nickname": "Characters",
+      "Nickname": "Special Actions",
       "Description": "",
       "LuaScript": "",
       "Transform": {
@@ -96,13 +96,29 @@
         228,
         229,
         230,
-        231
+        231,
+        232,
+        233,
+        234,
+        235,
+        236,
+        237,
+        238,
+        239,
+        240,
+        241,
+        242,
+        243,
+        244,
+        245,
+        246,
+        247
       ],
       "ContainedObjects": [
         {
           "CardID": 100,
           "Name": "card",
-          "Nickname": "Flint Dross",
+          "Nickname": "Thermal Venting",
           "Description": "",
           "Transform": {
             "posX": 0,
@@ -115,12 +131,12 @@
             "scaleY": 1,
             "scaleZ": 1
           },
-          "GMNotes": "01RHV-01CHP-001"
+          "GMNotes": "01RHA-05SPA-001"
         },
         {
           "CardID": 101,
           "Name": "card",
-          "Nickname": "Obduron",
+          "Nickname": "Fissure Eruption",
           "Transform": {
             "posX": 0,
             "posY": 0,
@@ -132,12 +148,12 @@
             "scaleY": 1,
             "scaleZ": 1
           },
-          "GMNotes": "01RHV-02FAM-002"
+          "GMNotes": "01RHA-05SPA-002"
         },
         {
           "CardID": 102,
           "Name": "card",
-          "Nickname": "Cinderhulk",
+          "Nickname": "Smoke Cloud",
           "Transform": {
             "posX": 0,
             "posY": 0,
@@ -149,12 +165,12 @@
             "scaleY": 1,
             "scaleZ": 1
           },
-          "GMNotes": "01RHV-02FAM-003"
+          "GMNotes": "01RHA-05SPA-003"
         },
         {
           "CardID": 103,
           "Name": "card",
-          "Nickname": "Saltpetre Pellobok",
+          "Nickname": "Pyroclastic Discharge",
           "Transform": {
             "posX": 0,
             "posY": 0,
@@ -166,12 +182,12 @@
             "scaleY": 1,
             "scaleZ": 1
           },
-          "GMNotes": "01RHV-02FAM-004"
+          "GMNotes": "01RHA-05SPA-004"
         },
         {
           "CardID": 104,
           "Name": "card",
-          "Nickname": "Ripple Elshara",
+          "Nickname": "Obsidian Slumber",
           "Transform": {
             "posX": 0,
             "posY": 0,
@@ -183,12 +199,12 @@
             "scaleY": 1,
             "scaleZ": 1
           },
-          "GMNotes": "02IRO-01CHP-005"
+          "GMNotes": "01RHA-05SPA-005"
         },
         {
           "CardID": 105,
           "Name": "card",
-          "Nickname": "Tumultuous Dropple",
+          "Nickname": "Harden Crust",
           "Transform": {
             "posX": 0,
             "posY": 0,
@@ -200,12 +216,12 @@
             "scaleY": 1,
             "scaleZ": 1
           },
-          "GMNotes": "02IRO-02FAM-006"
+          "GMNotes": "01RHA-05SPA-006"
         },
         {
           "CardID": 106,
           "Name": "card",
-          "Nickname": "Ponderous Dropple",
+          "Nickname": "Rip Tide",
           "Transform": {
             "posX": 0,
             "posY": 0,
@@ -217,12 +233,12 @@
             "scaleY": 1,
             "scaleZ": 1
           },
-          "GMNotes": "02IRO-02FAM-007"
+          "GMNotes": "02IRO-05SPA-007"
         },
         {
           "CardID": 107,
           "Name": "card",
-          "Nickname": "Puddling",
+          "Nickname": "Lamentable Flow",
           "Transform": {
             "posX": 0,
             "posY": 0,
@@ -234,12 +250,12 @@
             "scaleY": 1,
             "scaleZ": 1
           },
-          "GMNotes": "02IRO-02FAM-008"
+          "GMNotes": "02IRO-05SPA-008"
         },
         {
           "CardID": 108,
           "Name": "card",
-          "Nickname": "Driplet",
+          "Nickname": "Geyser Strike",
           "Transform": {
             "posX": 0,
             "posY": 0,
@@ -251,12 +267,12 @@
             "scaleY": 1,
             "scaleZ": 1
           },
-          "GMNotes": "02IRO-03MIN-009"
+          "GMNotes": "02IRO-05SPA-009"
         },
         {
           "CardID": 109,
           "Name": "card",
-          "Nickname": "Lark",
+          "Nickname": "Tidal Surge",
           "Transform": {
             "posX": 0,
             "posY": 0,
@@ -268,12 +284,12 @@
             "scaleY": 1,
             "scaleZ": 1
           },
-          "GMNotes": "03VOI-01CHP-010"
+          "GMNotes": "02IRO-05SPA-010"
         },
         {
           "CardID": 110,
           "Name": "card",
-          "Nickname": "Huma'ra",
+          "Nickname": "Ameliorate",
           "Transform": {
             "posX": 0,
             "posY": 0,
@@ -285,12 +301,12 @@
             "scaleY": 1,
             "scaleZ": 1
           },
-          "GMNotes": "03VOI-02FAM-011"
+          "GMNotes": "02IRO-05SPA-011"
         },
         {
           "CardID": 111,
           "Name": "card",
-          "Nickname": "Lu'ann",
+          "Nickname": "Caught in the Eddies",
           "Transform": {
             "posX": 0,
             "posY": 0,
@@ -302,12 +318,12 @@
             "scaleY": 1,
             "scaleZ": 1
           },
-          "GMNotes": "03VOI-02FAM-012"
+          "GMNotes": "02IRO-05SPA-012"
         },
         {
           "CardID": 112,
           "Name": "card",
-          "Nickname": "Shahbane",
+          "Nickname": "Dust Bath",
           "Transform": {
             "posX": 0,
             "posY": 0,
@@ -319,12 +335,12 @@
             "scaleY": 1,
             "scaleZ": 1
           },
-          "GMNotes": "03VOI-02FAM-013"
+          "GMNotes": "03VOI-05SPA-013"
         },
         {
           "CardID": 113,
           "Name": "card",
-          "Nickname": "Valex, the Final Plume",
+          "Nickname": "\"Finish them!\"",
           "Transform": {
             "posX": 0,
             "posY": 0,
@@ -336,12 +352,12 @@
             "scaleY": 1,
             "scaleZ": 1
           },
-          "GMNotes": "04XAL-01CHP-014"
+          "GMNotes": "03VOI-05SPA-014"
         },
         {
           "CardID": 114,
           "Name": "card",
-          "Nickname": "Cuauhxic",
+          "Nickname": "Gust",
           "Transform": {
             "posX": 0,
             "posY": 0,
@@ -353,12 +369,12 @@
             "scaleY": 1,
             "scaleZ": 1
           },
-          "GMNotes": "04XAL-02FAM-015"
+          "GMNotes": "03VOI-05SPA-015"
         },
         {
           "CardID": 115,
           "Name": "card",
-          "Nickname": "Zephyr Coatl",
+          "Nickname": "Sand Blast",
           "Transform": {
             "posX": 0,
             "posY": 0,
@@ -370,12 +386,12 @@
             "scaleY": 1,
             "scaleZ": 1
           },
-          "GMNotes": "04XAL-02FAM-016"
+          "GMNotes": "03VOI-05SPA-016"
         },
         {
           "CardID": 116,
           "Name": "card",
-          "Nickname": "Ixca",
+          "Nickname": "\"Let the talons fly!\"",
           "Transform": {
             "posX": 0,
             "posY": 0,
@@ -387,12 +403,12 @@
             "scaleY": 1,
             "scaleZ": 1
           },
-          "GMNotes": "04XAL-02FAM-017"
+          "GMNotes": "03VOI-05SPA-017"
         },
         {
           "CardID": 117,
           "Name": "card",
-          "Nickname": "Iroko, the Evergreen",
+          "Nickname": "Snare",
           "Transform": {
             "posX": 0,
             "posY": 0,
@@ -404,12 +420,12 @@
             "scaleY": 1,
             "scaleZ": 1
           },
-          "GMNotes": "05AHS-01CHP-018"
+          "GMNotes": "03VOI-05SPA-018"
         },
         {
           "CardID": 118,
           "Name": "card",
-          "Nickname": "Dolhyrmen",
+          "Nickname": "Tonalhualli",
           "Transform": {
             "posX": 0,
             "posY": 0,
@@ -421,12 +437,12 @@
             "scaleY": 1,
             "scaleZ": 1
           },
-          "GMNotes": "05AHS-02FAM-019"
+          "GMNotes": "04XAL-05SPA-019"
         },
         {
           "CardID": 119,
           "Name": "card",
-          "Nickname": "Aescorn Gardewrren",
+          "Nickname": "Overbearing Advance",
           "Transform": {
             "posX": 0,
             "posY": 0,
@@ -438,12 +454,12 @@
             "scaleY": 1,
             "scaleZ": 1
           },
-          "GMNotes": "05AHS-02FAM-020"
+          "GMNotes": "04XAL-05SPA-020"
         },
         {
           "CardID": 120,
           "Name": "card",
-          "Nickname": "Pochann",
+          "Nickname": "The Noose of Guilt",
           "Transform": {
             "posX": 0,
             "posY": 0,
@@ -455,12 +471,12 @@
             "scaleY": 1,
             "scaleZ": 1
           },
-          "GMNotes": "05AHS-02FAM-021"
+          "GMNotes": "04XAL-05SPA-021"
         },
         {
           "CardID": 121,
           "Name": "card",
-          "Nickname": "Huskling",
+          "Nickname": "Chimal's Decree",
           "Transform": {
             "posX": 0,
             "posY": 0,
@@ -472,12 +488,12 @@
             "scaleY": 1,
             "scaleZ": 1
           },
-          "GMNotes": "05AHS-03MIN-022"
+          "GMNotes": "04XAL-05SPA-022"
         },
         {
           "CardID": 122,
           "Name": "card",
-          "Nickname": "Patience Wick",
+          "Nickname": "A'tlahtli",
           "Transform": {
             "posX": 0,
             "posY": 0,
@@ -489,12 +505,12 @@
             "scaleY": 1,
             "scaleZ": 1
           },
-          "GMNotes": "06VER-01CHP-023"
+          "GMNotes": "04XAL-05SPA-023"
         },
         {
           "CardID": 123,
           "Name": "card",
-          "Nickname": "Shadwul",
+          "Nickname": "Teuctlix",
           "Transform": {
             "posX": 0,
             "posY": 0,
@@ -506,12 +522,12 @@
             "scaleY": 1,
             "scaleZ": 1
           },
-          "GMNotes": "06VER-02FAM-024"
+          "GMNotes": "04XAL-05SPA-024"
         },
         {
           "CardID": 124,
           "Name": "card",
-          "Nickname": "Phasmon",
+          "Nickname": "Thornlash",
           "Transform": {
             "posX": 0,
             "posY": 0,
@@ -523,12 +539,12 @@
             "scaleY": 1,
             "scaleZ": 1
           },
-          "GMNotes": "06VER-02FAM-025"
+          "GMNotes": "05AHE-05SPA-025"
         },
         {
           "CardID": 125,
           "Name": "card",
-          "Nickname": "Crystellus",
+          "Nickname": "Fecund Explosion",
           "Transform": {
             "posX": 0,
             "posY": 0,
@@ -540,12 +556,12 @@
             "scaleY": 1,
             "scaleZ": 1
           },
-          "GMNotes": "06VER-02FAM-026"
+          "GMNotes": "05AHE-05SPA-026"
         },
         {
           "CardID": 126,
           "Name": "card",
-          "Nickname": "Shiverlate",
+          "Nickname": "Thornmail Aegis",
           "Transform": {
             "posX": 0,
             "posY": 0,
@@ -557,12 +573,12 @@
             "scaleY": 1,
             "scaleZ": 1
           },
-          "GMNotes": "01RHV-02FAM-027"
+          "GMNotes": "05AHE-05SPA-027"
         },
         {
           "CardID": 127,
           "Name": "card",
-          "Nickname": "Coalslitch",
+          "Nickname": "Vaporous Bloom",
           "Transform": {
             "posX": 0,
             "posY": 0,
@@ -574,12 +590,12 @@
             "scaleY": 1,
             "scaleZ": 1
           },
-          "GMNotes": "01RHV-02FAM-028"
+          "GMNotes": "05AHE-05SPA-028"
         },
         {
           "CardID": 128,
           "Name": "card",
-          "Nickname": "Ko'hanu",
+          "Nickname": "Vinesnare",
           "Transform": {
             "posX": 0,
             "posY": 0,
@@ -591,12 +607,12 @@
             "scaleY": 1,
             "scaleZ": 1
           },
-          "GMNotes": "02IRO-02FAM-029"
+          "GMNotes": "05AHE-05SPA-029"
         },
         {
           "CardID": 129,
           "Name": "card",
-          "Nickname": "Maelia",
+          "Nickname": "Sylvan's Feast",
           "Transform": {
             "posX": 0,
             "posY": 0,
@@ -608,12 +624,12 @@
             "scaleY": 1,
             "scaleZ": 1
           },
-          "GMNotes": "02IRO-02FAM-030"
+          "GMNotes": "05AHE-05SPA-030"
         },
         {
           "CardID": 130,
           "Name": "card",
-          "Nickname": "Conro",
+          "Nickname": "Apotheosis",
           "Transform": {
             "posX": 0,
             "posY": 0,
@@ -625,12 +641,12 @@
             "scaleY": 1,
             "scaleZ": 1
           },
-          "GMNotes": "03VOI-02FAM-031"
+          "GMNotes": "06VER-05SPA-031"
         },
         {
           "CardID": 131,
           "Name": "card",
-          "Nickname": "Lillanir",
+          "Nickname": "Incipient Fracture",
           "Transform": {
             "posX": 0,
             "posY": 0,
@@ -642,12 +658,12 @@
             "scaleY": 1,
             "scaleZ": 1
           },
-          "GMNotes": "03VOI-02FAM-032"
+          "GMNotes": "06VER-05SPA-032"
         },
         {
           "CardID": 132,
           "Name": "card",
-          "Nickname": "Malinal",
+          "Nickname": "Drift",
           "Transform": {
             "posX": 0,
             "posY": 0,
@@ -659,12 +675,12 @@
             "scaleY": 1,
             "scaleZ": 1
           },
-          "GMNotes": "04XAL-02FAM-033"
+          "GMNotes": "06VER-05SPA-033"
         },
         {
           "CardID": 133,
           "Name": "card",
-          "Nickname": "Tezcayotl",
+          "Nickname": "Stasis Lock",
           "Transform": {
             "posX": 0,
             "posY": 0,
@@ -676,12 +692,12 @@
             "scaleY": 1,
             "scaleZ": 1
           },
-          "GMNotes": "04XAL-02FAM-034"
+          "GMNotes": "06VER-05SPA-034"
         },
         {
           "CardID": 134,
           "Name": "card",
-          "Nickname": "Lomanec'hel",
+          "Nickname": "Pertinent Rewind",
           "Transform": {
             "posX": 0,
             "posY": 0,
@@ -693,12 +709,12 @@
             "scaleY": 1,
             "scaleZ": 1
           },
-          "GMNotes": "05AHS-02FAM-035"
+          "GMNotes": "06VER-05SPA-035"
         },
         {
           "CardID": 135,
           "Name": "card",
-          "Nickname": "Bran-Si\u00fbl",
+          "Nickname": "Chronatic Snipe",
           "Transform": {
             "posX": 0,
             "posY": 0,
@@ -710,12 +726,12 @@
             "scaleY": 1,
             "scaleZ": 1
           },
-          "GMNotes": "05AHS-02FAM-036"
+          "GMNotes": "06VER-05SPA-036"
         },
         {
           "CardID": 136,
           "Name": "card",
-          "Nickname": "Occulacer",
+          "Nickname": "Mantle Accretion",
           "Transform": {
             "posX": 0,
             "posY": 0,
@@ -727,12 +743,12 @@
             "scaleY": 1,
             "scaleZ": 1
           },
-          "GMNotes": "06VER-02FAM-037"
+          "GMNotes": "01RHA-05SPA-037"
         },
         {
           "CardID": 137,
           "Name": "card",
-          "Nickname": "Hastaca",
+          "Nickname": "Rupture Strike",
           "Transform": {
             "posX": 0,
             "posY": 0,
@@ -744,12 +760,12 @@
             "scaleY": 1,
             "scaleZ": 1
           },
-          "GMNotes": "06VER-02FAM-038"
+          "GMNotes": "01RHA-05SPA-038"
         },
         {
           "CardID": 138,
           "Name": "card",
-          "Nickname": "Ignatius Krag",
+          "Nickname": "Karst Shield",
           "Transform": {
             "posX": 0,
             "posY": 0,
@@ -761,12 +777,12 @@
             "scaleY": 1,
             "scaleZ": 1
           },
-          "GMNotes": "01RHV-01CHP-039"
+          "GMNotes": "01RHA-05SPA-039"
         },
         {
           "CardID": 139,
           "Name": "card",
-          "Nickname": "Th\u00e6lass Elshara",
+          "Nickname": "Orogeny",
           "Transform": {
             "posX": 0,
             "posY": 0,
@@ -778,12 +794,12 @@
             "scaleY": 1,
             "scaleZ": 1
           },
-          "GMNotes": "02IRO-01CHP-040"
+          "GMNotes": "01RHA-05SPA-040"
         },
         {
           "CardID": 140,
           "Name": "card",
-          "Nickname": "Malika Saffron",
+          "Nickname": "Permeate",
           "Transform": {
             "posX": 0,
             "posY": 0,
@@ -795,12 +811,12 @@
             "scaleY": 1,
             "scaleZ": 1
           },
-          "GMNotes": "03VOI-01CHP-041"
+          "GMNotes": "02IRO-05SPA-041"
         },
         {
           "CardID": 141,
           "Name": "card",
-          "Nickname": "Micteca, the Unsetting Sun",
+          "Nickname": "Glacial Prison",
           "Transform": {
             "posX": 0,
             "posY": 0,
@@ -812,12 +828,12 @@
             "scaleY": 1,
             "scaleZ": 1
           },
-          "GMNotes": "04XAL-01CHP-042"
+          "GMNotes": "02IRO-05SPA-042"
         },
         {
           "CardID": 142,
           "Name": "card",
-          "Nickname": "Draen, the Ashen Hart",
+          "Nickname": "Heavy Precipitation",
           "Transform": {
             "posX": 0,
             "posY": 0,
@@ -829,12 +845,12 @@
             "scaleY": 1,
             "scaleZ": 1
           },
-          "GMNotes": "05AHS-01CHP-043"
+          "GMNotes": "02IRO-05SPA-043"
         },
         {
           "CardID": 143,
           "Name": "card",
-          "Nickname": "Clement Tacitus",
+          "Nickname": "Rime-Heart",
           "Transform": {
             "posX": 0,
             "posY": 0,
@@ -846,12 +862,12 @@
             "scaleY": 1,
             "scaleZ": 1
           },
-          "GMNotes": "06VER-01CHP-044"
+          "GMNotes": "02IRO-05SPA-044"
         },
         {
           "CardID": 144,
           "Name": "card",
-          "Nickname": "Vasolith",
+          "Nickname": "Sky Hunter's Roost",
           "Transform": {
             "posX": 0,
             "posY": 0,
@@ -863,12 +879,12 @@
             "scaleY": 1,
             "scaleZ": 1
           },
-          "GMNotes": "01RHV-02FAM-045"
+          "GMNotes": "03VOI-05SPA-045"
         },
         {
           "CardID": 145,
           "Name": "card",
-          "Nickname": "Talux",
+          "Nickname": "Eye of the Hunter",
           "Transform": {
             "posX": 0,
             "posY": 0,
@@ -880,12 +896,12 @@
             "scaleY": 1,
             "scaleZ": 1
           },
-          "GMNotes": "01RHV-02FAM-046"
+          "GMNotes": "03VOI-05SPA-046"
         },
         {
           "CardID": 146,
           "Name": "card",
-          "Nickname": "Lugubrious Dropple",
+          "Nickname": "Snatch Grab Vortex",
           "Transform": {
             "posX": 0,
             "posY": 0,
@@ -897,12 +913,12 @@
             "scaleY": 1,
             "scaleZ": 1
           },
-          "GMNotes": "02IRO-02FAM-047"
+          "GMNotes": "03VOI-05SPA-047"
         },
         {
           "CardID": 147,
           "Name": "card",
-          "Nickname": "Karkinkeep",
+          "Nickname": "Flee",
           "Transform": {
             "posX": 0,
             "posY": 0,
@@ -914,12 +930,12 @@
             "scaleY": 1,
             "scaleZ": 1
           },
-          "GMNotes": "02IRO-02FAM-048"
+          "GMNotes": "03VOI-05SPA-048"
         },
         {
           "CardID": 200,
           "Name": "card",
-          "Nickname": "Alicanur",
+          "Nickname": "\"Charge the flanks!\"",
           "Transform": {
             "posX": 0,
             "posY": 0,
@@ -931,12 +947,12 @@
             "scaleY": 1,
             "scaleZ": 1
           },
-          "GMNotes": "03VOI-02FAM-049"
+          "GMNotes": "04XAL-05SPA-049"
         },
         {
           "CardID": 201,
           "Name": "card",
-          "Nickname": "Stympharaq",
+          "Nickname": "Phalanx",
           "Transform": {
             "posX": 0,
             "posY": 0,
@@ -948,12 +964,12 @@
             "scaleY": 1,
             "scaleZ": 1
           },
-          "GMNotes": "03VOI-02FAM-050"
+          "GMNotes": "04XAL-05SPA-050"
         },
         {
           "CardID": 202,
           "Name": "card",
-          "Nickname": "Yolia",
+          "Nickname": "Tezca's Wellspring",
           "Transform": {
             "posX": 0,
             "posY": 0,
@@ -965,12 +981,12 @@
             "scaleY": 1,
             "scaleZ": 1
           },
-          "GMNotes": "04XAL-02FAM-051"
+          "GMNotes": "04XAL-05SPA-051"
         },
         {
           "CardID": 203,
           "Name": "card",
-          "Nickname": "Zotzon",
+          "Nickname": "Aurelian Trident",
           "Transform": {
             "posX": 0,
             "posY": 0,
@@ -982,12 +998,12 @@
             "scaleY": 1,
             "scaleZ": 1
           },
-          "GMNotes": "04XAL-02FAM-052"
+          "GMNotes": "04XAL-05SPA-052"
         },
         {
           "CardID": 204,
           "Name": "card",
-          "Nickname": "Nettle-Shy",
+          "Nickname": "Ecology",
           "Transform": {
             "posX": 0,
             "posY": 0,
@@ -999,12 +1015,12 @@
             "scaleY": 1,
             "scaleZ": 1
           },
-          "GMNotes": "05AHS-02FAM-053"
+          "GMNotes": "05AHE-05SPA-053"
         },
         {
           "CardID": 205,
           "Name": "card",
-          "Nickname": "Borejaun",
+          "Nickname": "Rootbound Grapple",
           "Transform": {
             "posX": 0,
             "posY": 0,
@@ -1016,12 +1032,12 @@
             "scaleY": 1,
             "scaleZ": 1
           },
-          "GMNotes": "05AHS-02FAM-054"
+          "GMNotes": "05AHE-05SPA-054"
         },
         {
           "CardID": 206,
           "Name": "card",
-          "Nickname": "Anecdote",
+          "Nickname": "Undergrowth Assault",
           "Transform": {
             "posX": 0,
             "posY": 0,
@@ -1033,12 +1049,12 @@
             "scaleY": 1,
             "scaleZ": 1
           },
-          "GMNotes": "06VER-02FAM-055"
+          "GMNotes": "05AHE-05SPA-055"
         },
         {
           "CardID": 207,
           "Name": "card",
-          "Nickname": "Gallitrice",
+          "Nickname": "Thrive",
           "Transform": {
             "posX": 0,
             "posY": 0,
@@ -1050,12 +1066,12 @@
             "scaleY": 1,
             "scaleZ": 1
           },
-          "GMNotes": "06VER-02FAM-056"
+          "GMNotes": "05AHE-05SPA-056"
         },
         {
           "CardID": 208,
           "Name": "card",
-          "Nickname": "The Kovarine",
+          "Nickname": "Breach",
           "Transform": {
             "posX": 0,
             "posY": 0,
@@ -1067,12 +1083,12 @@
             "scaleY": 1,
             "scaleZ": 1
           },
-          "GMNotes": "01RHV-02FAM-057"
+          "GMNotes": "06VER-05SPA-057"
         },
         {
           "CardID": 209,
           "Name": "card",
-          "Nickname": "Scoriath",
+          "Nickname": "Warp",
           "Transform": {
             "posX": 0,
             "posY": 0,
@@ -1084,12 +1100,12 @@
             "scaleY": 1,
             "scaleZ": 1
           },
-          "GMNotes": "01RHV-02FAM-058"
+          "GMNotes": "06VER-05SPA-058"
         },
         {
           "CardID": 210,
           "Name": "card",
-          "Nickname": "Tocarin",
+          "Nickname": "Punctual Arrival",
           "Transform": {
             "posX": 0,
             "posY": 0,
@@ -1101,12 +1117,12 @@
             "scaleY": 1,
             "scaleZ": 1
           },
-          "GMNotes": "02IRO-03MIN-059"
+          "GMNotes": "06VER-05SPA-059"
         },
         {
           "CardID": 211,
           "Name": "card",
-          "Nickname": "Pelazhiqi",
+          "Nickname": "Displacement",
           "Transform": {
             "posX": 0,
             "posY": 0,
@@ -1118,12 +1134,12 @@
             "scaleY": 1,
             "scaleZ": 1
           },
-          "GMNotes": "02IRO-02FAM-060"
+          "GMNotes": "06VER-05SPA-060"
         },
         {
           "CardID": 212,
           "Name": "card",
-          "Nickname": "Calazi",
+          "Nickname": "Resonating Geode",
           "Transform": {
             "posX": 0,
             "posY": 0,
@@ -1135,12 +1151,12 @@
             "scaleY": 1,
             "scaleZ": 1
           },
-          "GMNotes": "03VOI-03MIN-061"
+          "GMNotes": "01RHA-05SPA-061"
         },
         {
           "CardID": 213,
           "Name": "card",
-          "Nickname": "Mabruqa",
+          "Nickname": "Seismic Rebuke",
           "Transform": {
             "posX": 0,
             "posY": 0,
@@ -1152,12 +1168,12 @@
             "scaleY": 1,
             "scaleZ": 1
           },
-          "GMNotes": "03VOI-02FAM-062"
+          "GMNotes": "01RHA-05SPA-062"
         },
         {
           "CardID": 214,
           "Name": "card",
-          "Nickname": "Ryuztli",
+          "Nickname": "Tectonic Battery",
           "Transform": {
             "posX": 0,
             "posY": 0,
@@ -1169,12 +1185,12 @@
             "scaleY": 1,
             "scaleZ": 1
           },
-          "GMNotes": "04XAL-02FAM-063"
+          "GMNotes": "01RHA-05SPA-063"
         },
         {
           "CardID": 215,
           "Name": "card",
-          "Nickname": "Kibantli",
+          "Nickname": "Reverberating Carapace",
           "Transform": {
             "posX": 0,
             "posY": 0,
@@ -1186,12 +1202,12 @@
             "scaleY": 1,
             "scaleZ": 1
           },
-          "GMNotes": "04XAL-02FAM-064"
+          "GMNotes": "01RHA-05SPA-064"
         },
         {
           "CardID": 216,
           "Name": "card",
-          "Nickname": "Opolkan",
+          "Nickname": "Undertow",
           "Transform": {
             "posX": 0,
             "posY": 0,
@@ -1203,12 +1219,12 @@
             "scaleY": 1,
             "scaleZ": 1
           },
-          "GMNotes": "05AHS-03MIN-065"
+          "GMNotes": "02IRO-05SPA-065"
         },
         {
           "CardID": 217,
           "Name": "card",
-          "Nickname": "Egunghi",
+          "Nickname": "Deluge",
           "Transform": {
             "posX": 0,
             "posY": 0,
@@ -1220,12 +1236,12 @@
             "scaleY": 1,
             "scaleZ": 1
           },
-          "GMNotes": "05AHS-02FAM-066"
+          "GMNotes": "02IRO-05SPA-066"
         },
         {
           "CardID": 218,
           "Name": "card",
-          "Nickname": "Pashan",
+          "Nickname": "Aqueduct",
           "Transform": {
             "posX": 0,
             "posY": 0,
@@ -1237,12 +1253,12 @@
             "scaleY": 1,
             "scaleZ": 1
           },
-          "GMNotes": "06VER-03MIN-067"
+          "GMNotes": "02IRO-05SPA-067"
         },
         {
           "CardID": 219,
           "Name": "card",
-          "Nickname": "The Anticoris",
+          "Nickname": "Hoarfrost",
           "Transform": {
             "posX": 0,
             "posY": 0,
@@ -1254,12 +1270,12 @@
             "scaleY": 1,
             "scaleZ": 1
           },
-          "GMNotes": "06VER-02FAM-068"
+          "GMNotes": "02IRO-05SPA-068"
         },
         {
           "CardID": 220,
           "Name": "card",
-          "Nickname": "The Rock of Hrugar",
+          "Nickname": "Vantage Point",
           "Transform": {
             "posX": 0,
             "posY": 0,
@@ -1271,12 +1287,12 @@
             "scaleY": 1,
             "scaleZ": 1
           },
-          "GMNotes": "01RHV-04TAL-069"
+          "GMNotes": "03VOI-05SPA-069"
         },
         {
           "CardID": 221,
           "Name": "card",
-          "Nickname": "Cord of Iron Beads",
+          "Nickname": "\"Light them up!\"",
           "Transform": {
             "posX": 0,
             "posY": 0,
@@ -1288,12 +1304,12 @@
             "scaleY": 1,
             "scaleZ": 1
           },
-          "GMNotes": "01RHV-04TAL-070"
+          "GMNotes": "03VOI-05SPA-070"
         },
         {
           "CardID": 222,
           "Name": "card",
-          "Nickname": "Jade-Cloud Catcher",
+          "Nickname": "\"Sic'em!\"",
           "Transform": {
             "posX": 0,
             "posY": 0,
@@ -1305,12 +1321,12 @@
             "scaleY": 1,
             "scaleZ": 1
           },
-          "GMNotes": "02IRO-04TAL-071"
+          "GMNotes": "03VOI-05SPA-071"
         },
         {
           "CardID": 223,
           "Name": "card",
-          "Nickname": "Celadon Gourd",
+          "Nickname": "Plummet",
           "Transform": {
             "posX": 0,
             "posY": 0,
@@ -1322,12 +1338,12 @@
             "scaleY": 1,
             "scaleZ": 1
           },
-          "GMNotes": "02IRO-04TAL-072"
+          "GMNotes": "03VOI-05SPA-072"
         },
         {
           "CardID": 224,
           "Name": "card",
-          "Nickname": "The Kilit-Shard",
+          "Nickname": "Tlaquepal",
           "Transform": {
             "posX": 0,
             "posY": 0,
@@ -1339,12 +1355,12 @@
             "scaleY": 1,
             "scaleZ": 1
           },
-          "GMNotes": "03VOI-04TAL-073"
+          "GMNotes": "04XAL-05SPA-073"
         },
         {
           "CardID": 225,
           "Name": "card",
-          "Nickname": "Dawn-Quill Vane",
+          "Nickname": "Suns' Verdict",
           "Transform": {
             "posX": 0,
             "posY": 0,
@@ -1356,12 +1372,12 @@
             "scaleY": 1,
             "scaleZ": 1
           },
-          "GMNotes": "03VOI-04TAL-074"
+          "GMNotes": "04XAL-05SPA-074"
         },
         {
           "CardID": 226,
           "Name": "card",
-          "Nickname": "Gilded Gun-Kan",
+          "Nickname": "Sovereign Mandate",
           "Transform": {
             "posX": 0,
             "posY": 0,
@@ -1373,12 +1389,12 @@
             "scaleY": 1,
             "scaleZ": 1
           },
-          "GMNotes": "04XAL-04TAL-075"
+          "GMNotes": "04XAL-05SPA-075"
         },
         {
           "CardID": 227,
           "Name": "card",
-          "Nickname": "Re-Minted Obel",
+          "Nickname": "Tzitzim's Vigil",
           "Transform": {
             "posX": 0,
             "posY": 0,
@@ -1390,12 +1406,12 @@
             "scaleY": 1,
             "scaleZ": 1
           },
-          "GMNotes": "04XAL-04TAL-076"
+          "GMNotes": "04XAL-05SPA-076"
         },
         {
           "CardID": 228,
           "Name": "card",
-          "Nickname": "The Gnyar-Knot",
+          "Nickname": "Briar's Weep",
           "Transform": {
             "posX": 0,
             "posY": 0,
@@ -1407,12 +1423,12 @@
             "scaleY": 1,
             "scaleZ": 1
           },
-          "GMNotes": "05AHS-04TAL-077"
+          "GMNotes": "05AHE-05SPA-077"
         },
         {
           "CardID": 229,
           "Name": "card",
-          "Nickname": "Ghul-Bark Pouch",
+          "Nickname": "Lignify",
           "Transform": {
             "posX": 0,
             "posY": 0,
@@ -1424,12 +1440,12 @@
             "scaleY": 1,
             "scaleZ": 1
           },
-          "GMNotes": "05AHS-04TAL-078"
+          "GMNotes": "05AHE-05SPA-078"
         },
         {
           "CardID": 230,
           "Name": "card",
-          "Nickname": "Litany of the First-Stride",
+          "Nickname": "Verdant Coil",
           "Transform": {
             "posX": 0,
             "posY": 0,
@@ -1441,12 +1457,12 @@
             "scaleY": 1,
             "scaleZ": 1
           },
-          "GMNotes": "06VER-04TAL-079"
+          "GMNotes": "05AHE-05SPA-079"
         },
         {
           "CardID": 231,
           "Name": "card",
-          "Nickname": "Osmotic-Needle Censer",
+          "Nickname": "Bough Strike",
           "Transform": {
             "posX": 0,
             "posY": 0,
@@ -1458,13 +1474,285 @@
             "scaleY": 1,
             "scaleZ": 1
           },
-          "GMNotes": "06VER-04TAL-080"
+          "GMNotes": "05AHE-05SPA-080"
+        },
+        {
+          "CardID": 232,
+          "Name": "card",
+          "Nickname": "Follow Through",
+          "Transform": {
+            "posX": 0,
+            "posY": 0,
+            "posZ": 0,
+            "rotX": 0,
+            "rotY": 180,
+            "rotZ": 180,
+            "scaleX": 1,
+            "scaleY": 1,
+            "scaleZ": 1
+          },
+          "GMNotes": "06VER-05SPA-081"
+        },
+        {
+          "CardID": 233,
+          "Name": "card",
+          "Nickname": "Flashpoint",
+          "Transform": {
+            "posX": 0,
+            "posY": 0,
+            "posZ": 0,
+            "rotX": 0,
+            "rotY": 180,
+            "rotZ": 180,
+            "scaleX": 1,
+            "scaleY": 1,
+            "scaleZ": 1
+          },
+          "GMNotes": "06VER-05SPA-082"
+        },
+        {
+          "CardID": 234,
+          "Name": "card",
+          "Nickname": "Veros' Breath",
+          "Transform": {
+            "posX": 0,
+            "posY": 0,
+            "posZ": 0,
+            "rotX": 0,
+            "rotY": 180,
+            "rotZ": 180,
+            "scaleX": 1,
+            "scaleY": 1,
+            "scaleZ": 1
+          },
+          "GMNotes": "06VER-05SPA-083"
+        },
+        {
+          "CardID": 235,
+          "Name": "card",
+          "Nickname": "Snap",
+          "Transform": {
+            "posX": 0,
+            "posY": 0,
+            "posZ": 0,
+            "rotX": 0,
+            "rotY": 180,
+            "rotZ": 180,
+            "scaleX": 1,
+            "scaleY": 1,
+            "scaleZ": 1
+          },
+          "GMNotes": "06VER-05SPA-084"
+        },
+        {
+          "CardID": 236,
+          "Name": "card",
+          "Nickname": "Blazing Charge",
+          "Transform": {
+            "posX": 0,
+            "posY": 0,
+            "posZ": 0,
+            "rotX": 0,
+            "rotY": 180,
+            "rotZ": 180,
+            "scaleX": 1,
+            "scaleY": 1,
+            "scaleZ": 1
+          },
+          "GMNotes": "01RHA-05SPA-085"
+        },
+        {
+          "CardID": 237,
+          "Name": "card",
+          "Nickname": "Short Fuse",
+          "Transform": {
+            "posX": 0,
+            "posY": 0,
+            "posZ": 0,
+            "rotX": 0,
+            "rotY": 180,
+            "rotZ": 180,
+            "scaleX": 1,
+            "scaleY": 1,
+            "scaleZ": 1
+          },
+          "GMNotes": "01RHA-05SPA-086"
+        },
+        {
+          "CardID": 238,
+          "Name": "card",
+          "Nickname": "Condense",
+          "Transform": {
+            "posX": 0,
+            "posY": 0,
+            "posZ": 0,
+            "rotX": 0,
+            "rotY": 180,
+            "rotZ": 180,
+            "scaleX": 1,
+            "scaleY": 1,
+            "scaleZ": 1
+          },
+          "GMNotes": "02IRO-05SPA-087"
+        },
+        {
+          "CardID": 239,
+          "Name": "card",
+          "Nickname": "Roil",
+          "Transform": {
+            "posX": 0,
+            "posY": 0,
+            "posZ": 0,
+            "rotX": 0,
+            "rotY": 180,
+            "rotZ": 180,
+            "scaleX": 1,
+            "scaleY": 1,
+            "scaleZ": 1
+          },
+          "GMNotes": "02IRO-05SPA-088"
+        },
+        {
+          "CardID": 240,
+          "Name": "card",
+          "Nickname": "Dart",
+          "Transform": {
+            "posX": 0,
+            "posY": 0,
+            "posZ": 0,
+            "rotX": 0,
+            "rotY": 180,
+            "rotZ": 180,
+            "scaleX": 1,
+            "scaleY": 1,
+            "scaleZ": 1
+          },
+          "GMNotes": "03VOI-05SPA-089"
+        },
+        {
+          "CardID": 241,
+          "Name": "card",
+          "Nickname": "The Bold",
+          "Transform": {
+            "posX": 0,
+            "posY": 0,
+            "posZ": 0,
+            "rotX": 0,
+            "rotY": 180,
+            "rotZ": 180,
+            "scaleX": 1,
+            "scaleY": 1,
+            "scaleZ": 1
+          },
+          "GMNotes": "03VOI-05SPA-090"
+        },
+        {
+          "CardID": 242,
+          "Name": "card",
+          "Nickname": "Stele of Dulling",
+          "Transform": {
+            "posX": 0,
+            "posY": 0,
+            "posZ": 0,
+            "rotX": 0,
+            "rotY": 180,
+            "rotZ": 180,
+            "scaleX": 1,
+            "scaleY": 1,
+            "scaleZ": 1
+          },
+          "GMNotes": "04XAL-05SPA-091"
+        },
+        {
+          "CardID": 243,
+          "Name": "card",
+          "Nickname": "\"Bring hammers to anvils!\"",
+          "Transform": {
+            "posX": 0,
+            "posY": 0,
+            "posZ": 0,
+            "rotX": 0,
+            "rotY": 180,
+            "rotZ": 180,
+            "scaleX": 1,
+            "scaleY": 1,
+            "scaleZ": 1
+          },
+          "GMNotes": "04XAL-05SPA-092"
+        },
+        {
+          "CardID": 244,
+          "Name": "card",
+          "Nickname": "Siphoning Roots",
+          "Transform": {
+            "posX": 0,
+            "posY": 0,
+            "posZ": 0,
+            "rotX": 0,
+            "rotY": 180,
+            "rotZ": 180,
+            "scaleX": 1,
+            "scaleY": 1,
+            "scaleZ": 1
+          },
+          "GMNotes": "05AHE-05SPA-093"
+        },
+        {
+          "CardID": 245,
+          "Name": "card",
+          "Nickname": "Ire of the Korin\u00e1sh",
+          "Transform": {
+            "posX": 0,
+            "posY": 0,
+            "posZ": 0,
+            "rotX": 0,
+            "rotY": 180,
+            "rotZ": 180,
+            "scaleX": 1,
+            "scaleY": 1,
+            "scaleZ": 1
+          },
+          "GMNotes": "05AHE-05SPA-094"
+        },
+        {
+          "CardID": 246,
+          "Name": "card",
+          "Nickname": "Apertures of Mirimara",
+          "Transform": {
+            "posX": 0,
+            "posY": 0,
+            "posZ": 0,
+            "rotX": 0,
+            "rotY": 180,
+            "rotZ": 180,
+            "scaleX": 1,
+            "scaleY": 1,
+            "scaleZ": 1
+          },
+          "GMNotes": "06VER-05SPA-095"
+        },
+        {
+          "CardID": 247,
+          "Name": "card",
+          "Nickname": "The Abscission of Form",
+          "Transform": {
+            "posX": 0,
+            "posY": 0,
+            "posZ": 0,
+            "rotX": 0,
+            "rotY": 180,
+            "rotZ": 180,
+            "scaleX": 1,
+            "scaleY": 1,
+            "scaleZ": 1
+          },
+          "GMNotes": "06VER-05SPA-096"
         }
       ],
       "CustomDeck": {
         "1": {
-          "FaceUrl": "{verifycache}https://firebasestorage.googleapis.com/v0/b/card-maker-74ec3.appspot.com/o/images%2FOlU3dsFhrFU9sVcqenrI3BW2cB73%2FTTSFiles%2Fz2ITQMUq1gRjGX5kJ9Xm_bjTwJdCkf6QAggPX6lII_0.png?alt=media&token=4bf3adc2-54e0-4470-91d8-15875493f67a",
-          "BackUrl": "{verifycache}https://firebasestorage.googleapis.com/v0/b/card-maker-74ec3.appspot.com/o/images%2FOlU3dsFhrFU9sVcqenrI3BW2cB73%2FTTSFiles%2Fz2ITQMUq1gRjGX5kJ9Xm_back_bjTwJdCkf6QAggPX6lII_0.png?alt=media&token=73f8ccec-aff1-4125-a7b3-34252480d13d",
+          "FaceUrl": "{verifycache}https://firebasestorage.googleapis.com/v0/b/card-maker-74ec3.appspot.com/o/images%2FOlU3dsFhrFU9sVcqenrI3BW2cB73%2FTTSFiles%2Fz2ITQMUq1gRjGX5kJ9Xm_INBPEtO4L2nNPe4fpT3K_0.png?alt=media&token=364bf056-be1b-437d-8901-524ce6a9eeb2",
+          "BackUrl": "{verifycache}https://firebasestorage.googleapis.com/v0/b/card-maker-74ec3.appspot.com/o/images%2FOlU3dsFhrFU9sVcqenrI3BW2cB73%2FTTSFiles%2Fz2ITQMUq1gRjGX5kJ9Xm_back_INBPEtO4L2nNPe4fpT3K_0.png?alt=media&token=76dfb820-a219-48fc-a344-bdacaec9221f",
           "NumWidth": 8,
           "NumHeight": 6,
           "BackIsHidden": true,
@@ -1472,8 +1760,8 @@
           "Type": 0
         },
         "2": {
-          "FaceUrl": "{verifycache}https://firebasestorage.googleapis.com/v0/b/card-maker-74ec3.appspot.com/o/images%2FOlU3dsFhrFU9sVcqenrI3BW2cB73%2FTTSFiles%2Fz2ITQMUq1gRjGX5kJ9Xm_bjTwJdCkf6QAggPX6lII_1.png?alt=media&token=85129886-e88a-4c9e-a61c-7dcce1d67b8e",
-          "BackUrl": "{verifycache}https://firebasestorage.googleapis.com/v0/b/card-maker-74ec3.appspot.com/o/images%2FOlU3dsFhrFU9sVcqenrI3BW2cB73%2FTTSFiles%2Fz2ITQMUq1gRjGX5kJ9Xm_back_bjTwJdCkf6QAggPX6lII_1.png?alt=media&token=66024abc-7adf-46a9-9ac3-eb527b49e320",
+          "FaceUrl": "{verifycache}https://firebasestorage.googleapis.com/v0/b/card-maker-74ec3.appspot.com/o/images%2FOlU3dsFhrFU9sVcqenrI3BW2cB73%2FTTSFiles%2Fz2ITQMUq1gRjGX5kJ9Xm_INBPEtO4L2nNPe4fpT3K_1.png?alt=media&token=59ea47f8-1066-4f4d-82d9-32a7802388e4",
+          "BackUrl": "{verifycache}https://firebasestorage.googleapis.com/v0/b/card-maker-74ec3.appspot.com/o/images%2FOlU3dsFhrFU9sVcqenrI3BW2cB73%2FTTSFiles%2Fz2ITQMUq1gRjGX5kJ9Xm_back_INBPEtO4L2nNPe4fpT3K_1.png?alt=media&token=079a1833-c8d7-4505-8da3-437dd857e87b",
           "NumWidth": 8,
           "NumHeight": 6,
           "BackIsHidden": true,
