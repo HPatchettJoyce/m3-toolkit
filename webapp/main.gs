@@ -215,6 +215,9 @@ function getCardDatabase() {
     var roleIdx = findColumnIndex(charHeaderMap, ["Role (str)", "Role"]);
     var etherIdx = findColumnIndex(charHeaderMap, ["Ether (int)", "Ether (Cost)", "Ether", "Cost"]);
     var idIdx = findColumnIndex(charHeaderMap, ["ID (str)", "ID"]);
+    var effectIdx = findColumnIndex(charHeaderMap, ["Effect (str)", "Effect"]);
+    var prowessIdx = findColumnIndex(charHeaderMap, ["Prowess (int)", "Prowess"]);
+    var fortitudeIdx = findColumnIndex(charHeaderMap, ["Fortitude (int)", "Fortitude"]);
 
     // First Pass: Parse and index Champions
     charRows.forEach(function(row, index) {
@@ -234,10 +237,22 @@ function getCardDatabase() {
       if (unitClass === "Champion") {
         var champId = "champ_" + index;
         var imageInfo = (imageMappings && imageMappings.characters && imageMappings.characters[index]) ? imageMappings.characters[index] : null;
+        var role = roleIdx !== -1 ? String(row[roleIdx]).trim() : "";
+        var effect = effectIdx !== -1 ? String(row[effectIdx]).trim() : "";
+        var prowess = prowessIdx !== -1 ? String(row[prowessIdx]).trim() : "";
+        var fortitude = fortitudeIdx !== -1 ? String(row[fortitudeIdx]).trim() : "";
+        var cost = etherIdx !== -1 ? (parseInt(row[etherIdx]) || 0) : 0;
+
         db.champions.push({
           id: champId,
           name: name,
           dominion: dominion,
+          class: unitClass,
+          role: role,
+          effect: effect,
+          prowess: prowess,
+          fortitude: fortitude,
+          cost: cost,
           uniqueId: cardIdVal,
           image: imageInfo
         });
@@ -263,9 +278,9 @@ function getCardDatabase() {
       if (unitClass === "Familiar" || unitClass === "Minion" || unitClass === "Talisman") {
         var isLoyal = false;
         var tiedChampId = null;
+        var role = roleIdx !== -1 ? String(row[roleIdx]).trim() : "";
 
         if (roleIdx !== -1) {
-          var role = String(row[roleIdx]).trim();
           if (role) {
             var match = role.match(/^(.*?)(?:'s|')\s*Loyal Companion$/i);
             if (match) {
@@ -279,6 +294,10 @@ function getCardDatabase() {
         }
 
         var imageInfo = (imageMappings && imageMappings.characters && imageMappings.characters[index]) ? imageMappings.characters[index] : null;
+        var effect = effectIdx !== -1 ? String(row[effectIdx]).trim() : "";
+        var prowess = prowessIdx !== -1 ? String(row[prowessIdx]).trim() : "";
+        var fortitude = fortitudeIdx !== -1 ? String(row[fortitudeIdx]).trim() : "";
+
         db.units.push({
           id: "unit_" + index,
           name: name,
@@ -288,7 +307,11 @@ function getCardDatabase() {
           isLoyal: isLoyal,
           tiedChampionId: tiedChampId,
           uniqueId: cardIdVal,
-          image: imageInfo
+          image: imageInfo,
+          role: role,
+          effect: effect,
+          prowess: prowess,
+          fortitude: fortitude
         });
       }
     });
@@ -309,6 +332,7 @@ function getCardDatabase() {
     var spRoleIdx = findColumnIndex(spHeaderMap, ["Role (str)", "Role"]);
     var spEtherIdx = findColumnIndex(spHeaderMap, ["Ether (int)", "Ether (Cost)", "Ether", "Cost"]);
     var spIdIdx = findColumnIndex(spHeaderMap, ["ID (str)", "ID"]);
+    var spEffectIdx = findColumnIndex(spHeaderMap, ["Effect (str)", "Effect"]);
 
     spRows.forEach(function(row, index) {
       if (spNameIdx === -1 || spDomIdx === -1 || spClassIdx === -1) return;
@@ -325,9 +349,9 @@ function getCardDatabase() {
 
       var isSignature = false;
       var tiedChampId = null;
+      var role = spRoleIdx !== -1 ? String(row[spRoleIdx]).trim() : "";
 
       if (spRoleIdx !== -1) {
-        var role = String(row[spRoleIdx]).trim();
         if (role) {
           var match = role.match(/^(.*?)(?:'s|')\s*Signature Action$/i);
           if (match) {
@@ -341,15 +365,20 @@ function getCardDatabase() {
       }
 
       var imageInfo = (imageMappings && imageMappings.specials && imageMappings.specials[index]) ? imageMappings.specials[index] : null;
+      var effect = spEffectIdx !== -1 ? String(row[spEffectIdx]).trim() : "";
+
       db.specials.push({
         id: "sp_" + index,
         name: name,
         dominion: dominion,
+        class: unitClass,
         cost: cost,
         isSignature: isSignature,
         tiedChampionId: tiedChampId,
         uniqueId: spCardIdVal,
-        image: imageInfo
+        image: imageInfo,
+        role: role,
+        effect: effect
       });
     });
   }

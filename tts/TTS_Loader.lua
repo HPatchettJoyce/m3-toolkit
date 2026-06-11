@@ -421,7 +421,7 @@ function loadCastCoroutine()
 
         isCloning = true
         -- Spawn exactly 1 copy of the Champion standee
-        local modelSuccess = cloneModelFromBag(modelsBag, champId, 1, unitSpawnPos, {0, 90, 0}, xDirection, false)
+        local modelSuccess = cloneModelFromBag(modelsBag, champId, 1, unitSpawnPos, {0, 90, 0}, xDirection, false, config.color)
         if modelSuccess then
             while isCloning do
                 coroutine.yield(0)
@@ -473,7 +473,7 @@ function loadCastCoroutine()
 
                 isCloning = true
                 -- Rotate standees by 90 degrees around Y so they face the players directly
-                local modelSuccess = cloneModelFromBag(modelsBag, unitId, qty, unitSpawnPos, {0, 90, 0}, xDirection, false)
+                local modelSuccess = cloneModelFromBag(modelsBag, unitId, qty, unitSpawnPos, {0, 90, 0}, xDirection, false, config.color)
                 if modelSuccess then
                     while isCloning do
                         coroutine.yield(0)
@@ -507,7 +507,7 @@ function loadCastCoroutine()
 
             isCloning = true
             -- Spawn exactly 12 copies and stack them vertically (isStacked = true)
-            local modelSuccess = cloneModelFromBag(modelsBag, minionId, 12, minionSpawnPos, {0, 90, 0}, xDirection, true)
+            local modelSuccess = cloneModelFromBag(modelsBag, minionId, 12, minionSpawnPos, {0, 90, 0}, xDirection, true, config.color)
             if modelSuccess then
                 while isCloning do
                     coroutine.yield(0)
@@ -776,7 +776,7 @@ function getSpawnPositionForModels(config)
 end
 
 -- Core Function: Clones a specific model by ID from a bag N times, arranging them to the right, and returns original to the bag
-function cloneModelFromBag(bag, modelId, qty, targetPos, targetRot, xDirection, isStacked)
+function cloneModelFromBag(bag, modelId, qty, targetPos, targetRot, xDirection, isStacked, playerColor)
     if not bag then return false end
     
     for _, objInfo in ipairs(bag.getObjects()) do
@@ -811,6 +811,10 @@ function cloneModelFromBag(bag, modelId, qty, targetPos, targetRot, xDirection, 
                             position = modelPos,
                             rotation = targetRot
                         })
+                        
+                        if playerColor and clonedObj ~= nil then
+                            clonedObj.setColorTint(playerColor)
+                        end
                     end
                     
                     -- Return original model to the bag after a small frame delay to let clones spawn safely first

@@ -307,6 +307,321 @@
                 max-width: 200px;
             }
         }
+
+        /* Print Overlay Styles (On Screen) */
+        .print-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #f4f6f7;
+            z-index: 3000;
+            display: flex;
+            flex-direction: column;
+            box-sizing: border-box;
+        }
+
+        .print-overlay-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .print-overlay-header h2 {
+            margin: 0;
+            color: white;
+            border-bottom: none;
+            padding-bottom: 0;
+            font-size: 1.5rem;
+        }
+
+        .btn-confirm-print {
+            background-color: var(--success-colour);
+            color: white;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            padding: 8px 16px;
+            border-radius: var(--radius);
+            font-size: 1rem;
+            width: auto;
+        }
+
+        .btn-confirm-print:hover {
+            background-color: #2196f3;
+        }
+
+        .btn-close-print {
+            background-color: #7f8c8d;
+            color: white;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            padding: 8px 16px;
+            border-radius: var(--radius);
+            font-size: 1rem;
+            width: auto;
+        }
+
+        .btn-close-print:hover {
+            background-color: #95a5a6;
+        }
+
+        .print-overlay-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        /* Print Pages Container (flows sheets vertically on screen) */
+        .print-pages-container {
+            display: block;
+            width: 100%;
+            height: auto;
+            box-sizing: border-box;
+        }
+
+        /* Print Page (On Screen Preview) */
+        .print-page {
+            width: 210mm;
+            height: 297mm;
+            background: white;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin: 20px auto;
+            box-sizing: border-box;
+            padding: 15.15mm 9.75mm;
+            position: relative;
+            break-after: page;
+            page-break-after: always;
+        }
+
+        /* Print Grid and Cards Styles */
+        .print-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 63.5mm);
+            grid-template-rows: repeat(3, 88.9mm);
+            gap: 0; /* butt cards against each other with NO gap! */
+            justify-content: center;
+            align-content: center;
+            box-sizing: border-box;
+        }
+
+        .print-card {
+            width: 63.5mm;
+            height: 88.9mm;
+            background: white;
+            border: 2px solid var(--faction-color, #333);
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            padding: 10px;
+            color: #111;
+            font-family: Arial, sans-serif;
+            position: relative;
+            background-color: #fff !important;
+            break-inside: avoid;
+            page-break-inside: avoid;
+        }
+
+        .print-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            border-bottom: 2px solid var(--faction-color, #333);
+            padding-bottom: 4px;
+            margin-bottom: 4px;
+        }
+
+        .print-card-name {
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: #000;
+            margin: 0;
+            line-height: 1.1;
+            max-width: 70%;
+        }
+
+        .print-card-cost-class {
+            font-size: 0.75rem;
+            font-weight: bold;
+            color: var(--faction-color, #333);
+            text-align: right;
+            line-height: 1.1;
+        }
+
+        .print-card-subheader {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #555;
+            margin-bottom: 6px;
+            font-weight: bold;
+        }
+
+        .print-card-stats {
+            display: flex;
+            justify-content: space-between;
+            background-color: #f2f4f4;
+            border: 1px solid #bdc3c7;
+            border-radius: 4px;
+            padding: 2px 8px;
+            margin-bottom: 6px;
+            font-size: 0.7rem;
+            font-weight: bold;
+        }
+
+        .print-card-stats span {
+            color: #222;
+        }
+
+        .print-card-art-placeholder {
+            width: 1.8in;
+            height: 1.3in;
+            border: 2px solid #111;
+            border-radius: 4px;
+            margin: 6px auto;
+            background-color: #ffffff;
+            box-sizing: border-box;
+        }
+
+        .print-card-effect {
+            flex: 1;
+            font-size: 0.65rem;
+            line-height: 1.15;
+            color: #111;
+            overflow: hidden;
+            word-wrap: break-word;
+        }
+
+        /* Hide the elements on screen printing if needed */
+        @media print {
+            @page {
+                size: A4;
+                margin: 0; /* Let our metric padding handle alignment to disable headers/footers */
+            }
+
+            body {
+                background: white !important;
+                color: black !important;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+
+            /* Hide everything except the print overlay body containing the print grid */
+            body > *:not(#print-overlay) {
+                display: none !important;
+            }
+
+            #print-overlay {
+                position: absolute !important;
+                top: 0 !important;
+                left: 0 !important;
+                width: auto !important;
+                height: auto !important;
+                background: white !important;
+                display: block !important;
+            }
+
+            .print-overlay-header {
+                display: none !important;
+            }
+
+            .print-overlay-body {
+                padding: 0 !important;
+                overflow: visible !important;
+            }
+
+            .print-pages-container {
+                display: block !important;
+                width: auto !important;
+                height: auto !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                box-shadow: none !important;
+            }
+
+            .print-page {
+                width: 210mm !important;
+                height: 297mm !important;
+                margin: 0 !important;
+                box-shadow: none !important; /* Removes the drop shadow ink waste when printing! */
+                padding: 15.15mm 9.75mm !important;
+                box-sizing: border-box !important;
+                background: white !important;
+                page-break-after: always !important;
+                break-after: page !important;
+            }
+
+            .print-grid {
+                display: grid !important;
+                grid-template-columns: repeat(3, 63.5mm) !important;
+                grid-template-rows: repeat(3, 88.9mm) !important;
+                gap: 0 !important; /* butt cards against each other with NO gap! */
+                justify-content: center !important;
+                align-content: center !important;
+                max-width: 100% !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                box-sizing: border-box !important;
+            }
+
+            .print-card {
+                box-shadow: none !important;
+                border: 2px solid var(--faction-color, #333) !important;
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
+            }
+        }
+
+        /* Import Modal Styles */
+        .import-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 4000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .import-modal-content {
+            background-color: white;
+            padding: 25px;
+            border-radius: var(--radius);
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.3);
+            box-sizing: border-box;
+        }
+
+        .import-modal h3 {
+            margin-top: 0;
+            border-left: none;
+            padding-left: 0;
+            font-size: 1.3rem;
+            color: var(--primary-colour);
+        }
+
+        #import-input {
+            width: 100%;
+            height: 180px;
+            font-family: monospace;
+            background-color: #f8f9fa;
+            border: 1px solid var(--border-colour);
+            border-radius: var(--radius);
+            padding: 10px;
+            box-sizing: border-box;
+            resize: vertical;
+        }
     </style>
 </head>
 <body>
@@ -328,11 +643,14 @@
     <div id="loading" class="loader">Loading database...</div>
 
     <div id="app" class="hidden">
-        <div class="section">
-            <label for="dominion-select">Select Dominion</label>
-            <select id="dominion-select">
-                <option value="">-- Choose a Dominion --</option>
-            </select>
+        <div class="section" style="display: flex; gap: 15px; align-items: flex-end; flex-wrap: wrap;">
+            <div style="flex: 2; min-width: 200px;">
+                <label for="dominion-select">Select Dominion</label>
+                <select id="dominion-select" style="margin-bottom: 0;">
+                    <option value="">-- Choose a Dominion --</option>
+                </select>
+            </div>
+            <button id="btn-import-top" class="btn-import" style="flex: 1; min-width: 150px; background-color: #2c3e50; color: white; font-weight: bold; font-size: 1.1rem; border: none; cursor: pointer; border-radius: var(--radius); padding: 12px; height: 48px; transition: background-color 0.2s;">Import Cast JSON</button>
         </div>
 
         <div id="builder-content" class="hidden">
@@ -373,9 +691,39 @@
             </div>
 
             <div class="section">
-                <button id="btn-export" class="btn-export">Export Cast</button>
+                <div style="display: flex; gap: 15px; margin-bottom: 15px; flex-wrap: wrap;">
+                    <button id="btn-print" class="btn-print" style="background-color: #34495e; color: white; font-weight: bold; font-size: 1.15rem; border: none; cursor: pointer; border-radius: var(--radius); padding: 12px; flex: 1; min-width: 140px; transition: background-color 0.2s;">Print Cards</button>
+                    <button id="btn-export" class="btn-export" style="margin-bottom: 0; flex: 1; min-width: 140px;">Export Cast</button>
+                </div>
                 <textarea id="export-output" readonly placeholder="Your exported JSON will appear here..."></textarea>
             </div>
+        </div>
+    </div>
+</div>
+
+<!-- Fullscreen Print Preview Overlay -->
+<div id="print-overlay" class="print-overlay hidden">
+    <div class="print-overlay-header">
+        <h2>Print Preview</h2>
+        <div style="display: flex; gap: 10px;">
+            <button id="btn-confirm-print" class="btn-confirm-print">Confirm Print</button>
+            <button id="btn-close-print" class="btn-close-print">Close Preview</button>
+        </div>
+    </div>
+    <div class="print-overlay-body">
+        <div id="print-grid" class="print-pages-container"></div>
+    </div>
+</div>
+
+<!-- Import Modal Dialog -->
+<div id="import-modal" class="import-modal hidden">
+    <div class="import-modal-content">
+        <h3 style="margin-top: 0; border-left: none; padding-left: 0; font-size: 1.3rem; color: var(--primary-colour);">Import Shared Cast JSON</h3>
+        <p style="font-size: 0.9rem; color: #666; margin-top: 0; margin-bottom: 15px;">Paste your shared Monumentum Cast JSON into the box below and click "Load Cast".</p>
+        <textarea id="import-input" placeholder="Paste JSON here..."></textarea>
+        <div style="display: flex; gap: 10px; margin-top: 15px;">
+            <button id="btn-submit-import" style="background-color: var(--success-colour); color: white; font-weight: bold; border: none; cursor: pointer; border-radius: var(--radius); padding: 10px; flex: 1;">Load Cast</button>
+            <button id="btn-cancel-import" style="background-color: #7f8c8d; color: white; font-weight: bold; border: none; cursor: pointer; border-radius: var(--radius); padding: 10px; flex: 1;">Cancel</button>
         </div>
     </div>
 </div>
@@ -418,8 +766,18 @@
         warningsBox: document.getElementById('warnings'),
         warningsList: document.getElementById('warnings-list'),
         btnExport: document.getElementById('btn-export'),
+        btnImportTop: document.getElementById('btn-import-top'),
         exportOutput: document.getElementById('export-output'),
-        statusWidget: document.getElementById('status-widget')
+        statusWidget: document.getElementById('status-widget'),
+        btnPrint: document.getElementById('btn-print'),
+        printOverlay: document.getElementById('print-overlay'),
+        printGrid: document.getElementById('print-grid'),
+        btnConfirmPrint: document.getElementById('btn-confirm-print'),
+        btnClosePrint: document.getElementById('btn-close-print'),
+        importModal: document.getElementById('import-modal'),
+        importInput: document.getElementById('import-input'),
+        btnSubmitImport: document.getElementById('btn-submit-import'),
+        btnCancelImport: document.getElementById('btn-cancel-import')
     };
 
     function initialise() {
@@ -1009,6 +1367,355 @@
         }).catch(err => {
             alert("Failed to copy to clipboard automatically. You can copy the text manually from the box.");
         });
+    });
+
+    // Printer-friendly Cards Generation
+    const FACTION_COLORS = {
+        "Rhavlika": "#c0392b",     // Red
+        "Iro-Si-Khar": "#2980b9",  // Blue
+        "Voisira": "#b7950b",      // Legible Dark Gold/Amber
+        "Xalakith": "#7d3c98",     // Purple
+        "Ahèserec": "#27ae60",     // Green
+        "Veritian": "#138d75"      // Slate/Teal
+    };
+
+    function formatRulesText(text) {
+        if (!text) return "";
+        // Normalize line breaks
+        let html = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+        // Collapse consecutive multiple newlines to save space
+        html = html.replace(/\n+/g, '\n');
+        // Convert single newlines to standard <br> breaks
+        html = html.replace(/\n/g, '<br>');
+
+        html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+        html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
+        html = html.replace(/\{M3\/Icons\/Dice\/(.*?)\.png\}/gi, '<strong>[$1]</strong>');
+        html = html.replace(/\{M3\/Icons\/.*?\/(.*?)\.png\}/gi, '<strong>[$1]</strong>');
+        html = html.replace(/\{.*?\}/g, '');
+        return html;
+    }
+
+    function generatePrintCard(card, qty) {
+        const factionColor = FACTION_COLORS[card.dominion] || "#34495e";
+        const costStr = card.cost !== undefined ? `${card.cost}E` : "";
+        const classStr = card.class || "";
+        const costClass = [costStr, classStr].filter(Boolean).join(" • ");
+        
+        const subheaderStr = [card.dominion, card.role].filter(Boolean).join(" • ");
+
+        const prowessVal = card.prowess !== undefined ? String(card.prowess).trim() : "";
+        const fortitudeVal = card.fortitude !== undefined ? String(card.fortitude).trim() : "";
+        const hasStats = prowessVal || fortitudeVal;
+
+        const cardEl = document.createElement('div');
+        cardEl.className = 'print-card';
+        cardEl.style.setProperty('--faction-color', factionColor);
+
+        // Header
+        const headerEl = document.createElement('div');
+        headerEl.className = 'print-card-header';
+        
+        const nameEl = document.createElement('h3');
+        nameEl.className = 'print-card-name';
+        nameEl.textContent = card.name;
+        headerEl.appendChild(nameEl);
+
+        if (costClass) {
+            const costClassEl = document.createElement('div');
+            costClassEl.className = 'print-card-cost-class';
+            costClassEl.textContent = costClass;
+            headerEl.appendChild(costClassEl);
+        }
+        cardEl.appendChild(headerEl);
+
+        // Subheader
+        const subheaderEl = document.createElement('div');
+        subheaderEl.className = 'print-card-subheader';
+        subheaderEl.textContent = subheaderStr;
+        cardEl.appendChild(subheaderEl);
+
+        // Stats (Prowess / Fortitude)
+        if (hasStats) {
+            const statsEl = document.createElement('div');
+            statsEl.className = 'print-card-stats';
+            statsEl.innerHTML = `<span>PROWESS: ${prowessVal || '-'}</span> <span>FORTITUDE: ${fortitudeVal || '-'}</span>`;
+            cardEl.appendChild(statsEl);
+        }
+
+        // Art placeholder (completely empty canvas)
+        const artEl = document.createElement('div');
+        artEl.className = 'print-card-art-placeholder';
+        cardEl.appendChild(artEl);
+
+        // Effect
+        const effectEl = document.createElement('div');
+        effectEl.className = 'print-card-effect';
+        effectEl.innerHTML = formatRulesText(card.effect);
+        cardEl.appendChild(effectEl);
+
+        return cardEl;
+    }
+
+    function openPrintPreview() {
+        if (!state.dominion || !state.champion) {
+            alert('Please select a Dominion and Champion before printing.');
+            return;
+        }
+
+        // Check talismans
+        for (const talId in state.talismans) {
+            if (state.talismans[talId] === "") {
+                alert('Please ensure all recruited Talismans are attached to a Basic Familiar before printing.');
+                return;
+            }
+        }
+
+        const cardsToPrint = [];
+
+        // 1. Champion
+        const champObj = db.champions.find(c => c.id === state.champion);
+        if (champObj) {
+            cardsToPrint.push(generatePrintCard(champObj, 1));
+        }
+
+        // 2. Units Recruited (Loyals and Basics) - Rendered STRICTLY ONCE as reference cards!
+        for (const [id, qty] of Object.entries(state.familiars)) {
+            const unitObj = db.units.find(u => u.id === id);
+            if (unitObj && qty > 0) {
+                cardsToPrint.push(generatePrintCard(unitObj, 1));
+            }
+        }
+
+        // 2.5 Auto-Minion Reference Cards (Driplet for Iro-Si-Khar, Huskling for Ahèserec)
+        if (state.dominion === "Iro-Si-Khar") {
+            const driplet = db.units.find(u => u.name.toLowerCase() === "driplet" && u.dominion === "Iro-Si-Khar");
+            if (driplet) {
+                cardsToPrint.push(generatePrintCard(driplet, 1));
+            }
+        } else if (state.dominion === "Ahèserec") {
+            const huskling = db.units.find(u => u.name.toLowerCase() === "huskling" && u.dominion === "Ahèserec");
+            if (huskling) {
+                cardsToPrint.push(generatePrintCard(huskling, 1));
+            }
+        }
+
+        // 3. Talismans
+        for (const id in state.talismans) {
+            const talObj = db.units.find(u => u.id === id);
+            if (talObj) {
+                cardsToPrint.push(generatePrintCard(talObj, 1));
+            }
+        }
+
+        // 4. Specials
+        state.specials.forEach(id => {
+            const specObj = db.specials.find(s => s.id === id);
+            if (specObj) {
+                cardsToPrint.push(generatePrintCard(specObj, 1));
+            }
+        });
+
+        // Clear print area
+        els.printGrid.innerHTML = '';
+
+        // Chunk cards into pages of exactly 9 cards (3x3 grid)
+        const PAGE_SIZE = 9;
+        for (let i = 0; i < cardsToPrint.length; i += PAGE_SIZE) {
+            const pageCards = cardsToPrint.slice(i, i + PAGE_SIZE);
+            
+            // Create A4 paper sheet container
+            const pageEl = document.createElement('div');
+            pageEl.className = 'print-page';
+            
+            // Create A4 3x3 no-gap grid container
+            const gridEl = document.createElement('div');
+            gridEl.className = 'print-grid';
+            
+            pageCards.forEach(cardEl => {
+                gridEl.appendChild(cardEl);
+            });
+            
+            pageEl.appendChild(gridEl);
+            els.printGrid.appendChild(pageEl);
+        }
+
+        els.printOverlay.classList.remove('hidden');
+    }
+
+    function importCastList() {
+        const jsonStr = els.importInput.value.trim();
+        if (!jsonStr) {
+            alert('Please paste a JSON cast list into the box before clicking Load Cast.');
+            return false;
+        }
+
+        let data;
+        try {
+            data = JSON.parse(jsonStr);
+        } catch (err) {
+            alert('Invalid JSON format. Please ensure you pasted the complete and correct JSON cast list.');
+            return false;
+        }
+
+        // Validate basic structure
+        if (!data.dominion) {
+            alert('Missing "dominion" property in the JSON file.');
+            return false;
+        }
+
+        // 1. Resolve Dominion
+        const matchedDominion = db.dominions.find(d => d.toLowerCase() === data.dominion.toLowerCase());
+        if (!matchedDominion) {
+            alert(`Dominion "${data.dominion}" is not present in the loaded database.`);
+            return false;
+        }
+
+        // Apply Dominion to state
+        state.dominion = matchedDominion;
+        els.dominionSelect.value = matchedDominion;
+        
+        // Trigger select change UI reset
+        els.builderContent.classList.remove('hidden');
+        els.statusWidget.classList.remove('hidden');
+
+        // 2. Resolve Champion
+        let matchedChamp = null;
+        if (data.championId) {
+            matchedChamp = db.champions.find(c => c.uniqueId === data.championId && c.dominion === matchedDominion);
+        }
+        if (!matchedChamp && data.champion) {
+            matchedChamp = db.champions.find(c => c.name.toLowerCase() === data.champion.toLowerCase() && c.dominion === matchedDominion);
+        }
+
+        if (!matchedChamp) {
+            alert(`Could not find champion "${data.champion || data.championId}" under dominion "${matchedDominion}" in the database.`);
+            return false;
+        }
+
+        state.champion = matchedChamp.id;
+
+        // Clear existing state for units, talismans, specials before loading new ones
+        state.familiars = {};
+        state.talismans = {};
+        state.specials = [];
+
+        // 3. Resolve Units Recruited (Loyals and Basics)
+        if (data.unitIdsRecruited && Object.keys(data.unitIdsRecruited).length > 0) {
+            for (const [uniqueId, qty] of Object.entries(data.unitIdsRecruited)) {
+                const dbUnit = db.units.find(u => u.uniqueId === uniqueId && u.dominion === matchedDominion);
+                if (dbUnit) {
+                    state.familiars[dbUnit.id] = qty;
+                }
+            }
+        } else if (data.unitsRecruited && Object.keys(data.unitsRecruited).length > 0) {
+            for (const [name, qty] of Object.entries(data.unitsRecruited)) {
+                const dbUnit = db.units.find(u => u.name.toLowerCase() === name.toLowerCase() && u.dominion === matchedDominion);
+                if (dbUnit) {
+                    state.familiars[dbUnit.id] = qty;
+                }
+            }
+        }
+
+        // 4. Resolve Talismans
+        if (data.talismanIdsEquipped && Object.keys(data.talismanIdsEquipped).length > 0) {
+            for (const [talUniqueId, attachmentStr] of Object.entries(data.talismanIdsEquipped)) {
+                const dbTalisman = db.units.find(u => u.uniqueId === talUniqueId && u.class === "Talisman" && u.dominion === matchedDominion);
+                if (dbTalisman) {
+                    let attachedUnitId = "";
+                    const match = attachmentStr.match(/Attached to:\s*(.*)/i);
+                    if (match) {
+                        const targetUniqueId = match[1].trim();
+                        const dbTargetUnit = db.units.find(u => u.uniqueId === targetUniqueId && u.dominion === matchedDominion);
+                        if (dbTargetUnit && state.familiars[dbTargetUnit.id]) {
+                            attachedUnitId = dbTargetUnit.id;
+                        }
+                    }
+                    state.talismans[dbTalisman.id] = attachedUnitId;
+                }
+            }
+        } else if (data.talismansEquipped && Object.keys(data.talismansEquipped).length > 0) {
+            for (const [talName, attachmentStr] of Object.entries(data.talismansEquipped)) {
+                const dbTalisman = db.units.find(u => u.name.toLowerCase() === talName.toLowerCase() && u.class === "Talisman" && u.dominion === matchedDominion);
+                if (dbTalisman) {
+                    let attachedUnitId = "";
+                    const match = attachmentStr.match(/Attached to:\s*(.*)/i);
+                    if (match) {
+                        const targetName = match[1].trim();
+                        const dbTargetUnit = db.units.find(u => u.name.toLowerCase() === targetName.toLowerCase() && u.dominion === matchedDominion);
+                        if (dbTargetUnit && state.familiars[dbTargetUnit.id]) {
+                            attachedUnitId = dbTargetUnit.id;
+                        }
+                    }
+                    state.talismans[dbTalisman.id] = attachedUnitId;
+                }
+            }
+        }
+
+        // 5. Resolve Specials
+        if (data.specialIds && data.specialIds.length > 0) {
+            data.specialIds.forEach(uniqueId => {
+                const dbSpecial = db.specials.find(s => s.uniqueId === uniqueId && s.dominion === matchedDominion);
+                if (dbSpecial) {
+                    state.specials.push(dbSpecial.id);
+                }
+            });
+        } else if (data.specialActions && data.specialActions.length > 0) {
+            data.specialActions.forEach(name => {
+                const dbSpecial = db.specials.find(s => s.name.toLowerCase() === name.toLowerCase() && s.dominion === matchedDominion);
+                if (dbSpecial) {
+                    state.specials.push(dbSpecial.id);
+                }
+            });
+        }
+
+        // Re-render whole UI sequentially
+        renderChampions();
+        renderAllUnits();
+        renderSpecials();
+        updateTrackers();
+
+        // Show recruitment and specials panels
+        els.recruitmentSection.classList.remove('hidden');
+        els.specialsSection.classList.remove('hidden');
+
+        // Confirm success visually
+        const originalText = els.btnImportTop.textContent;
+        els.btnImportTop.textContent = 'Import Successful!';
+        els.btnImportTop.style.backgroundColor = 'var(--success-colour)';
+        setTimeout(() => {
+            els.btnImportTop.textContent = originalText;
+            els.btnImportTop.style.backgroundColor = '#2c3e50';
+        }, 3000);
+
+        return true;
+    }
+
+    // Modal triggers
+    els.btnImportTop.addEventListener('click', () => {
+        els.importInput.value = '';
+        els.importModal.classList.remove('hidden');
+    });
+
+    els.btnCancelImport.addEventListener('click', () => {
+        els.importModal.classList.add('hidden');
+    });
+
+    els.btnSubmitImport.addEventListener('click', () => {
+        const success = importCastList();
+        if (success) {
+            els.importModal.classList.add('hidden');
+        }
+    });
+
+    els.btnPrint.addEventListener('click', openPrintPreview);
+
+    els.btnConfirmPrint.addEventListener('click', () => {
+        window.print();
+    });
+
+    els.btnClosePrint.addEventListener('click', () => {
+        els.printOverlay.classList.add('hidden');
     });
 
 </script>

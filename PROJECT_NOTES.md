@@ -179,3 +179,42 @@ We have implemented a decoupled, 3D button-based End Game Controller to record m
 * **Silent & Secure Synchronized Interactions:**
   * Clean, silent `-` and `+` XML buttons increment and decrement health.
   * To prevent stealth health modifications, any update broadcasts a synchronized, color-coded chat notification containing the player's name and the component's name to all active players.
+
+---
+
+### Printer-Friendly Cards & JSON Roster Sharing Upgrades (June 11, 2026)
+
+#### Task 1: Full-Detail Backend Mapping (Prowess, Fortitude, Role, Effect, Ether)
+* **Objective:** Serve numerical combat stats and rules text from Google Sheets to the visual deck builder.
+* **Implementation:**
+  * Modified the server-side Apps Script backend (`webapp/main.gs`) inside `getCardDatabase()` to retrieve the raw columns `Role`, `Effect (str)`, `Prowess (int)`, `Fortitude (int)`, and `Ether (int)` for both character and special action tabs (`IN Cha-Tal` and `IN SP`).
+  * Structured these fields into standard Champion, Unit, and Special objects, serving full data payloads to the client without altering schema formatting expected by TTS or external engines.
+
+#### Task 2: Low-Ink Printer-Friendly Card System
+* **Objective:** Give playtesters a clean, low-ink, standard poker-size card printout directly from the browser.
+* **Implementation:**
+  * **Butt-Joined 3x3 Centered A4 Pages:** Groups selected cards in strict blocks of exactly 9. Each group is rendered inside a precise `210mm x 297mm` A4 page container, with exact centering margins (left/right: `9.75mm`, top/bottom: `15.15mm`) and `0` gap between adjacent cards (butt-joined). This forces a perfect page break after each sheet, centers the cards safely away from physical printer edges, suppresses browser headers/footers via `@page { size: A4; margin: 0; }`, and allows a single paper-cutter slice to cut adjacent borders perfectly cleanly.
+    * **Overlap & Ink-Waste Fixes:** Isolated the preview page containers under an block-level `.print-pages-container` layout to ensure they flow vertically without screen overlap. Added strict `box-shadow: none !important;` within `@media print` to disable screen-space drop shadows, saving home printer ink and preventing margin overflows.
+  * **Strict Poker-Size Cards:** Cards are sized strictly at `2.5 inches x 3.5 inches` (63.5mm x 88.9mm) to fit perfectly in standard playing card sleeves. Added `page-break-inside: avoid; break-inside: avoid;` to ensure cards are never split horizontally across pages.
+  * **Minimalist Dominion Borders:** Uses clear colored borders to differentiate factions without consuming massive ink resources:
+    * **Rhavlika:** Red (`#c0392b`)
+    * **Iro-Si-Khar:** Blue (`#2980b9`)
+    * **Voisira:** Readability-adjusted Dark Gold/Amber (`#b7950b`)
+    * **Xalakith:** Purple (`#7d3c98`)
+    * **Ahèserec:** Green (`#27ae60`)
+    * **Veritian:** Slate/Teal (`#138d75`)
+  * **Clean Drawing Canvases:** Features a fixed, completely empty `1.8in x 1.3in` artwork rectangle with a crisp `2px` black border. It acts as a perfect drawing canvas for physical playtesting and removes any placeholder text that might interfere with custom sketching.
+  * **Markup Rules Formatter:** A lightweight client-side formatter that instantly cleans up spreadsheet markdown-style text (converting `**bold**` and `*italics*` to standard HTML tags) and maps complex Tabletop Simulator asset tags (like `{M3/Icons/Dice/SQUARE.png}`) to legible plain-text brackets like `[SQUARE]`.
+  * **Reference Cards Enforcement (No Duplicates):** Restricts character card printing to exactly 1 reference card per recruited character (Champions, Loyals, Basics, Talismans, and Specials). Even if a cast list contains multiple copies of a familiar (e.g. 3 Pelloboks), only a single reference card is generated to maximize paper/ink efficiency.
+  * **Auto-Minion Printing Integration:** When printing cards for faction dominions with native mid-game minions (**Iro-Si-Khar** and **Ahèserec**), the print-previwer automatically resolves and injects a single reference card for their respective minions (**Driplet** and **Huskling**), ensuring players have physical references for these summoned units without needing to pick them during cast construction.
+
+#### Task 3: JSON Cast List Sharing & Importer
+* **Objective:** Give players a clean, seamless way to import shared cast list JSON files back into the visual recruiter before faction selection.
+* **Implementation:**
+  * **Top-Aligned Dialog Trigger:** Positioned an elegant "Import Cast JSON" button directly next to the dominion/faction selector dropdown. This makes the import feature immediately available before selecting any dominion.
+  * **Import Overlay Modal:** Clicking the button opens a modern screen-space overlay modal that prompts the player for their shared JSON code. If successful, it automatically resolves, activates the dominion selection, and loads the active cast layout.
+  * **Multi-Tiered Resilient Mapping:** Developed an ultra-robust, secure mapping algorithm:
+    1. First, attempts to match recruited cards, champions, talismans, and specials using Modern Unique IDs (ideal for reliable matching).
+    2. If unique IDs are missing or mismatched, falls back to name-based resolution (case-insensitive) for complete backward compatibility.
+    3. Handles equipped talismans by parsing attachment annotations (e.g. `Attached to: Obduron` or ID-based equivalents) and re-linking them to basic familiars.
+    4. Automatically updates all active trackers, warning states, and regenerates visual grid components to seamlessly load the loaded list onto the screen.
