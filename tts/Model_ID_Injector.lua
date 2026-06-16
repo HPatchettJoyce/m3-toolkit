@@ -233,7 +233,7 @@ OBJECT_TYPE = "auto"
 
 -- 1. CONFIGURATION FOR CUSTOM TILES (Lying flat on the table)
 TILE_CONFIG = {
-    position     = "0 0 -35",       -- XML coordinates: Negative Z moves the UI "up" above the tile's face. -35 corresponds to 0.35 world units.
+    position     = "0 0 -300",       -- XML coordinates: Negative Z moves the UI "up" above the tile's face. -300 corresponds to 3.0 world units.
     rotation     = "0 0 180",         -- Lying flat parallel to the tile's face
     scale        = "1.0 1.0 1.0",   -- Crisp 1.0 scale as preferred by the user
     width        = "320",           -- Resolution width (pixel space)
@@ -244,7 +244,7 @@ TILE_CONFIG = {
 -- Lays flat horizontally above the head, making it fully readable to players sitting at any angle around the table.
 STANDEE_CONFIG = {
     position     = "0 0 -300",      -- XML coordinates: Negative Z moves the UI "up" above the head. -300 corresponds to 3.0 world units.
-    rotation     = "0 0 0",         -- Lying flat horizontally parallel to the table
+    rotation     = "0 0 180",         -- Lying flat horizontally parallel to the table
     scale        = "1.0 1.0 1.0",   -- Crisp 1.0 scale
     width        = "320",           -- Resolution width
     height       = "100"            -- Resolution height

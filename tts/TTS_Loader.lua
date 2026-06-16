@@ -75,7 +75,7 @@ ONBOARDING_SCENARIOS = {
             champion = "Flint Dross"
         },
         [3] = {
-            championId = "01RHA-01CHP-001",
+            championId = "01RHA-01CMP-001",
             unitIdsRecruited = { ["01RHA-02FAM-002"] = 1, ["01RHA-02FAM-003"] = 1, ["01RHA-02FAM-004"] = 2 },
             talismanIdsEquipped = {},
             specialIds = { "01RHA-05SPA-006", "01RHA-05SPA-038", "01RHA-05SPA-005", "01RHA-05SPA-063" },
@@ -83,7 +83,7 @@ ONBOARDING_SCENARIOS = {
             champion = "Flint Dross"
         },
         [4] = {
-            championId = "01RHA-01CHP-001",
+            championId = "01RHA-01CMP-001",
             unitIdsRecruited = { ["01RHA-02FAM-002"] = 2, ["01RHA-02FAM-003"] = 3, ["01RHA-02FAM-004"] = 3 },
             talismanIdsEquipped = {},
             specialIds = { "01RHA-05SPA-006", "01RHA-05SPA-038", "01RHA-05SPA-005", "01RHA-05SPA-063", "01RHA-05SPA-001", "01RHA-05SPA-003" },
@@ -109,7 +109,7 @@ ONBOARDING_SCENARIOS = {
             champion = "Ripple Elshara"
         },
         [3] = {
-            championId = "02IRO-01CHP-005",
+            championId = "02IRO-01CMP-005",
             unitIdsRecruited = { ["02IRO-02FAM-006"] = 1, ["02IRO-02FAM-007"] = 1, ["02IRO-02FAM-008"] = 2 },
             talismanIdsEquipped = {},
             specialIds = { "02IRO-05SPA-010", "02IRO-05SPA-041", "02IRO-05SPA-012", "02IRO-05SPA-067"},
@@ -117,7 +117,7 @@ ONBOARDING_SCENARIOS = {
             champion = "Ripple Elshara"
         },
         [4] = {
-            championId = "02IRO-01CHP-005",
+            championId = "02IRO-01CMP-005",
             unitIdsRecruited = { ["02IRO-02FAM-006"] = 3, ["02IRO-02FAM-007"] = 3, ["02IRO-02FAM-008"] = 3 },
             talismanIdsEquipped = {},
             specialIds = { "02IRO-05SPA-010", "02IRO-05SPA-041", "02IRO-05SPA-012", "02IRO-05SPA-067", "02IRO-05SPA-011", "02IRO-05SPA-065" },
@@ -143,7 +143,7 @@ ONBOARDING_SCENARIOS = {
             champion = "Lark"
         },
         [3] = {
-            championId = "03VOI-01CHP-010",
+            championId = "03VOI-01CMP-010",
             unitIdsRecruited = { ["03VOI-02FAM-011"] = 1, ["03VOI-02FAM-012"] = 2, ["03VOI-02FAM-050"] = 1 },
             talismanIdsEquipped = {},
             specialIds = { "03VOI-05SPA-048", "03VOI-05SPA-017", "03VOI-05SPA-014", "03VOI-05SPA-018"  },
@@ -151,7 +151,7 @@ ONBOARDING_SCENARIOS = {
             champion = "Lark"
         },
         [4] = {
-            championId = "03VOI-01CHP-010",
+            championId = "03VOI-01CMP-010",
             unitIdsRecruited = { ["03VOI-02FAM-011"] = 3, ["03VOI-02FAM-012"] = 3, ["03VOI-02FAM-050"] = 3 },
             talismanIdsEquipped = {},
             specialIds = { "03VOI-05SPA-048", "03VOI-05SPA-017", "03VOI-05SPA-014", "03VOI-05SPA-018", "03VOI-05SPA-013", "03VOI-05SPA-016"  },
@@ -341,6 +341,7 @@ function loadCastCoroutine()
     
     local config = PLAYER_CONFIG[playerNum]
     local spawnPos = config.special_dest -- Safe temporary spawn coordinates before dealing to hand
+    local targetModelRot = (config.color == "Red") and {0, 270, 0} or {0, 90, 0}
     
     -- Clear previous cards in hand and models in zone for a clean fresh redraw (Tweak 1)
     clearPlayerWorkspace(playerNum)
@@ -403,7 +404,7 @@ function loadCastCoroutine()
 
     -- 3a. Spawn Champion Standee (Task 3 Improvement - Champion as Character 1)
     local champId = castData.championId
-    if champId and modelsBag then
+    if champId and champId ~= "" and not isReducedScenario and modelsBag then
         unitIndex = unitIndex + 1
         local spawnTarget = getSpawnPositionForModels(config)
         
@@ -421,7 +422,7 @@ function loadCastCoroutine()
 
         isCloning = true
         -- Spawn exactly 1 copy of the Champion standee
-        local modelSuccess = cloneModelFromBag(modelsBag, champId, 1, unitSpawnPos, {0, 90, 0}, xDirection, false, config.color)
+        local modelSuccess = cloneModelFromBag(modelsBag, champId, 1, unitSpawnPos, targetModelRot, xDirection, false, config.color)
         if modelSuccess then
             while isCloning do
                 coroutine.yield(0)
@@ -472,8 +473,8 @@ function loadCastCoroutine()
                 }
 
                 isCloning = true
-                -- Rotate standees by 90 degrees around Y so they face the players directly
-                local modelSuccess = cloneModelFromBag(modelsBag, unitId, qty, unitSpawnPos, {0, 90, 0}, xDirection, false, config.color)
+                -- Rotate standees around Y so they face the players directly
+                local modelSuccess = cloneModelFromBag(modelsBag, unitId, qty, unitSpawnPos, targetModelRot, xDirection, false, config.color)
                 if modelSuccess then
                     while isCloning do
                         coroutine.yield(0)
@@ -507,7 +508,7 @@ function loadCastCoroutine()
 
             isCloning = true
             -- Spawn exactly 12 copies and stack them vertically (isStacked = true)
-            local modelSuccess = cloneModelFromBag(modelsBag, minionId, 12, minionSpawnPos, {0, 90, 0}, xDirection, true, config.color)
+            local modelSuccess = cloneModelFromBag(modelsBag, minionId, 12, minionSpawnPos, targetModelRot, xDirection, true, config.color)
             if modelSuccess then
                 while isCloning do
                     coroutine.yield(0)
