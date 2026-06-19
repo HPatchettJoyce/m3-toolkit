@@ -25,48 +25,8 @@ function onLoad()
     self.setName("Monumentum End Game Controller")
     self.setDescription("Declares the winner and submits game results to the web database.")
     
-    -- Setup floating XML UI
-    setupXmlUi()
-    
     -- Draw the 3D control button flat on the token surface
     drawButtons()
-end
-
--- Builds the floating XML UI on the token dynamically
-function setupXmlUi()
-    local xml = [[
-<Defaults>
-    <Button class="menu-btn" width="220" height="50" fontSize="18" textColor="#ffffff" fontStyle="Bold" />
-    <Button class="cancel-btn" width="120" height="42" fontSize="16" color="#7f8c8d" textColor="#ffffff" />
-    <Text class="header" fontSize="22" fontStyle="Bold" color="#ffffff" alignment="Inferred" />
-</Defaults>
-<Panel id="endGamePanel" 
-       active="false" 
-       width="450" 
-       height="320" 
-       position="0 0 -120" 
-       rotation="180 0 0" 
-       scale="0.6 0.6 0.6" 
-       color="#2c3e50" 
-       outline="#34495e" 
-       outlineSize="4" 
-       padding="20">
-    <VerticalLayout spacing="15">
-        <Text class="header" alignment="MiddleCenter">Declare Game Winner</Text>
-        
-        <VerticalLayout spacing="10" alignment="MiddleCenter">
-            <Button class="menu-btn" onClick="btnSelectRedXml" color="#e74c3c">Red Won</Button>
-            <Button class="menu-btn" onClick="btnSelectBlueXml" color="#3498db">Blue Won</Button>
-            <Button class="menu-btn" onClick="btnSelectDrawXml" color="#95a5a6">Draw</Button>
-        </VerticalLayout>
-        
-        <HorizontalLayout alignment="MiddleCenter" height="50">
-            <Button class="cancel-btn" onClick="btnCancelXml">Cancel</Button>
-        </HorizontalLayout>
-    </VerticalLayout>
-</Panel>
-]]
-    self.UI.setXml(xml)
 end
 
 -- Renders the main tactile 3D button on top of the tile
@@ -88,57 +48,30 @@ function drawButtons()
     })
 end
 
--- 3D Button Click Handler: Activates the floating XML pop-up window
+-- 3D Button Click Handler: Triggers the screen-space XML pop-up on the main Cast Loader
 function btnEndGame(obj, player_color, alt_click)
     local player = Player[player_color]
     if not player.host then
         broadcastToColor("Only the Host can declare end game.", player_color, {1, 0, 0})
         return
     end
-    self.UI.setAttribute("endGamePanel", "active", "true")
-end
-
--- XML UI Pop-up Handlers
-function btnCancelXml(player, value, id)
-    if not player.host then
-        broadcastToColor("Only the Host can cancel.", player.color, {1, 0, 0})
+    
+    -- Find and query the Cast Loader object
+    local loader = getObjectFromGUID(CAST_LOADER_GUID)
+    if not loader then
+        broadcastToColor("Error: Could not find the Cast Loader token. Please check your CAST_LOADER_GUID configuration.", player_color, {1, 0, 0})
         return
     end
-    self.UI.setAttribute("endGamePanel", "active", "false")
-    declaredWinner = nil
+    
+    -- Request the Cast Loader to show the screen-space End Game Panel
+    loader.call("showScreenSpaceEndGamePanel", { controller_guid = self.getGUID() })
 end
 
-function btnSelectRedXml(player, value, id)
-    if not player.host then
-        broadcastToColor("Only the Host can declare the winner.", player.color, {1, 0, 0})
-        return
-    end
-    declaredWinner = "Red"
-    print("Winner declared as: Red")
-    self.UI.setAttribute("endGamePanel", "active", "false")
-    submitGame(player.color)
-end
-
-function btnSelectBlueXml(player, value, id)
-    if not player.host then
-        broadcastToColor("Only the Host can declare the winner.", player.color, {1, 0, 0})
-        return
-    end
-    declaredWinner = "Blue"
-    print("Winner declared as: Blue")
-    self.UI.setAttribute("endGamePanel", "active", "false")
-    submitGame(player.color)
-end
-
-function btnSelectDrawXml(player, value, id)
-    if not player.host then
-        broadcastToColor("Only the Host can declare the winner.", player.color, {1, 0, 0})
-        return
-    end
-    declaredWinner = "Draw"
-    print("Winner declared as: Draw")
-    self.UI.setAttribute("endGamePanel", "active", "false")
-    submitGame(player.color)
+-- API function called by the Cast Loader when a selection is made in the screen-space pop-up
+function declareWinnerAndSubmit(params)
+    if not params or not params.winner then return end
+    declaredWinner = params.winner
+    submitGame(params.player_color)
 end
 
 -- Submission Function (Internally processes the results and POSTs via WebRequest.custom)

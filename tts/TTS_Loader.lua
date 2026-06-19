@@ -847,7 +847,10 @@ selectedChamp = "Flint"
 selectedScenario = 1
 selectedPlayer = 1
 
--- Build the screen-space XML panel dynamically on load (Task 5 Improvements - Global Screen Space)
+-- Global tracking of the active End Game Controller GUID for cross-script callbacks
+activeControllerGuid = nil
+
+-- Build the screen-space XML panels dynamically on load (Task 5 Improvements - Global Screen Space)
 function setupXmlUi()
     local myGuid = self.getGUID()
     local xml = string.format([[
@@ -855,7 +858,13 @@ function setupXmlUi()
     <Button class="start-btn" width="180" height="40" fontSize="16" color="#2ecc71" textColor="#ffffff" fontStyle="Bold" />
     <Button class="close-btn" width="100" height="40" fontSize="16" color="#95a5a6" textColor="#ffffff" />
     <Text class="header" fontSize="18" fontStyle="Bold" color="#ffffff" alignment="Inferred" />
+    
+    <Button class="menu-btn" width="220" height="42" fontSize="16" textColor="#ffffff" fontStyle="Bold" />
+    <Button class="cancel-btn" width="120" height="40" fontSize="15" color="#7f8c8d" textColor="#ffffff" />
+    <Text class="header-game" fontSize="20" fontStyle="Bold" color="#ffffff" alignment="MiddleCenter" />
 </Defaults>
+
+<!-- Onboarding Panel -->
 <Panel id="onboardPanel" active="false" width="450" height="300" color="#2c3e50" rectAlignment="MiddleCenter" padding="20" showAnimation="SlideIn_Bottom" hideAnimation="SlideOut_Bottom">
     <VerticalLayout spacing="15">
         <Text class="header" alignment="MiddleCenter">Monumentum Onboarding Setup</Text>
@@ -893,8 +902,85 @@ function setupXmlUi()
         </HorizontalLayout>
     </VerticalLayout>
 </Panel>
-]], myGuid, myGuid, myGuid, myGuid, myGuid)
+
+<!-- Screen-Space End Game Winner Selection Modal -->
+<Panel id="endGamePanel" active="false" width="400" height="280" color="#2c3e50" rectAlignment="MiddleCenter" padding="20" showAnimation="SlideIn_Bottom" hideAnimation="SlideOut_Bottom">
+    <VerticalLayout spacing="15">
+        <Text class="header-game">Declare Game Winner</Text>
+        
+        <VerticalLayout spacing="10" alignment="MiddleCenter">
+            <Button class="menu-btn" onClick="%s/btnSelectRedXml" color="#e74c3c">Red Won</Button>
+            <Button class="menu-btn" onClick="%s/btnSelectBlueXml" color="#3498db">Blue Won</Button>
+            <Button class="menu-btn" onClick="%s/btnSelectDrawXml" color="#95a5a6">Draw</Button>
+        </VerticalLayout>
+        
+        <HorizontalLayout alignment="MiddleCenter" height="40">
+            <Button class="cancel-btn" onClick="%s/btnCancelXml">Cancel</Button>
+        </HorizontalLayout>
+    </VerticalLayout>
+</Panel>
+]], myGuid, myGuid, myGuid, myGuid, myGuid, myGuid, myGuid, myGuid, myGuid)
     UI.setXml(xml)
+end
+
+-- API function called by End Game Controller to trigger the screen-space picker panel
+function showScreenSpaceEndGamePanel(params)
+    if params and params.controller_guid then
+        activeControllerGuid = params.controller_guid
+    end
+    UI.setAttribute("endGamePanel", "active", "true")
+end
+
+-- Screen Space End Game Callback Event Handlers
+function btnCancelXml(player, value, id)
+    if not player.host then
+        broadcastToColor("Only the Host can cancel.", player.color, {1, 0, 0})
+        return
+    end
+    UI.setAttribute("endGamePanel", "active", "false")
+    activeControllerGuid = nil
+end
+
+function btnSelectRedXml(player, value, id)
+    if not player.host then
+        broadcastToColor("Only the Host can declare the winner.", player.color, {1, 0, 0})
+        return
+    end
+    UI.setAttribute("endGamePanel", "active", "false")
+    if activeControllerGuid then
+        local controller = getObjectFromGUID(activeControllerGuid)
+        if controller then
+            controller.call("declareWinnerAndSubmit", { winner = "Red", player_color = player.color })
+        end
+    end
+end
+
+function btnSelectBlueXml(player, value, id)
+    if not player.host then
+        broadcastToColor("Only the Host can declare the winner.", player.color, {1, 0, 0})
+        return
+    end
+    UI.setAttribute("endGamePanel", "active", "false")
+    if activeControllerGuid then
+        local controller = getObjectFromGUID(activeControllerGuid)
+        if controller then
+            controller.call("declareWinnerAndSubmit", { winner = "Blue", player_color = player.color })
+        end
+    end
+end
+
+function btnSelectDrawXml(player, value, id)
+    if not player.host then
+        broadcastToColor("Only the Host can declare the winner.", player.color, {1, 0, 0})
+        return
+    end
+    UI.setAttribute("endGamePanel", "active", "false")
+    if activeControllerGuid then
+        local controller = getObjectFromGUID(activeControllerGuid)
+        if controller then
+            controller.call("declareWinnerAndSubmit", { winner = "Draw", player_color = player.color })
+        end
+    end
 end
 
 -- Toggles Onboarding UI visibility (using global UI)
