@@ -89,15 +89,15 @@ We have implemented a decoupled, 3D button-based End Game Controller to record m
   * Exposes this match data securely via a global API function `getMatchDataJson()`, which returns a serialised JSON string. This completely bypasses Tabletop Simulator's cross-script table ownership limitations ("Attempt to perform operations with resources owned by different scripts").
 * **Dedicated End Game Controller (`tts/End_Game_Controller.lua`)**:
   * Attached to a separate, dedicated table token (e.g. your red/yellow brand tile).
-  * Features flat, large, highly visible, color-coded 3D buttons stacked vertically in a single column (1x4) scaled to fit and drawn slightly above the surface (`y = 0.2`):
+  * Reduces table clutter by drawing a single central **"End Game"** button (Green background).
+  * Restricts interaction to the Host.
+  * Clicking **"End Game"** opens a winner selection menu flat on the token surface:
     * **Red Won** (Red background)
     * **Blue Won** (Blue background)
     * **Draw** (Grey background)
-    * **Submit Game** (Green background)
-  * Restricts winning declarations and submission access to the Host.
-  * Dynamically highlights the selected winner using button label and color states.
-  * Queries the Cast Loader via Tabletop Simulator's `call` API to retrieve match data as a JSON string, then decodes it locally so the tables are owned by the controller's sandbox.
-  * Compiles, serialises, and POSTs the match record to the configured Google Web App webhook via `WebRequest.custom()`.
+    * **Cancel** (Dark grey background, resets back to "End Game" button)
+  * Clicking any winner option ("Red Won", "Blue Won", or "Draw") immediately declares that winner, retrieves match data from the Cast Loader via Tabletop Simulator's `call` API, compiles/serialises it, and automatically POSTs it to the configured Google Web App webhook.
+  * Resets back to the single "End Game" button state upon completion or cancel.
 * **Webhook Receiver & Sheets Integration (`webapp/main.gs`)**:
   * The `doPost(e)` function in the Apps Script backend has been upgraded into an ultra-resilient parser.
   * It logs match records live to a spreadsheet tab named **`IN TTS`** (creating it on the fly if it is missing) using sequential appending via `sheet.appendRow()`.
@@ -218,3 +218,22 @@ We have implemented a decoupled, 3D button-based End Game Controller to record m
     2. If unique IDs are missing or mismatched, falls back to name-based resolution (case-insensitive) for complete backward compatibility.
     3. Handles equipped talismans by parsing attachment annotations (e.g. `Attached to: Obduron` or ID-based equivalents) and re-linking them to basic familiars.
     4. Automatically updates all active trackers, warning states, and regenerates visual grid components to seamlessly load the loaded list onto the screen.
+
+---
+
+### End Game UI Simplification & Scenario List Submissions (June 19, 2026)
+
+#### Task 1: Single-Button "End Game" UI & Auto-Submission
+* **Objective:** Simplify the Tabletop Simulator End Game Controller down to a single modular button, opening a clean winner selection menu, and automatically transmitting results on selection to minimize table clutter.
+* **Implementation:**
+  * **Single-Button UI Redesign:** Replaced the 1x4 stacked column of physical 3D buttons on the `End_Game_Controller.lua` token with a single central, prominent **"End Game"** button.
+  * **Winner Selection Menu:** Clicking "End Game" clears the button and draws a local flat menu on the token surface containing options for **"Red Won"**, **"Blue Won"**, **"Draw"**, and **"Cancel"**.
+  * **Automatic Transmission:** Selecting any winner option immediately declares that winner, retrieves the player rosters (including active learning scenario lists) and special action logs from the main Cast Loader token via the Tabletop Simulator `call` API, and automatically submits them to the Web App webhook.
+  * **Auto-Reset State:** Upon successful transmission, a network error, or a click on "Cancel", the controller fully resets its state and draws the single "End Game" button back onto the token surface.
+
+#### Task 2: Scenario Cast List Submission Fixes
+* **Objective:** Resolve the issue where no rosters/lists were submitted to the Google Sheet when players used learning or demo scenarios.
+* **Implementation:**
+  * **Roster Payload Schema Alignment:** Fixed a critical structural key mismatch where the `End_Game_Controller.lua` webhook payload packed the player rosters under the key `casts` but the `main.gs` server-side script expected the key `loadedCasts`. Packed both `loadedCasts` and `casts` keys in the webhook payload, ensuring absolute backward and forward compatibility.
+  * **Immutable Onboarding Configurations:** Integrated `deepCopy()` within `TTS_Loader.lua`'s scenario spawning routine (`btnSpawnOnboarding`). This guarantees that modifications to scenario state (such as injecting `scenarioNum = selectedScenario` dynamically during play) are applied to a pristine local clone and do not mutate or contaminate the source `ONBOARDING_SCENARIOS` configuration table, ensuring reliable repeated play and pristine sheet logging across both solo, reduced learning matches (Scenarios 1-3) and full standard matchups (Scenario 4).
+

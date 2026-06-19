@@ -14,11 +14,12 @@
 CAST_LOADER_GUID = "eea0da"
 
 -- Your Google Web App URL where the compiled match data will be POSTed.
-WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbzbD0ouBOWmp5_rEGpOrayG75pHN8DeKHxkUxH6LPoc6_fEhBYHawaNE4T2uzn_wCjJ/exec"
+WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbzJ_rRo1MT81RSvWaqHqFvRzJ9utCt0stRyWUT6TguOIscMNviKVxogu8qwfqyxaBbT/exec"
 
 
 -- =============== STATE VARIABLES ===============
 declaredWinner = nil -- Selected winner ("Red", "Blue", or "Draw")
+showMenu = false     -- Toggle to show selection menu or single "End Game" button
 
 function onLoad()
     print("Monumentum End Game Controller initialised.")
@@ -33,75 +34,103 @@ end
 function drawButtons()
     self.clearButtons()
     
-    -- Style configurations to ensure high visibility on a red/yellow base
-    local labelRed = declaredWinner == "Red" and "[ RED WON ]" or "Red Won"
-    local labelBlue = declaredWinner == "Blue" and "[ BLUE WON ]" or "Blue Won"
-    local labelDraw = declaredWinner == "Draw" and "[ DRAW ]" or "Draw"
-    
-    -- Highlight selected button by making it brighter/larger
-    local colorRed = declaredWinner == "Red" and {231/255, 76/255, 60/255} or {150/255, 40/255, 30/255}
-    local colorBlue = declaredWinner == "Blue" and {52/255, 152/255, 219/255} or {30/255, 100/255, 150/255}
-    local colorDraw = declaredWinner == "Draw" and {149/255, 165/255, 166/255} or {80/255, 80/255, 80/255}
-    
-    -- Button 1: Red Won (Top of Column)
-    self.createButton({
-        click_function = "btnSelectRed",
-        function_owner = self,
-        label          = labelRed,
-        position       = {0, 0.2, -1.35},
-        rotation       = {0, 0, 0},
-        width          = 1440,
-        height         = 360,
-        font_size      = 160,
-        color          = colorRed,
-        font_color     = {1, 1, 1}
-    })
+    if not showMenu then
+        -- Draw only ONE button: "End Game"
+        self.createButton({
+            click_function = "btnEndGame",
+            function_owner = self,
+            label          = "End Game",
+            position       = {0, 0.2, 0},
+            rotation       = {0, 0, 0},
+            width          = 1440,
+            height         = 400,
+            font_size      = 200,
+            color          = {39/255, 174/255, 96/255}, -- Green
+            font_color     = {1, 1, 1}
+        })
+    else
+        -- Button 1: Red Won
+        self.createButton({
+            click_function = "btnSelectRed",
+            function_owner = self,
+            label          = "Red Won",
+            position       = {0, 0.2, -1.35},
+            rotation       = {0, 0, 0},
+            width          = 1440,
+            height         = 360,
+            font_size      = 160,
+            color          = {231/255, 76/255, 60/255}, -- Red
+            font_color     = {1, 1, 1}
+        })
 
-    -- Button 2: Blue Won (Second in Column)
-    self.createButton({
-        click_function = "btnSelectBlue",
-        function_owner = self,
-        label          = labelBlue,
-        position       = {0, 0.2, -0.45},
-        rotation       = {0, 0, 0},
-        width          = 1440,
-        height         = 360,
-        font_size      = 160,
-        color          = colorBlue,
-        font_color     = {1, 1, 1}
-    })
+        -- Button 2: Blue Won
+        self.createButton({
+            click_function = "btnSelectBlue",
+            function_owner = self,
+            label          = "Blue Won",
+            position       = {0, 0.2, -0.45},
+            rotation       = {0, 0, 0},
+            width          = 1440,
+            height         = 360,
+            font_size      = 160,
+            color          = {52/255, 152/255, 219/255}, -- Blue
+            font_color     = {1, 1, 1}
+        })
 
-    -- Button 3: Draw (Third in Column)
-    self.createButton({
-        click_function = "btnSelectDraw",
-        function_owner = self,
-        label          = labelDraw,
-        position       = {0, 0.2, 0.45},
-        rotation       = {0, 0, 0},
-        width          = 1440,
-        height         = 360,
-        font_size      = 160,
-        color          = colorDraw,
-        font_color     = {1, 1, 1}
-    })
+        -- Button 3: Draw
+        self.createButton({
+            click_function = "btnSelectDraw",
+            function_owner = self,
+            label          = "Draw",
+            position       = {0, 0.2, 0.45},
+            rotation       = {0, 0, 0},
+            width          = 1440,
+            height         = 360,
+            font_size      = 160,
+            color          = {149/255, 165/255, 166/255}, -- Grey
+            font_color     = {1, 1, 1}
+        })
 
-    -- Button 4: Submit Game (Bottom of Column)
-    -- Styled in bright green to be clearly distinguishable
-    self.createButton({
-        click_function = "btnSubmitGame",
-        function_owner = self,
-        label          = "Submit Game",
-        position       = {0, 0.2, 1.35},
-        rotation       = {0, 0, 0},
-        width          = 1440,
-        height         = 360,
-        font_size      = 160,
-        color          = {39/255, 174/255, 96/255}, -- Green
-        font_color     = {1, 1, 1}
-    })
+        -- Button 4: Cancel (Resets menu)
+        self.createButton({
+            click_function = "btnCancel",
+            function_owner = self,
+            label          = "Cancel",
+            position       = {0, 0.2, 1.35},
+            rotation       = {0, 0, 0},
+            width          = 1440,
+            height         = 360,
+            font_size      = 160,
+            color          = {80/255, 80/255, 80/255}, -- Dark grey
+            font_color     = {1, 1, 1}
+        })
+    end
 end
 
--- Selection Handlers
+-- Opens the Winner Selection Menu
+function btnEndGame(obj, player_color, alt_click)
+    local player = Player[player_color]
+    if not player.host then
+        broadcastToColor("Only the Host can declare end game.", player_color, {1, 0, 0})
+        return
+    end
+    showMenu = true
+    drawButtons()
+end
+
+-- Resets Selection State
+function btnCancel(obj, player_color, alt_click)
+    local player = Player[player_color]
+    if not player.host then
+        broadcastToColor("Only the Host can cancel.", player_color, {1, 0, 0})
+        return
+    end
+    showMenu = false
+    declaredWinner = nil
+    drawButtons()
+end
+
+-- Selection Handlers (Declares and automatically submits results)
 function btnSelectRed(obj, player_color, alt_click)
     local player = Player[player_color]
     if not player.host then
@@ -109,8 +138,8 @@ function btnSelectRed(obj, player_color, alt_click)
         return
     end
     declaredWinner = "Red"
-    drawButtons()
     print("Winner declared as: Red")
+    submitGame(player_color)
 end
 
 function btnSelectBlue(obj, player_color, alt_click)
@@ -120,8 +149,8 @@ function btnSelectBlue(obj, player_color, alt_click)
         return
     end
     declaredWinner = "Blue"
-    drawButtons()
     print("Winner declared as: Blue")
+    submitGame(player_color)
 end
 
 function btnSelectDraw(obj, player_color, alt_click)
@@ -131,20 +160,16 @@ function btnSelectDraw(obj, player_color, alt_click)
         return
     end
     declaredWinner = "Draw"
-    drawButtons()
     print("Winner declared as: Draw")
+    submitGame(player_color)
 end
 
--- Submission Handler
-function btnSubmitGame(obj, player_color, alt_click)
-    local player = Player[player_color]
-    if not player.host then
-        broadcastToColor("Only the Host can submit game results.", player_color, {1, 0, 0})
-        return
-    end
-    
+-- Submission Function (Internally processes the results)
+function submitGame(player_color)
     if declaredWinner == nil then
-        broadcastToColor("Error: Please declare a winner (Red, Blue, or Draw) before submitting.", player_color, {1, 0, 0})
+        broadcastToColor("Error: Please declare a winner before submitting.", player_color, {1, 0, 0})
+        showMenu = false
+        drawButtons()
         return
     end
     
@@ -152,6 +177,9 @@ function btnSubmitGame(obj, player_color, alt_click)
     local loader = getObjectFromGUID(CAST_LOADER_GUID)
     if not loader then
         broadcastToColor("Error: Could not find the Cast Loader token. Please check your CAST_LOADER_GUID configuration.", player_color, {1, 0, 0})
+        showMenu = false
+        declaredWinner = nil
+        drawButtons()
         return
     end
     
@@ -162,6 +190,9 @@ function btnSubmitGame(obj, player_color, alt_click)
     
     if not success or not matchDataJson then
         broadcastToColor("Error: Failed to fetch match data from the Cast Loader. Make sure the Cast Loader has the latest script.", player_color, {1, 0, 0})
+        showMenu = false
+        declaredWinner = nil
+        drawButtons()
         return
     end
     
@@ -172,6 +203,9 @@ function btnSubmitGame(obj, player_color, alt_click)
     
     if not decodeSuccess or not matchData then
         broadcastToColor("Error: Failed to parse match data received from the Cast Loader.", player_color, {1, 0, 0})
+        showMenu = false
+        declaredWinner = nil
+        drawButtons()
         return
     end
     
@@ -181,6 +215,7 @@ function btnSubmitGame(obj, player_color, alt_click)
     local payload = {
         timestamp = os.date("!%Y-%m-%dT%H:%M:%SZ"), -- UTC ISO 8601 timestamp
         winner = declaredWinner,
+        loadedCasts = matchData.loadedCasts,
         casts = matchData.loadedCasts,
         specialActionsLog = matchData.specialActionsLog
     }
@@ -192,6 +227,9 @@ function btnSubmitGame(obj, player_color, alt_click)
     
     if not encodeSuccess or jsonString == nil then
         broadcastToColor("Error: Failed to serialise match data to JSON.", player_color, {1, 0, 0})
+        showMenu = false
+        declaredWinner = nil
+        drawButtons()
         return
     end
     
@@ -211,10 +249,11 @@ function btnSubmitGame(obj, player_color, alt_click)
                 broadcastToAll("Please ensure the Web App is deployed with 'Who has access' set to 'Anyone'.", {1, 0.5, 0})
             else
                 broadcastToAll("Success: Game results successfully submitted and logged!", {0.1, 0.9, 0.1})
-                -- Reset the selection state after successful submission
-                declaredWinner = nil
-                drawButtons()
             end
         end
+        -- Reset menu and winner state
+        showMenu = false
+        declaredWinner = nil
+        drawButtons()
     end)
 end

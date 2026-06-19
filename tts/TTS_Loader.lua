@@ -930,6 +930,22 @@ function onPlayerSelected(player, value, id)
     end
 end
 
+-- Helper function to deep copy tables to prevent side-effects from mutating shared configs
+function deepCopy(orig)
+    local orig_type = type(orig)
+    local copy
+    if orig_type == 'table' then
+        copy = {}
+        for orig_key, orig_value in next, orig, nil do
+            copy[deepCopy(orig_key)] = deepCopy(orig_value)
+        end
+        setmetatable(copy, deepCopy(getmetatable(orig)))
+    else -- number, string, boolean, etc
+        copy = orig
+    end
+    return copy
+end
+
 -- Submits selected onboarding configurations to the main coroutine loader
 function btnSpawnOnboarding(player, value, id)
     if not player.host then
@@ -937,14 +953,17 @@ function btnSpawnOnboarding(player, value, id)
         return
     end
     
-    local scenarioData = ONBOARDING_SCENARIOS[selectedChamp][selectedScenario]
-    if not scenarioData then
+    local scenarioDataRaw = ONBOARDING_SCENARIOS[selectedChamp][selectedScenario]
+    if not scenarioDataRaw then
         broadcastToColor("Error: Scenario not configured yet.", player.color, {1, 0, 0})
         return
     end
     
     -- Hide Onboarding Menu
     UI.setAttribute("onboardPanel", "active", "false")
+    
+    -- Create a deep copy to avoid mutating the original configuration table
+    local scenarioData = deepCopy(scenarioDataRaw)
     
     -- Dynamically inject scenarioNum so the loader knows which scenario is active (Tweak 2)
     scenarioData.scenarioNum = selectedScenario
