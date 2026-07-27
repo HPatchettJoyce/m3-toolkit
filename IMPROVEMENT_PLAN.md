@@ -8,19 +8,30 @@ summary of what changed into `PROJECT_NOTES.md`, then delete this file.**
 
 ## Pending Fixes
 
-- [ ] **1. Fix card art generator writing to the wrong path (real bug, highest priority)**
-  - File: `dextrous/generate_card_images.py` (lines ~47-48, ~151-152)
-  - Problem: `output_path` is built from `parent_dir` (the repo root), so running the
-    script produces `/m3-toolkit/CardImages.gs` instead of `/m3-toolkit/webapp/CardImages.gs`.
-    PROJECT_NOTES.md's workflow section claims the script "updates `webapp/CardImages.gs`" —
-    that's false today. Confirmed the two files have already drifted (different Firebase
-    Storage tokens), meaning the deployed web app is likely serving stale card art right now.
-  - Fix: point `output_path` at `webapp/CardImages.gs` directly. Re-run the generator once
-    fixed (needs the source `MonuMentuM Characters/Specials *.json` exports and the two
-    root-level CSVs present), diff the regenerated file against the current `webapp/CardImages.gs`
-    to confirm what's actually stale, then decide whether to delete the now-orphaned
-    root-level `CardImages.gs` or keep it (currently unclear if anything else reads it —
-    check for references before deleting).
+- [x] **1. Fix card art generator writing to the wrong path (real bug, highest priority)** — DONE
+  - `output_path` in `dextrous/generate_card_images.py` now points at
+    `webapp/CardImages.gs` (was `<repo root>/CardImages.gs`), so PROJECT_NOTES.md's
+    workflow claim is finally true. Also replaced the hardcoded
+    `Generated on: Friday, 5 June 2026` header with `datetime.date.today()`, since that
+    line existed to say when the file was generated and had been lying for ~7 weeks.
+  - Re-ran the generator against the existing `MonuMentuM Characters/Specials 08-06-2026.json`
+    exports and the two root CSVs. Results:
+    - **The stale file was the deployed one.** The regenerated output is byte-identical
+      to the orphaned root-level `CardImages.gs` apart from the date header — i.e. the root
+      file was always the *fresh* output, and `webapp/CardImages.gs` (the copy GAS actually
+      serves) had been frozen since 5 June.
+    - The real drift is exactly **4 Firebase Storage download tokens** across all 176 URL
+      entries (80 characters + 96 specials). Every `cols`/`rows`/`idx` sprite coordinate is
+      unchanged, so no card art was re-laid-out — the web app was just requesting images
+      with tokens that had since been rotated.
+    - The run made no changes to the source deck JSONs (`Nickname`/`GMNotes` were already
+      injected and matched the CSVs), confirming the injector half of the script is idempotent.
+  - Deleted the now-orphaned root-level `CardImages.gs`. Verified nothing referenced it
+    first: `getCardImageMappings()` is called only from `webapp/main.gs:177`, and the only
+    writer of the root path was the buggy line just fixed. PROJECT_NOTES.md's repo tree
+    never listed a root-level copy, so the docs are now accurate as-written.
+  - **Follow-up for the user:** `clasp push` from `webapp/` to actually ship the refreshed
+    tokens — until then the live web app keeps serving the stale ones.
 
 - [x] **2. Finish the double-load guard in `tts/TTS_Loader.lua`** — DONE
   - Added `isLoadingCast = false` immediately before every `return` in `loadCastCoroutine()`.
