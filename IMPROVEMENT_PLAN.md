@@ -60,16 +60,36 @@ summary of what changed into `PROJECT_NOTES.md`, then delete this file.**
     live Apps Script project. Until then the deployed script still carries the dead function
     — harmless (nothing calls it), just not yet in sync.
 
-- [ ] **4. Reconcile a small position-value drift across the map-deploy scripts**
-  - `tts/Deploy_Font_Tiles.lua:18` uses `y = 0.22`; `tts/TTS_Loader.lua:27` and
-    `tts/Deploy_Path_Tiles.lua:20` both use `y = 0.21`. Only 0.01 world units apart
-    (near-invisible), but it's live proof that the map-deployment logic — duplicated
-    across `TTS_Loader.lua`'s own `deployScenarioMap`/`captureMapDecks`/`recallMapDeployed`
-    and the two standalone `Deploy_*.lua` scripts — has already drifted once.
-  - Fix: pick one canonical value (0.21, to match the majority) and update
-    `Deploy_Font_Tiles.lua`. Separately worth a judgment call: leave the 3-way duplication
-    as-is (each script is meant to be usable standalone) or consolidate — not required,
-    just flagging the tradeoff.
+- [x] **4. Reconcile a small position-value drift across the map-deploy scripts** — DONE
+  - **The plan's suggested fix was wrong, and doing it literally would have been a small
+    regression.** The `0.22` in `Deploy_Font_Tiles.lua:18` was not arbitrary drift: font
+    tiles stack *on top of* path tiles, so they have to spawn above the grid plane.
+    `TTS_Loader.lua:1196` does exactly this and says so — it deploys scenario fonts at
+    `MAP_START_POS.y + 0.05` while path tiles go at `MAP_START_POS.y` (line 1151).
+    `Deploy_Font_Tiles.lua` was expressing the same intent, but by baking a *different*
+    lift (0.01) into the shared origin constant instead of applying it at spawn. Setting
+    it to a flat `0.21` would have made standalone-deployed fonts coplanar with the path
+    tiles underneath them.
+  - Fix applied: `START_POS.y` is now `0.21` in all three scripts (one canonical grid
+    origin), and `Deploy_Font_Tiles.lua` gained an explicit `FONT_Y_OFFSET = 0.05`
+    constant applied at the two places fonts get positioned — the initial `deck.takeObject`
+    in `btnToggleFonts()` and the `setPositionSmooth` in `moveDeployedFonts()` (the layout
+    cycler, which previously would also have dropped them flat). Net effect: fonts now sit
+    0.05 above the board via both the standalone controller and the loader's scenario
+    deployment, where before the two routes disagreed (0.01 vs 0.05).
+  - The deck-respawn-on-recall positions were left alone: all three scripts already used
+    `START_POS.y + 0.2` consistently, and that value now resolves to 0.41 everywhere
+    instead of 0.42 in one place.
+  - **Judgment call on the 3-way duplication: left as-is deliberately.** Consolidating
+    would defeat the design — `Deploy_Font_Tiles.lua` and `Deploy_Path_Tiles.lua` exist to
+    be dropped onto a table token *without* the loader, and TTS has no module/require
+    system, so "sharing" would mean copy-pasting a config block anyway (which is what
+    `Model_ID_Injector.lua` already does with its embedded health tracker). Documented the
+    shared origin in `PROJECT_NOTES.md` instead, so the next change knows all three copies
+    need updating together.
+  - Not verified in-game: there's no Lua toolchain in this environment, so the change is
+    reviewed-by-eye only. Worth a quick visual check in TTS that fonts still seat correctly
+    on the path tiles.
 
 - [ ] **5. (Optional, low priority) Escape spreadsheet text before `innerHTML` injection**
   - `webapp/CastRecruiter.html` (~lines 1442, 1454): `statsEl.innerHTML` and

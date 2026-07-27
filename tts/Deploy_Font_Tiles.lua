@@ -15,7 +15,10 @@ FONT_ZONE_GUID = "547581"
 
 -- =============== PHYSICAL LAYOUT CONFIGURATION ===============
 SPACING = 4.0 -- Spacing distance between tiles on the table grid
-START_POS = { x = -10, y = 0.22, z = 10 } -- Top-left corner spawn coordinate
+START_POS = { x = -10, y = 0.21, z = 10 } -- Top-left corner spawn coordinate
+-- Fonts sit on top of the path tiles, so they spawn slightly above the grid plane.
+-- Must match the lift used by deployScenarioMap() in TTS_Loader.lua.
+FONT_Y_OFFSET = 0.05
 
 -- =============== STATE VARIABLES & LAYOUTS ===============
 LAYOUTS = { "Orthogonal", "Diagonal", "Spiral" }
@@ -158,8 +161,8 @@ function btnToggleFonts(obj, player_color, alt_click)
         for i = 1, 5 do
             local targetPos = {
                 x = START_POS.x + (coords[i][1] * SPACING),
-                y = START_POS.y, 
-                z = START_POS.z - (coords[i][2] * SPACING) 
+                y = START_POS.y + FONT_Y_OFFSET,
+                z = START_POS.z - (coords[i][2] * SPACING)
             }
 
             local currentRot = deck.getRotation()
@@ -225,10 +228,10 @@ function moveDeployedFonts()
             
             local targetPos = {
                 x = START_POS.x + (coords[i][1] * SPACING),
-                y = START_POS.y, 
-                z = START_POS.z - (coords[i][2] * SPACING) 
+                y = START_POS.y + FONT_Y_OFFSET,
+                z = START_POS.z - (coords[i][2] * SPACING)
             }
-            
+
             fontTile.setPositionSmooth(targetPos, false, true)
             
             -- Lock back down once translation completes

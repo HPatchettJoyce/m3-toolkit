@@ -143,6 +143,7 @@ Tabletop Simulator scripts automate setup, layout physics, board deployment, and
 *   **Tile Controllers (`Deploy_Font_Tiles.lua` & `Deploy_Path_Tiles.lua`)**:
     *   Standalone map deployment buttons that automatically toggle between Recall and Deploy labels.
     *   Uses cached states on load, queries trigger zones, and implements error handling to ensure seamless physical board construction.
+    *   **Shared grid origin**: both controllers and `TTS_Loader.lua`'s own `deployScenarioMap()` place tiles from the same top-left origin (`x = -10, y = 0.21, z = 10`) at `4.0` spacing, so a board built by either route lines up. Font tiles are the one exception — they stack *on top of* path tiles and so spawn at `y + 0.05` (`FONT_Y_OFFSET` in `Deploy_Font_Tiles.lua`). Keep these three copies in sync when changing the layout.
 
 ---
 
