@@ -45,14 +45,20 @@ summary of what changed into `PROJECT_NOTES.md`, then delete this file.**
     `isProcessing` flag; without it here, clicking "Load" twice while a cast is mid-load
     fails the second click silently (TTS only allows one active coroutine per object).
 
-- [ ] **3. Delete dead code: `webapp/CardDatabase.gs`**
-  - `getRawCardDatabase()` is never called anywhere (confirmed via grep across
-    `webapp/*.gs` and `webapp/*.html` — only `main.gs`'s `getCardDatabase()` is used).
-  - This function used to collide with `main.gs`'s `getCardDatabase()` under GAS's shared
-    global namespace; the collision was already resolved by renaming it, but nobody removed
-    the now-pointless leftover file afterward.
-  - Fix: delete `webapp/CardDatabase.gs` entirely. `CLAUDE.md` already documents this as
-    dead code (updated this session) — once deleted, simplify that note too.
+- [x] **3. Delete dead code: `webapp/CardDatabase.gs`** — DONE
+  - Deleted `webapp/CardDatabase.gs`. Re-confirmed before removing: `getRawCardDatabase()`
+    was defined in that one file and called from nowhere in the repo (grep across all
+    tracked files — `webapp/CastRecruiter.html:798` calls `getCardDatabase()`, which is
+    defined only at `webapp/main.gs:166`). `.clasp.json`'s `filePushOrder` is empty, so no
+    push configuration referenced the file either.
+  - Docs updated to match: removed the file from `PROJECT_NOTES.md`'s repo tree, and rewrote
+    both the PROJECT_NOTES "Global Namespace Collision Warning" and the equivalent
+    `CLAUDE.md` gotcha. Neither now describes a live collision (there isn't one); each keeps
+    the flat-global-scope hazard as a forward-looking caution against reintroducing a second
+    card-fetching implementation, which is the part that was actually worth remembering.
+  - **Follow-up for the user:** `clasp push` from `webapp/` also removes the file from the
+    live Apps Script project. Until then the deployed script still carries the dead function
+    — harmless (nothing calls it), just not yet in sync.
 
 - [ ] **4. Reconcile a small position-value drift across the map-deploy scripts**
   - `tts/Deploy_Font_Tiles.lua:18` uses `y = 0.22`; `tts/TTS_Loader.lua:27` and

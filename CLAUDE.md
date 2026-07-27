@@ -10,8 +10,7 @@ Web app for building and validating game rosters ("casts") for the tabletop game
 
 ## Architecture
 
-- `webapp/main.gs` — primary entry point: `doGet(e)` routes the Web App, `doPost(e)` receives webhooks (e.g. from Tabletop Simulator), and defines `getCardDatabase()`.
-- `webapp/CardDatabase.gs` — an alternate, unused implementation (`getRawCardDatabase()`, never called from `CastRecruiter.html`) — a leftover from before the collision below was resolved by renaming.
+- `webapp/main.gs` — primary entry point: `doGet(e)` routes the Web App, `doPost(e)` receives webhooks (e.g. from Tabletop Simulator), and defines `getCardDatabase()` — the single source of card data for the frontend.
 - `webapp/CastRecruiter.html` — the frontend SPA: layout, styling, state, validation, JSON export.
 - `webapp/CardImages.gs` — card image handling.
 
@@ -31,7 +30,7 @@ Expected `getCardDatabase()` schema:
 
 ## Conventions & gotchas
 
-- **`getCardDatabase()` collision (historical)**: `main.gs` and `CardDatabase.gs` used to both define `getCardDatabase()`, colliding in GAS's shared namespace. That's now resolved — `CardDatabase.gs`'s copy was renamed to `getRawCardDatabase()` — but the renamed function is dead code (nothing calls it). Consider deleting `CardDatabase.gs` outright rather than keeping an unused alternate implementation around.
+- **One `getCardDatabase()` only**: since all `.gs` files share a flat global scope, two files defining the same function name silently override each other. This bit the project once (`CardDatabase.gs` used to define its own `getCardDatabase()`); that file has since been deleted, leaving `main.gs` as the sole definition. Don't reintroduce a second card-fetching implementation in another `.gs` file.
 - Keep the `:root` CSS custom properties block intact (`--primary-colour`, `--accent-colour`, etc.) for consistent theming.
 - UI `.container` max-width is `1200px` on desktop, stepping down through breakpoints at 1100px/900px/600px for mobile — keep panels self-contained at all sizes.
 
