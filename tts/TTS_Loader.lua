@@ -179,6 +179,10 @@ local activeCoroutineParams = nil
 -- Global lock to synchronize asynchronous card-cloning operations
 local isCloning = false
 
+-- Global lock preventing overlapping loadCastCoroutine runs (TTS allows only one active
+-- coroutine per object, but a second click while loading fails silently without this check)
+local isLoadingCast = false
+
 function onLoad()
     print("Monumentum Cast Loader initialised.")
     self.setName("Monumentum Cast Loader")
@@ -269,26 +273,32 @@ function submitCast2(text, color)
 end
 
 function processPastedCast(playerNum, player, jsonText)
+    if isLoadingCast then
+        broadcastToColor("A cast is already loading — please wait for it to finish.", player.color, {1, 0, 0})
+        return
+    end
+
     if jsonText == nil or jsonText == "" then
         broadcastToColor("Paste field was empty! Please copy the exported JSON from your cast builder.", player.color, {1,0,0})
         return
     end
-    
+
     -- Parse JSON
     local success, castData = pcall(function() return JSON.decode(jsonText) end)
     if not success or not castData then
         broadcastToColor("Error: Invalid JSON format. Make sure you copied the entire exported text from your browser.", player.color, {1,0,0})
         return
     end
-    
+
     -- Store the parsed cast data into our global tracking table
     local playerColour = PLAYER_CONFIG[playerNum].color
     loadedCasts[playerColour] = castData
-    
+
     -- Store arguments in global parameter storage before running coroutine
     activeCoroutineParams = {playerNum = playerNum, clickerColor = player.color, castData = castData}
-    
+
     -- Run Loader Coroutine
+    isLoadingCast = true
     startLuaCoroutine(self, "loadCastCoroutine")
 end
 
@@ -333,7 +343,7 @@ function loadCastCoroutine()
     local params = activeCoroutineParams
     activeCoroutineParams = nil -- Clear immediately
     
-    if not params then return 1 end
+    if not params then isLoadingCast = false; return 1 end
     
     local playerNum = params.playerNum
     local clickerColor = params.clickerColor
@@ -359,10 +369,12 @@ function loadCastCoroutine()
     local initialCharDeck, initialSpecDeck = findDecks()
     if not initialCharDeck then
         broadcastToColor("Error: Could not find any Deck/Card in the Characters Trigger Zone. Check your CHARACTERS_ZONE_GUID.", clickerColor, {1,0,0})
+        isLoadingCast = false
         return 1
     end
     if not initialSpecDeck then
         broadcastToColor("Error: Could not find any Deck/Card in the Specials Trigger Zone. Check your SPECIALS_ZONE_GUID.", clickerColor, {1,0,0})
+        isLoadingCast = false
         return 1
     end
     
@@ -377,6 +389,7 @@ function loadCastCoroutine()
         local charDeck, specDeck = findDecks()
         if not charDeck then
             broadcastToColor("Error: Characters deck vanished or was moved during loading.", clickerColor, {1,0,0})
+            isLoadingCast = false
             return 1
         end
 
@@ -487,11 +500,11 @@ function loadCastCoroutine()
         end
     end
 
-    -- 3c. Auto-Spawn 12 Stacked Minions (Driplet / Huskling Lot for Iro-Si-Khar & Ahéserec) (Tweak 2)
-    if (castData.dominion == "Iro-Si-Khar" or castData.dominion == "Ahéserec" or castData.dominion == "Aheserec") and not isReducedScenario then
+    -- 3c. Auto-Spawn 12 Stacked Minions (Driplet / Huskling Lot for Iro-Si-Khar & Ahèserec) (Tweak 2)
+    if (castData.dominion == "Iro-Si-Khar" or castData.dominion == "Ahèserec") and not isReducedScenario then
         if modelsBag then
             unitIndex = unitIndex + 1
-            local minionId = (castData.dominion == "Iro-Si-Khar") and "02IRO-03MIN-009" or "05AHS-03MIN-022"
+            local minionId = (castData.dominion == "Iro-Si-Khar") and "02IRO-03MIN-009" or "05AHE-03MIN-022"
             local spawnTarget = getSpawnPositionForModels(config)
             
             local xStart = (config.color == "Red") and -23.5 or 23.5
@@ -544,9 +557,9 @@ function loadCastCoroutine()
     end
     
     -- 4.5 Auto-Summon Minions (Task 1)
-    if (castData.dominion == "Iro-Si-Khar" or castData.dominion == "Ahéserec" or castData.dominion == "Aheserec") and not isReducedScenario then
+    if (castData.dominion == "Iro-Si-Khar" or castData.dominion == "Ahèserec") and not isReducedScenario then
         local minionName = (castData.dominion == "Iro-Si-Khar") and "Driplet" or "Huskling"
-        local minionId = (castData.dominion == "Iro-Si-Khar") and "02IRO-03MIN-009" or "05AHS-03MIN-022"
+        local minionId = (castData.dominion == "Iro-Si-Khar") and "02IRO-03MIN-009" or "05AHE-03MIN-022"
         local charDeck, specDeck = findDecks()
         if charDeck then
             isCloning = true
@@ -587,6 +600,7 @@ function loadCastCoroutine()
     end
     
     broadcastToAll("Cast for Player " .. playerNum .. " loaded successfully!", {0.1, 0.9, 0.1})
+    isLoadingCast = false
     return 1
 end
 
