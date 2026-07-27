@@ -10,12 +10,12 @@ Web app for building and validating game rosters ("casts") for the tabletop game
 
 ## Architecture
 
-- `webapp/main.gs` — primary entry point: `doGet(e)` routes the Web App, `doPost(e)` receives webhooks (e.g. from Tabletop Simulator), and holds one implementation of `getCardDatabase()`.
-- `webapp/CardDatabase.gs` — a second, alternate implementation of `getCardDatabase()`.
+- `webapp/main.gs` — primary entry point: `doGet(e)` routes the Web App, `doPost(e)` receives webhooks (e.g. from Tabletop Simulator), and defines `getCardDatabase()`.
+- `webapp/CardDatabase.gs` — an alternate, unused implementation (`getRawCardDatabase()`, never called from `CastRecruiter.html`) — a leftover from before the collision below was resolved by renaming.
 - `webapp/CastRecruiter.html` — the frontend SPA: layout, styling, state, validation, JSON export.
 - `webapp/CardImages.gs` — card image handling.
 
-Data flow: the frontend loads via `doGet` → `HtmlService.createTemplateFromFile('CastRecruiter').evaluate()`, then asynchronously calls `google.script.run.withSuccessHandler(...).withFailureHandler(...).getCardDatabase()`.
+Data flow: the frontend loads via `doGet` → `HtmlService.createHtmlOutputFromFile('CastRecruiter')`, then asynchronously calls `google.script.run.withSuccessHandler(...).withFailureHandler(...).getCardDatabase()`.
 
 Backend data source: the active spreadsheet's `IN Cha-Tal` tab (Champion/Familiar/Minion/Talisman cards) and `IN SP` tab (Special Action cards).
 
@@ -31,9 +31,9 @@ Expected `getCardDatabase()` schema:
 
 ## Conventions & gotchas
 
-- **`getCardDatabase()` collision**: two implementations exist (`main.gs` and `CardDatabase.gs`). GAS's shared namespace means whichever loads last silently wins. Always ensure `main.gs`'s version (the structured `champions`/`units`/`specials` schema) is the one in effect — when editing, either work in `main.gs` or rename one implementation to avoid the collision.
+- **`getCardDatabase()` collision (historical)**: `main.gs` and `CardDatabase.gs` used to both define `getCardDatabase()`, colliding in GAS's shared namespace. That's now resolved — `CardDatabase.gs`'s copy was renamed to `getRawCardDatabase()` — but the renamed function is dead code (nothing calls it). Consider deleting `CardDatabase.gs` outright rather than keeping an unused alternate implementation around.
 - Keep the `:root` CSS custom properties block intact (`--primary-colour`, `--accent-colour`, etc.) for consistent theming.
-- UI max-width is `600px` — it's designed to sit in embedded iframes/mobile views; keep panels self-contained.
+- UI `.container` max-width is `1200px` on desktop, stepping down through breakpoints at 1100px/900px/600px for mobile — keep panels self-contained at all sizes.
 
 ## Other repo contents
 

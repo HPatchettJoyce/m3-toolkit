@@ -16,3 +16,6 @@ Desktop.ini
 *.tmp
 *.log
 *.bak
+
+# Claude Code local state (worktrees, machine-local settings)
+.claude/

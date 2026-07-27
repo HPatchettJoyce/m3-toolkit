@@ -17,8 +17,10 @@
 -- =============== CONFIGURATION (ADJUST TO FIT YOUR MODELS) ==================
 -- ============================================================================
 
--- Starting/Default health value
-DEFAULT_HEALTH = 6
+-- Starting/Default health values
+DEFAULT_HEALTH        = 6   -- Fallback default for any non-Minion card (Champion/Familiar/Talisman)
+MINION_DEFAULT_HEALTH = 2   -- Default for any model whose card "class" is Minion, regardless of
+                             -- whether it's physically a Tile or a Standee.
 
 -- Object type detection:
 --   "auto"    - Dynamically detects type (Uses "Tile" settings if the object tag is "Tile", else "Standee")
@@ -26,10 +28,19 @@ DEFAULT_HEALTH = 6
 --   "standee" - Forces Custom Standee behavior (UI is always visible)
 OBJECT_TYPE = "auto"
 
+-- Card "class" is read from the model's GMNotes ID injected by the Model ID Injector
+-- (format "01RHA-02FAM-002" -- the letters in the middle segment identify the class).
+CLASS_CODES = {
+    CMP = "Champion",
+    FAM = "Familiar",
+    MIN = "Minion",
+    TAL = "Talisman"
+}
+
 -- 1. CONFIGURATION FOR CUSTOM TILES (Lying flat on the table)
 TILE_CONFIG = {
-    position     = "0 0 -35",       -- XML coordinates: Negative Z moves the UI "up" above the tile's face. -35 corresponds to 0.35 world units.
-    rotation     = "0 0 0",         -- Lying flat parallel to the tile's face
+    position     = "0 0 -175",       -- XML coordinates: Negative Z moves the UI "up" above the tile's face. -125 corresponds to 1.25 world units.
+    rotation     = "0 0 180",         -- Lying flat parallel to the tile's face
     scale        = "1.0 1.0 1.0",   -- Crisp 1.0 scale as preferred by the user
     width        = "320",           -- Resolution width (pixel space)
     height       = "100"            -- Resolution height (pixel space)
@@ -39,7 +50,7 @@ TILE_CONFIG = {
 -- Lays flat horizontally above the head, making it fully readable to players sitting at any angle around the table.
 STANDEE_CONFIG = {
     position     = "0 0 -300",      -- XML coordinates: Negative Z moves the UI "up" above the head. -300 corresponds to 3.0 world units.
-    rotation     = "0 0 0",         -- Lying flat horizontally parallel to the table
+    rotation     = "0 0 180",         -- Lying flat horizontally parallel to the table
     scale        = "1.0 1.0 1.0",   -- Crisp 1.0 scale
     width        = "320",           -- Resolution width
     height       = "100"            -- Resolution height
@@ -56,18 +67,19 @@ ENABLE_CHAT_NOTIFICATIONS = true    -- Set to true to broadcast health changes i
 currentHealth = DEFAULT_HEALTH      -- Active health tracker value
 isUIVisible = true                  -- Tracking current visibility state of the panel
 checkTimerID = nil                  -- Internal timer ID for motion checks
-isTileObject = false                -- Cached classification of this object
+isTileObject = false                -- Cached classification of this object's shape (Tile vs Standee)
+isMinion = false                    -- Cached classification of this object's card class
 
 
 -- =============== CORE EVENT HOOKS ===============
 
 function onLoad()
-    -- Classify object type
+    -- Classify object shape and card class
     classifyObject()
-    
-    -- Sync health to default
-    currentHealth = DEFAULT_HEALTH
-    
+
+    -- Sync health to the appropriate default for this object
+    currentHealth = resolveDefaultHealth()
+
     -- Dynamically generate and inject the XML UI
     setupXmlUi()
     
@@ -100,7 +112,9 @@ end
 
 -- =============== INTERNAL FUNCTIONS & CALLBACKS ===============
 
--- Classifies whether this object is behaving as a Tile or Standee
+-- Classifies whether this object is behaving as a Tile or Standee, and whether
+-- its card class is a Minion (shape and class are independent - not all Minions
+-- are flat Custom Tiles).
 function classifyObject()
     if OBJECT_TYPE == "tile" then
         isTileObject = true
@@ -109,6 +123,29 @@ function classifyObject()
     else
         -- "auto" mode: Custom Tiles have tag == "Tile"
         isTileObject = (self.tag == "Tile")
+    end
+
+    isMinion = (getModelClass() == "Minion")
+end
+
+-- Reads the card "class" (Champion/Familiar/Minion/Talisman) out of this model's
+-- GMNotes ID, e.g. "01RHA-02FAM-002" -> "Familiar". Returns nil if unset/unrecognised.
+function getModelClass()
+    local notes = self.getGMNotes()
+    if not notes or notes == "" then return nil end
+
+    local segment = notes:match("^[^-]+%-([^-]+)%-")
+    local code = segment and segment:match("%a+")
+    return code and CLASS_CODES[code] or nil
+end
+
+-- Resolves the starting health for this object based on card class alone
+-- (independent of whether it's rendered as a Tile or a Standee).
+function resolveDefaultHealth()
+    if isMinion then
+        return MINION_DEFAULT_HEALTH
+    else
+        return DEFAULT_HEALTH
     end
 end
 
