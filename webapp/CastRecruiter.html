@@ -1379,10 +1379,22 @@
         "Veritian": "#138d75"      // Slate/Teal
     };
 
+    // Neutralise any markup coming from the spreadsheet before we build HTML from it.
+    function escapeHtml(text) {
+        return String(text)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+    }
+
     function formatRulesText(text) {
         if (!text) return "";
+        // Escape first, so only the markup this function generates below is live HTML
+        let html = escapeHtml(text);
         // Normalize line breaks
-        let html = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+        html = html.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
         // Collapse consecutive multiple newlines to save space
         html = html.replace(/\n+/g, '\n');
         // Convert single newlines to standard <br> breaks
@@ -1439,7 +1451,7 @@
         if (hasStats) {
             const statsEl = document.createElement('div');
             statsEl.className = 'print-card-stats';
-            statsEl.innerHTML = `<span>PROWESS: ${prowessVal || '-'}</span> <span>FORTITUDE: ${fortitudeVal || '-'}</span>`;
+            statsEl.innerHTML = `<span>PROWESS: ${escapeHtml(prowessVal || '-')}</span> <span>FORTITUDE: ${escapeHtml(fortitudeVal || '-')}</span>`;
             cardEl.appendChild(statsEl);
         }
 

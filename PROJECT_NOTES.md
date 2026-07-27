@@ -79,8 +79,12 @@ The web app is deployed as a single-page visual recruiter and automated webhook 
 *   **Database Fetching (`getCardDatabase`)**:
     *   Retrieves raw card data from two specific spreadsheet tabs: **`IN Cha-Tal`** (Characters, Loyals, Talismans) and **`IN SP`** (Special Actions).
     *   **🚨 Global Namespace Caution**: In Google Apps Script, all `.gs` files share a flat global scope, so two files defining the same function name silently override one another. This previously happened here — `CardDatabase.gs` shipped a competing `getCardDatabase()`. That file has since been deleted (its `getRawCardDatabase()` helper was never called by anything), leaving the structured category-mapping implementation in `main.gs` as the sole definition. Do not add a second card-fetching implementation in another `.gs` file.
+*   **Webhook Ingestion (`doPost`)**:
+    *   Serialises match-log writes behind a script lock (`LockService.getScriptLock()`, 30-second `waitLock`) so two simultaneous End Game submissions can't interleave `appendRow` calls.
+    *   The `finally` block releases the lock only if `waitLock()` actually returned (tracked by a `hasLock` flag). Releasing unconditionally would have meant calling `releaseLock()` on the one path where the lock was never held — the timeout path.
 *   **Visual Recruiter SPA (`CastRecruiter.html`)**:
-    *   Provides players with a responsive (max `600px` centered) interface to select a Dominion faction, review card text/stats, and recruit a legal deck under compliance rules.
+    *   Provides players with a responsive interface (`.container` maxes out at `1200px` on desktop, stepping down through breakpoints at 1100px/900px/600px) to select a Dominion faction, review card text/stats, and recruit a legal deck under compliance rules.
+    *   **Sanitised Rules Text**: Card text from the spreadsheet is passed through `escapeHtml()` *before* `formatRulesText()` applies its bold/italic/icon markup, so only the markup the app generates is live HTML. Anything angle-bracketed in the sheet renders as literal text. The print-card stat line escapes its interpolated values the same way. If you add markup rules to `formatRulesText()`, keep them after the escape step.
     *   **Signature Action Segregation**: Splitting the Specials rendering into separate visual DOM grids (`#signature-container` vs `#specials-container`) to isolate a Champion's free Signature Actions from generic, cost-allocated Special Actions.
     *   **JSON Roster Sharing**: 
         *   *Export*: Outputs a structured, backward-compatible JSON string containing recruited card IDs, attached talismans, and general specials.

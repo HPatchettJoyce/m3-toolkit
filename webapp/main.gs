@@ -24,10 +24,14 @@ function doGet() {
  */
 function doPost(e) {
   var lock = LockService.getScriptLock();
+  var hasLock = false;
   try {
     // Acquire a 30-second lock to prevent concurrent write collisions in Google Sheets!
+    // waitLock() throws if the lock can't be obtained in time, so only flag it as held
+    // once the call returns — the finally block must not release a lock we never took.
     lock.waitLock(30000);
-    
+    hasLock = true;
+
     var rawContent = e && e.postData ? e.postData.contents : "";
     if (!rawContent) {
       return ContentService.createTextOutput(JSON.stringify({
@@ -138,7 +142,9 @@ function doPost(e) {
       message: globalErr.toString()
     })).setMimeType(ContentService.MimeType.JSON);
   } finally {
-    lock.releaseLock();
+    if (hasLock) {
+      lock.releaseLock();
+    }
   }
 }
 
